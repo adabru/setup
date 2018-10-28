@@ -1,9 +1,11 @@
 
+if [ $(tty) = "/dev/tty1" ]; then
+	export XKB_DEFAULT_LAYOUT=ab; sway
+	exit 0
+fi
+
 # If not running interactively, don't do anything
-case $- in
-    *i*) ;;
-      *) return;;
-esac
+[[ $- != *i* ]] && return
 
 # enable programmable completion features (you don't need to enable
 # this, if it's already enabled in /etc/bash.bashrc and /etc/profile
@@ -17,35 +19,10 @@ fi
 # history
 HISTSIZE=10000
 HISTFILESIZE=10000
-HISTCONTROL=ignoreboth
+HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
-
-# aliases & vars
-alias grep='grep --color=auto'
-alias ls='ls --color=auto'
-alias ll='ls -alF'
-alias la='ls -A'
-alias l='ls -CF'
-alias apts='apt-cache search'
-alias apti='sudo apt-get install -V'
-alias aptu='sudo apt-get update'
-alias aptrm='sudo apt-get remove'
-alias less='less -r'
-alias ..='cd ..'
-alias ...='cd ../..'
-alias chx='chmod +x'
-alias tree2='tree -L 2'
-red="\[\e[31m\]"
-green="\[\e[32m\]"
-yellow="\[\e[33m\]"
-purple="\[\e[35m\]"
-cyan="\[\e[36m\]"
-grey="\[\e[90m\]"
-red2="\[\e[91m\]"
-normal="\[\e[39m\]\[\e[49m\]\[\e[27m\]"
-invert="\[\e[7m\]"
 
 # prompt
 col() {
@@ -60,6 +37,7 @@ prompt() {
   local c1a=$(col 600300)
   local c1b=$(col 600c00)
   local c2=$(col 630f90)
+  local normal="\[\e[39m\]\[\e[49m\]\[\e[27m\]"
 
   time_=$(date "+%s%N")
   local time=$((${time_}-${_time}))
@@ -109,6 +87,31 @@ git_prompt_vars() {
 }
 PROMPT_COMMAND=prompt
 
+
+# aliases & vars
+alias grep='grep --color=auto'
+alias ls='ls --color=auto'
+alias ll='ls -alF'
+alias la='ls -A'
+alias l='ls -CF'
+alias apts='apt-cache search'
+alias apti='sudo apt-get install -V'
+alias aptu='sudo apt-get update'
+alias aptrm='sudo apt-get remove'
+alias less='less -r'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias chx='chmod +x'
+alias tree2='tree -L 2'
+
+alias pacman='sudo pacman --color auto'
+alias update='sudo pacman -Syyu'
+# yay as aur helper - updates everything
+alias pksyua="yay -Syu --noconfirm"
+
+#get fastest mirrors in your neighborhood
+alias mirror="sudo reflector --protocol https --latest 50 --number 20 --sort rate --save /etc/pacman.d/mirrorlist"
+alias mirrors=mirror
 
 # python
 . /home/adabru/.virtualenv/bin/activate
