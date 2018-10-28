@@ -1,0 +1,64 @@
+{
+    "window.zoomLevel": -1,
+    "editor.tabSize": 2,
+    "window.enableMenuBarMnemonics": false,
+    "editor.multiCursorModifier": "ctrlCmd",
+    "editor.renderWhitespace": "boundary",
+    "files.trimTrailingWhitespace": true,
+    "editor.rulers": [
+        100
+    ],
+    "editor.tokenColorCustomizations": {
+        "[Default Dark+]": {
+            "textMateRules": [
+                {  "scope": ["source.adabrumarkup", "toc"],
+                   "settings": {"foreground": "#a63"}
+                },{"scope": ["source.adabrumarkup", "unimportant"],
+                   "settings": {"foreground": "#444444"}
+                },{"scope": ["source.adabrumarkup", "heading.l1"],
+                   "settings": {"foreground": "#E1993A"}
+                },{"scope": ["source.adabrumarkup", "heading.l2"],
+                   "settings": {"foreground": "#C3A743"}
+                },{"scope": ["source.adabrumarkup", "heading.l3"],
+                   "settings": {"foreground": "#A5B34E"}
+                },{"scope": ["source.adabrumarkup", "heading.l4"],
+                   "settings": {"foreground": "#53C146"}
+                },{"scope": ["source.adabrumarkup", "heading.l4"],
+                   "settings": {"foreground": "#53C146"}
+                },{"scope": ["source.adabrumarkup", "info"],
+                   "settings": {"foreground": "#540"}
+                },{"scope": ["source.adabrumarkup", "warn"],
+                   "settings": {"foreground": "#922"}
+                },{"scope": ["source.adabrumarkup", "listitem"],
+                   "settings": {"foreground": "#222"}
+                },{"scope": ["source.adabrumarkup", "quoted"],
+                   "settings": {"foreground": "#bdcbfc"}
+                },{"scope": ["source.adabrumarkup", "emphasize"],
+                   "settings": {"foreground": "#ffffff"}
+                },{"scope": ["source.adabrumarkup", "bold"],
+                   "settings": {"fontStyle": "bold"}
+                },{"scope": ["source.adabrumarkup", "file"],
+                   "settings": {"foreground": "#bfb"}
+                },{"scope": ["source.adabrumarkup", "folder"],
+                   "settings": {"foreground": "#34e2e1"}
+                },{"scope": ["source.adabrumarkup", "time"],
+                   "settings": {"foreground": "#bb4444"}
+                },{"scope": ["source.adabrumarkup", "bracket"],
+                   "settings": {"foreground": "#842"}
+                },{"scope": ["source.adabrumarkup", "link"],
+                   "settings": {"foreground": "#bbbbff"}
+                },{"scope": ["source.adabrumarkup", "terminal"],
+                   "settings": {"foreground": "#ad36b8"}
+                },{"scope": ["source.adabrumarkup", "tableeven"],
+                   "settings": {"background": "#300a24"}
+                },{"scope": ["source.adabrumarkup", "tableodd"],
+                   "settings": {"background": "#333"}
+                },{"scope": ["source.adabrumarkup", "keystroke"],
+                   "settings": {"foreground": "#ac4cfa"}
+                },{"scope": ["source.adabrumarkup"],
+                   "settings": {"foreground": "#ddd","fontStyle":""}
+                }
+            ]
+        }
+    }
+}
