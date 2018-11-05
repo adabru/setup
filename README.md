@@ -28,6 +28,7 @@
   sudo loadkeys setup-master/kbd_ab.map
   sudo cp ~/setup/kbd_ab.map /usr/share/kbd/keymaps/ab.map
   sudo sh -c "echo KEYMAP=ab > /etc/vconsole.conf"
+  ~/setup/sync.py
 
   # wlan
   # check wlan on/off switch
@@ -108,7 +109,13 @@
 
   # ranger
   # pacman -S thunar gvfs
-  pacman -S ranger highlight mediainfo
+  pacman -S ranger highlight mediainfo mpv
+  # w3m image preview doesn't work in termite: https://github.com/thestinger/termite/issues/501
+  # mpv instead: https://github.com/ranger/ranger/wiki/Image-Previews#with-mpv
+  #   $ranger = /usr/lib/python3.7/site-packages/ranger/
+  sudo vim /usr/lib/python3.7/site-packages/ranger/ext/img_display.py
+  sudo vim /usr/lib/python3.7/site-packages/ranger/core/fm.py
+
   # yay -S nautilus nautilus-open-terminal
 
   # access documentation on 127.0.7.1:7000 via doc/
@@ -117,6 +124,14 @@
   sudo cp ~/setup/nftables.conf /etc
   sudo systemctl enable nftables
   sudo systemctl restart nftable
+
+  # refind
+  pacman -S refind-efi
+  refind-install
+  sudo cp ~/setup/refind.conf /boot/efi/EFI/refind/refind.conf
+  sudo cp ~/setup/os_grub.png /boot/efi/EFI/refind/icons/os_grub.png
+  sudo cp ~/setup/os_arcolinux.png /boot/efi/EFI/refind/icons/os_arcolinux.png
+  poweroff --reboot
 
   # mail
   yay -S mailpile
@@ -194,4 +209,8 @@
   - make executable: └▪chmod a+x ~/bin/node↵
 
 
-libreoffice-fresh # Finanzen
+libreoffice-fresh # finance, work-table
+gimp # backgrounds, gifts
+inkscape # svg editing
+graphicsmagick # image conversion
+

@@ -141,7 +141,6 @@ alias ga='git add'
 alias gall='git add -A'
 alias gd='git diff --ws-error-highlight=all'
 alias gus='git reset HEAD'
-alias gm="git merge"
 alias gs='git status'
 alias gl='git pull'
 alias gp='git push'

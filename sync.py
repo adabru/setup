@@ -10,7 +10,9 @@ def sync(source, target):
   print("\033[96m{:} \033[39m→ \033[94m{:}\033[39m: ".format(source, target), end="")
   source = os.path.expanduser(source)
   target = os.path.expanduser(target)
-  if os.path.realpath(target) == source:
+  if not os.path.exists(source):
+    print("\033[33msource doesn't exist")
+  elif os.path.realpath(target) == source:
     print("\033[93m✔")
   elif not os.path.exists(os.path.dirname(target)):
     print("\033[93mtarget dir doesn't exist (yet).")
@@ -26,12 +28,17 @@ def sync(source, target):
     print("\033[93m(✔)")
   elif os.path.exists(target):
     print("\033[33msource and target differ")
-  elif os.path.isfile(target) and not os.access(target, os.W_OK):
+  elif not os.access(target, os.W_OK):
     print("sudo copy source to target")
   else:
     os.symlink(source, target)
     print("\033[93m✔")
   print("\033[39m", end="")
+
+# refind
+sync("~/setup/refind.conf", "/boot/efi/EFI/refind/refind.conf")
+sync("~/setup/os_arcolinux.png", "/boot/efi/EFI/refind/icons/os_arcolinux.png")
+sync("~/setup/os_grub.png", "/boot/efi/EFI/refind/icons/os_grub.png")
 
 # keyboard
 sync("~/setup/kbd_ab.map", "/usr/share/kbd/keymaps/ab.map")
