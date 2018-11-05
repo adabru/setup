@@ -1,0 +1,22 @@
+global keymap
+set keymap {
+  {a 12}
+  {w 13}
+  {s 14}
+  {e 15}
+  {d 16}
+  {f 17}
+  {t 18}
+  {g 19}
+  {z 20}
+  {h 21}
+  {u 22}
+  {j 23}
+  {k 24}
+  {o 25}
+  {l 26}
+  {p 27}
+  {odiaeresis 28}
+  {adiaeresis 29}
+  {ssharp 30}
+}

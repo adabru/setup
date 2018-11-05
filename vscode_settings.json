@@ -60,5 +60,7 @@
                 }
             ]
         }
-    }
+    },
+    "keyboard.dispatch": "keyCode",
+    "explorer.confirmDelete": false
 }

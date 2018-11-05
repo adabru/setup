@@ -11,7 +11,7 @@ xkb_symbols "basic" {
 
   include "de(neo)"
   include "ab(neo_extension)"
-  
+
   key <AD01> { [          q,          Q ] };
   key <AD02> { [          w,          W ] };
   key <AD03> { [          e,          E ] };
@@ -24,7 +24,7 @@ xkb_symbols "basic" {
   key <AD10> { [          p,          P ] };
   key <AD11> { [ udiaeresis, Udiaeresis ] };
   key <AD12> { [ ssharp ] };
-              
+
   key <AC01> { [          a,          A ] };
   key <AC02> { [          s,          S ] };
   key <AC03> { [          d,          D ] };
@@ -36,7 +36,7 @@ xkb_symbols "basic" {
   key <AC09> { [          l,          L ] };
   key <AC10> { [ odiaeresis, Odiaeresis ] };
   key <AC11> { [ adiaeresis, Adiaeresis ] };
-                                       
+
   key <AB01> { [          y,          Y ] };
   key <AB02> { [          x,          X ] };
   key <AB03> { [          c,          C ] };
@@ -50,30 +50,31 @@ partial
 xkb_symbols "neo_extension" {
   // see `/usr/share/X11/xkb/symbols/de`
 
-  key <AD01> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<PGUP>), RedirectKey(key=<PGUP>), NoAction(), NoAction() ] };
-  key <AD02> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<BKSP>), RedirectKey(key=<BKSP>), NoAction(), NoAction() ] };
-  key <AD03> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<UP>,clearmods=Mod3), RedirectKey(key=<UP>,clearmods=Mod3), NoAction(), NoAction() ] };
-  key <AD04> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<DELE>), RedirectKey(key=<DELE>), NoAction(), NoAction() ] };
-  key <AD05> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<PGDN>), RedirectKey(key=<PGDN>), NoAction(), NoAction() ] };
+  // key <AD01> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<PGUP>), RedirectKey(key=<PGUP>), NoAction(), NoAction() ] };
+  // key <AD02> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<AB02>), RedirectKey(key=<AB02>), NoAction(), NoAction() ] };
+  // key <AD02> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<BKSP>), RedirectKey(key=<BKSP>), NoAction(), NoAction() ] };
+  // key <AD03> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<UP>,clearmods=Mod3), RedirectKey(key=<UP>,clearmods=Mod3), NoAction(), NoAction() ] };
+  // key <AD04> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<DELE>), RedirectKey(key=<DELE>), NoAction(), NoAction() ] };
+  // key <AD05> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<PGDN>), RedirectKey(key=<PGDN>), NoAction(), NoAction() ] };
 
-  key <AC01> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<HOME>), RedirectKey(key=<HOME>), NoAction(), NoAction() ] };
-  key <AC02> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<LEFT>,clearmods=Mod3), RedirectKey(key=<LEFT>,clearmods=Mod3), NoAction(), NoAction() ] };
-  key <AC03> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<DOWN>,clearmods=Mod3), RedirectKey(key=<DOWN>,clearmods=Mod3), NoAction(), NoAction() ] };
-  key <AC04> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<RGHT>,clearmods=Mod3), RedirectKey(key=<RGHT>,clearmods=Mod3), NoAction(), NoAction() ] };
-  key <AC05> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<END>), RedirectKey(key=<END>), NoAction(), NoAction() ] };
+  // key <AC01> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<HOME>), RedirectKey(key=<HOME>), NoAction(), NoAction() ] };
+  // key <AC02> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<LEFT>,clearmods=Mod3), RedirectKey(key=<LEFT>,clearmods=Mod3), NoAction(), NoAction() ] };
+  // key <AC03> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<DOWN>,clearmods=Mod3), RedirectKey(key=<DOWN>,clearmods=Mod3), NoAction(), NoAction() ] };
+  // key <AC04> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<RGHT>,clearmods=Mod3), RedirectKey(key=<RGHT>,clearmods=Mod3), NoAction(), NoAction() ] };
+  // key <AC05> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<END>), RedirectKey(key=<END>), NoAction(), NoAction() ] };
 
-  key <AB01> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<ESC>), RedirectKey(key=<ESC>), NoAction(), NoAction() ] };
-  key <AB02> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<TAB>,clearmods=Mod3), RedirectKey(key=<TAB>,clearmods=Mod3), NoAction(), NoAction() ] };
-  key <AB03> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<INS>), RedirectKey(key=<INS>), NoAction(), NoAction() ] };
-  key <AB04> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<RTRN>), RedirectKey(key=<RTRN>), NoAction(), NoAction() ] };
-  key <AB05> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<UNDO>), RedirectKey(key=<REDO>), NoAction(), NoAction() ] }; 
+  // key <AB01> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<ESC>), RedirectKey(key=<ESC>), NoAction(), NoAction() ] };
+  // key <AB02> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<TAB>,clearmods=Mod3), RedirectKey(key=<TAB>,clearmods=Mod3), NoAction(), NoAction() ] };
+  // key <AB03> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<INS>), RedirectKey(key=<INS>), NoAction(), NoAction() ] };
+  // key <AB04> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<RTRN>), RedirectKey(key=<RTRN>), NoAction(), NoAction() ] };
+  // key <AB05> { actions = [ NoAction(), NoAction(), NoAction(), NoAction(), RedirectKey(key=<UNDO>), RedirectKey(key=<REDO>), NoAction(), NoAction() ] };
 };
 
 partial
 xkb_symbols "russian" {
-  
+
   name[Group1] = "Russian (adabru)";
-  
+
   include "de(neo)"
   include "ab(neo_extension)"
 
@@ -137,7 +138,7 @@ xkb_symbols "persian" {
   key <AD10> { [ Arabic_hah   ] };
   key <AD11> { [ Arabic_jeem  ] };
   key <AD12> { [ Arabic_tcheh ] };
-  
+
   key <AC01> { [ Arabic_sheen, Arabic_hamzaonwaw ] };
   key <AC02> { [ Arabic_seen,  Arabic_hamzaonyeh ] };
   key <AC03> { [ Farsi_yeh,    Arabic_yeh ] };

@@ -1,6 +1,11 @@
 
+export PATH=~/bin:$PATH
+
 if [ $(tty) = "/dev/tty1" ]; then
-	export XKB_DEFAULT_LAYOUT=ab; sway
+  export XKB_DEFAULT_LAYOUT=ab
+  export XKB_DEFAULT_OPTIONS=compose:menu
+  # export QT_QPA_PLATFORM=wayland-egl
+  sway
 	exit 0
 fi
 
@@ -87,6 +92,7 @@ git_prompt_vars() {
 }
 PROMPT_COMMAND=prompt
 
+export EDITOR=vim
 
 # aliases & vars
 alias grep='grep --color=auto'
@@ -161,7 +167,7 @@ gambri() { xrandr --output LVDS1 --gamma $1:$1:$1 --brightness $2; }
 copy() { (if [ -f "$1" ]; then cat $1; else printf "$1"; fi;) | xclip -sel p -f | xclip -sel c; }
 
 alias h='history'
-alias doc='cd ~/repo/adabru-markup/ ; ./html/js/server.ls -d ~/Portable/Documentation --cache ~/.cache/adabru-markup'
+alias doc='cd ~/repo/adabru-markup/ ; ./html/js/server.ls -d ~/portable/documentation --cache ~/.cache/adabru-markup'
 alias nnn='export EDITOR=vim ; nnn'
 c() {
 for b in {40..47} {100..107} ; do
@@ -201,4 +207,20 @@ gopen() {
 }
 bench() {
   benchmark.py -r 5 "$@"
+}
+
+#https://github.com/rg3/youtube-dl/issues/622
+yt() {
+  if [ -z $1 ] ; then
+   echo -e "
+    usage
+
+    \e[1myt\e[22m url                                    show available formats
+    \e[1myt\e[22m format 00:12:00 00:13:00 name url      download portion
+  "
+  elif [ -z $2 ] ; then
+    youtube-dl -F $1
+  else
+    ffmpeg -ss $2 -i $(youtube-dl -f $1 -g "$5") -t $3 -c copy $4.mp4
+  fi
 }
