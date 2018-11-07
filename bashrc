@@ -1,9 +1,9 @@
 
-export PATH=~/bin:$PATH
 
 if [ $(tty) = "/dev/tty1" ]; then
   export XKB_DEFAULT_LAYOUT=ab
   export XKB_DEFAULT_OPTIONS=compose:menu
+  export PATH=~/bin:$PATH
   # export QT_QPA_PLATFORM=wayland-egl
   sway
 	exit 0

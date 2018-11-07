@@ -13,7 +13,7 @@
 - burn arcolinuxd to stick
 - install arcolinuxd
   - mount 100MB Windows System partition as /boot/efi
-  - make 80GB btrfs partition mount as /
+  - make 80GB btrfs partition mount as / , label with "ARCOLINUX"
   - make 16GB swap partition
 - setup arcolinuxd
 
@@ -85,9 +85,7 @@
 
   # sudo keep display
   # https://askubuntu.com/questions/175611/cannot-connect-to-x-server-when-running-app-with-sudo#175615
-  sudo visudo
-  # Defaults env_keep += "DISPLAY"
-  xhost local:root
+  echo "xhost local:root" > ~/.xinitrc
 
   # data transfer
   pacman -S partitionmanager
@@ -133,8 +131,20 @@
   sudo cp ~/setup/os_arcolinux.png /boot/efi/EFI/refind/icons/os_arcolinux.png
   poweroff --reboot
 
-  # mail
-  yay -S mailpile
+  # messaging
+  yay -S thunderbird rambox
+  # gmx https://support.gmx.com/pop-imap/imap/outlook.html
+  # gmail
+  # rwth https://www.welcome.itc.rwth-aachen.de/en/email.htm
+  # rambox:
+  #   Mail http://localhost:33411 https://www.mailpile.is/img/icon-512x512.png
+  #   FB https://facebook.com https://en.facebookbrand.com/wp-content/uploads/2016/05/flogo_rgb_hex-brc-site-250.png
+  #   Mindcloud Slack mind-cloud
+  #   InfoAG Slack infoaghh
+  #   i9 RocketChat https://rclufgi9.informatik.rwth-aachen.de/home
+  #   WA Whatsapp
+  #   yjs Gitter
+  #   Jungschar Threema
 
   pacman -S geany
 
@@ -173,6 +183,10 @@
   pacman -S alsa-utils
   alsamixer
   speaker-test
+
+  # tmux
+  # wl-clipboard as temporary workaround for https://github.com/swaywm/sway/issues/926
+  yay -S tmux wl-clipboard
   ```
 
 |
@@ -213,4 +227,5 @@ libreoffice-fresh # finance, work-table
 gimp # backgrounds, gifts
 inkscape # svg editing
 graphicsmagick # image conversion
-
+docker # i9 work
+namcap # AUR packaging
