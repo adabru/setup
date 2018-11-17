@@ -1,0 +1,1 @@
+albert toggle || ((albert&); sleep .5; albert toggle)

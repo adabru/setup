@@ -28,7 +28,7 @@ def sync(source, target):
     print("\033[93m(✔)")
   elif os.path.exists(target):
     print("\033[33msource and target differ")
-  elif not os.access(target, os.W_OK):
+  elif not os.access(os.path.dirname(target), os.W_OK):
     print("sudo copy source to target")
   else:
     os.symlink(source, target)
@@ -46,6 +46,7 @@ sync("~/setup/xkb_ab", "/usr/share/X11/xkb/symbols/ab")
 
 # sway
 sync("~/setup/sway_config", "~/.config/sway/config")
+sync("~/setup/bin/statusbar.py", "~/bin/statusbar.py")
 
 # firewall and doc
 sync("~/setup/nftables.conf", "/etc/nftables.conf")
@@ -55,18 +56,25 @@ sync("~/repo/vscode-adabru-markup", "~/.vscode-oss/extensions/vscode-adabru-mark
 sync("~/setup/vscode_keybindings.json", "~/.config/Code - OSS/User/keybindings.json")
 sync("~/setup/vscode_settings.json", "~/.config/Code - OSS/User/settings.json")
 
-# terminal
+# terminal + envs
 sync("~/setup/bashrc", "~/.bashrc")
 sync("~/setup/clingrc", "~/.clingrc")
 sync("~/setup/pythonrc", "~/.pythonrc")
 sync("~/setup/tmux.conf", "~/.tmux.conf")
 sync("~/setup/XCompose", "~/.XCompose")
+sync("~/setup/bin/node", "~/bin/node")
 
 # brightness
 sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
+
+# launcher
+sync("~/setup/bin/launcher.sh", "~/bin/launcher.sh")
 
 # inkscape
 # sync("~/setup/inkscape.xml", ???)
 
 # virtual MIDI keyboard
 sync("~/setup/vkeybdmap", "~/.vkeybdmap")
+
+# sync
+sync("~/setup/sync.py", "~/bin/sync.py")

@@ -33,7 +33,7 @@
   # wlan
   # check wlan on/off switch
   rfkill list all
-  mcli device wifi
+  nmcli device wifi
   nmcli device wifi connect your_ap_name_ssid
   nmcli connection
 
@@ -180,13 +180,36 @@
   ssh -T git@gitlab.com
 
   # audio
-  pacman -S alsa-utils
+  pacman -S alsa-utils pulseaudio pavucontrol
   alsamixer
   speaker-test
+  # reboot for pulseaudio to start
 
   # tmux
   # wl-clipboard as temporary workaround for https://github.com/swaywm/sway/issues/926
   yay -S tmux wl-clipboard
+
+  # bluetooth
+  pacman -S bluez bluez-utils pulseaudio-bluetooth blueman
+  sudo systemctl enable bluetooth
+  sudo systemctl restart bluetooth
+  blueman
+
+  # printer
+  pacman -S cups cups-pdf
+  yay -S brother-mfc-9332cdw
+  systemctl enable org.cups.cupsd.service
+  systemctl start org.cups.cupsd.service
+  # setup printer at http://localhost:631/admin
+
+  # pdf reader
+  pacman -S evince
+
+  # flash
+  pacman -S pepper-flash
+
+  # screenshot
+  yay -S slurp grim
   ```
 
 |

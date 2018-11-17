@@ -109,6 +109,7 @@ alias ..='cd ..'
 alias ...='cd ../..'
 alias chx='chmod +x'
 alias tree2='tree -L 2'
+alias mymount='sudo mount -o gid=users,fmask=113,dmask=002'
 
 alias pacman='sudo pacman --color auto'
 alias update='sudo pacman -Syyu'
@@ -120,6 +121,7 @@ alias mirror="sudo reflector --protocol https --latest 50 --number 20 --sort rat
 alias mirrors=mirror
 
 # python
+# python virutal env breaks many pacman-installed programs
 . /home/adabru/.virtualenv/bin/activate
 export PYTHONSTARTUP=$HOME/.pythonrc
 

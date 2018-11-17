@@ -83,6 +83,11 @@ bindsym XF86AudioLowerVolume exec brillo -U 10
 bindsym Shift+XF86AudioLowerVolume exec brillo -U 1
 bindsym Shift+Ctrl+XF86AudioLowerVolume exec brillo -U .1
 
+bindsym XF86MonBrightnessDown exec pactl set-sink-volume 0 -10%
+bindsym XF86MonBrightnessUp exec pactl set-sink-volume 0 +10%
+
+bindsym Print exec slurp | grim -g - ~/s.png
+
 # man 5 sway-bar
 bar {
     status_command statusbar.py
