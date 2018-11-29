@@ -139,7 +139,9 @@
   # rambox:
   #   Mail http://localhost:33411 https://www.mailpile.is/img/icon-512x512.png
   #   FB https://facebook.com https://en.facebookbrand.com/wp-content/uploads/2016/05/flogo_rgb_hex-brc-site-250.png
-  #   Mindcloud Slack mind-cloud
+  #   MindCloud Slack mind-cloud
+  #   MindCloud https://trello.com/mindcloud77 https://d2k1ftgv7pobq7.cloudfront.net/meta/u/res/images/brand-assets/Logos/0099ec3754bf473d2bbf317204ab6fea/trello-logo-blue.png
+  #   MindCloud https://calendar.google.com/calendar/r https://www.gstatic.com/images/branding/product/1x/calendar_48dp.png
   #   InfoAG Slack infoaghh
   #   i9 RocketChat https://rclufgi9.informatik.rwth-aachen.de/home
   #   WA Whatsapp
@@ -149,6 +151,7 @@
   pacman -S geany
 
   # font
+  # see font coverage on https://www.fileformat.info/info/unicode/block/miscellaneous_symbols_and_pictographs/fontsupport.htm
   yay -S symbola gucharmap
 
   # check Wayland/XWayland
@@ -187,12 +190,15 @@
 
   # tmux
   # wl-clipboard as temporary workaround for https://github.com/swaywm/sway/issues/926
+  # ctrl+shift+insert as temporary workaround for https://github.com/thestinger/termite/issues/645
   yay -S tmux wl-clipboard
 
   # bluetooth
   pacman -S bluez bluez-utils pulseaudio-bluetooth blueman
   sudo systemctl enable bluetooth
   sudo systemctl restart bluetooth
+  bluetoothctl power on
+  bluetoothctl devices
   blueman
 
   # printer
@@ -211,6 +217,9 @@
   # screenshot
   yay -S slurp grim
   ```
+- see <https://wiki.archlinux.org/index.php/System_maintenance>:
+  - `systemctl --failed`
+  - `journalctl -p 3 -xb`
 
 |
 |@virtualenv / @pip|
@@ -247,8 +256,13 @@
 
 
 libreoffice-fresh # finance, work-table
-gimp # backgrounds, gifts
-inkscape # svg editing
-graphicsmagick # image conversion
-docker # i9 work
-namcap # AUR packaging
+gimp              # backgrounds, gifts
+inkscape          # svg editing
+graphicsmagick    # image conversion
+docker            # i9 work
+owncloud-client   # i9 work
+firefox           # web development (test)
+namcap            # AUR packaging
+spotify           # music streaming
+grive             # mindcloud
+cura              # 3d printing

@@ -132,7 +132,10 @@ export NVM_DIR="/home/adabru/.nvm"
 export PATH=./node_modules/.bin:$PATH
 
 # java
-[ -s "/home/adabru/.jabba/jabba.sh" ] && source "/home/adabru/.jabba/jabba.sh"
+# [ -s "/home/adabru/.jabba/jabba.sh" ] && source "/home/adabru/.jabba/jabba.sh"
+# export SDKMAN_DIR="/home/adabru/.sdkman"
+# [[ -s "/home/adabru/.sdkman/bin/sdkman-init.sh" ]] && source "/home/adabru/.sdkman/bin/sdkman-init.sh"
+
 
 # rvm
 [[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm"
@@ -208,20 +211,4 @@ gopen() {
 }
 bench() {
   benchmark.py -r 5 "$@"
-}
-
-#https://github.com/rg3/youtube-dl/issues/622
-yt() {
-  if [ -z $1 ] ; then
-   echo -e "
-    usage
-
-    \e[1myt\e[22m url                                    show available formats
-    \e[1myt\e[22m format 00:12:00 00:13:00 name url      download portion
-  "
-  elif [ -z $2 ] ; then
-    youtube-dl -F $1
-  else
-    ffmpeg -ss $2 -i $(youtube-dl -f $1 -g "$5") -t $3 -c copy $4.mp4
-  fi
 }

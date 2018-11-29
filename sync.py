@@ -61,6 +61,7 @@ sync("~/setup/bashrc", "~/.bashrc")
 sync("~/setup/clingrc", "~/.clingrc")
 sync("~/setup/pythonrc", "~/.pythonrc")
 sync("~/setup/tmux.conf", "~/.tmux.conf")
+sync("~/setup/bin/copy.py", "~/bin/copy.py")
 sync("~/setup/XCompose", "~/.XCompose")
 sync("~/setup/bin/node", "~/bin/node")
 
@@ -78,3 +79,9 @@ sync("~/setup/vkeybdmap", "~/.vkeybdmap")
 
 # sync
 sync("~/setup/sync.py", "~/bin/sync.py")
+
+# youtube
+sync("~/setup/bin/yt.py", "~/bin/yt")
+
+# bluetooth
+sync("~/setup/bin/bt.py", "~/bin/bt")
