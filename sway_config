@@ -4,7 +4,7 @@
 # Mod1 = Alt
 set $mod Mod4
 
-bindsym $mod+Return exec termite
+bindsym $mod+Return exec termite -e tmux
 bindsym Ctrl+Space exec launcher.sh
 # exec albert || albert hide
 
@@ -56,15 +56,7 @@ bindsym $mod+Shift+KP_8 move container to workspace 8
 bindsym $mod+Shift+KP_9 move container to workspace 9
 bindsym $mod+Shift+KP_0 move container to workspace 10
 
-#exec swayidle \
-#    timeout 300 'swaylock -c 000000' \
-#    timeout 600 'swaymsg "output * dpms off"' \
-#       resume 'swaymsg "output * dpms on"' \
-#    before-sleep 'swaylock -c 000000'
-#
-# This will lock your screen after 300 seconds of inactivity, then turn off
-# your displays after another 600 seconds, and turn your screens back on when
-# resumed. It will also lock your screen before your computer goes to sleep.
+exec swayidle timeout 600 lockscreen.py
 
 input "1:1:AT_Translated_Set_2_keyboard" {
   repeat_delay 500

@@ -79,9 +79,16 @@
   grep XF86MonBrightness /usr/share/.../symbols
 
   # autologin
-  sudo vim /lib/systemd/system/getty@.service
-  # replace: ExecStart=-/sbin/agetty -o '-p -- \\u' --noclear %I %TERM
-  # with:    ExecStart=-/sbin/agetty -a adabru %I %TERM
+  # https://wiki.archlinux.org/index.php/Getty#Virtual_console
+  # https://wiki.archlinux.org/index.php/Systemd#Editing_provided_units
+  # sudo systemctl edit getty^TAB
+  sudo mkdir /etc/systemd/system/getty@tty1.service.d/
+  sudo sh -c 'echo "
+  [Service]
+  ExecStart=
+  ExecStart=-/usr/bin/agetty --autologin adabru --noclear %I $TERM
+  " > /etc/systemd/system/getty@tty1.service.d/override.conf'
+  systemctl daemon-reload
 
   # sudo keep display
   # https://askubuntu.com/questions/175611/cannot-connect-to-x-server-when-running-app-with-sudo#175615
@@ -216,6 +223,31 @@
 
   # screenshot
   yay -S slurp grim
+
+  # screencast
+  ./wlstream 24 vaapi /dev/dri/renderD128 libx264 nv12 12 /tmp/screen.mkv
+
+  # android emulator
+  yay -S android-sdk
+  sdkmanager --list
+  # https://wiki.archlinux.org/index.php/Android#Android_Studio
+  sudo chown -R adabru:adabru /opt/android-sdk/
+  # see https://developer.android.com/about/dashboards/
+  sudo mount -o remount,size=5G /tmp/
+  touch ~/.android/repositories.cfg
+  sdkmanager "system-images;android-23;google_apis;x86_64"
+  avdmanager create avd --name myandroid -k "system-images;android-23;google_apis;x86_64"
+  avdmanager list avd
+  sdkmanager emulator
+  yay -S  android-sdk-platform-tools
+  cd /opt/android-sdk/tools
+  # https://developer.android.com/studio/run/emulator-commandline
+  # https://developer.android.com/studio/run/emulator-comparison
+  emulator @myandroid
+  adb install ~/portable/Aktuell/Android/apps/WhatsApp.apk
+  # for WhatsApp-Web, connect (compatible) webcam and run
+  emulator @myandroid -webcam-list
+  emulator @myandroid -camera-back webcam1
   ```
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
   - `systemctl --failed`
@@ -233,7 +265,7 @@
     ./bin/virtualenv -p python3 .
     . ./bin/activate
     ```
-  - @youtube-dl @ipython @plac @colorama
+  - @youtube-dl @ipython @plac @colorama @Pillow
 |@nvm / @npm|
   - <https://github.com/creationix/nvm>
 
@@ -266,3 +298,9 @@ namcap            # AUR packaging
 spotify           # music streaming
 grive             # mindcloud
 cura              # 3d printing
+kvm               # i9 work
+tk                # python GUI, lockscreen
+tribler, vlc, python2-pyopenssl, python2-service-identity
+                  # torrents
+pdfshuffler       # typesetting
+ghostscript       # typesetting

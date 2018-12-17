@@ -22,8 +22,8 @@ elif [ -f /etc/bash_completion ]; then
 fi
 
 # history
-HISTSIZE=10000
-HISTFILESIZE=10000
+HISTSIZE=50000
+HISTFILESIZE=50000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 bind '"\e[A": history-search-backward'
@@ -32,7 +32,6 @@ bind '"\e[B": history-search-forward'
 # prompt
 col() {
   printf "\[\e[48;2;%d;%d;%dm\]\[\e[38;2;%d;%d;%dm\]" 0x${1:0:1}0 0x${1:1:1}0 0x${1:2:1}0 0x${1:3:1}0 0x${1:4:1}0 0x${1:5:1}0
-  # printf "\e[48;2;%d;%d;%dm\e[38;2;%d;%d;%dm" 0x${1:0:1}0 0x${1:1:1}0 0x${1:2:1}0 0x${1:3:1}0 0x${1:4:1}0 0x${1:5:1}0
 }
 
 _time=$(date "+%s%N")
@@ -110,11 +109,20 @@ alias ...='cd ../..'
 alias chx='chmod +x'
 alias tree2='tree -L 2'
 alias mymount='sudo mount -o gid=users,fmask=113,dmask=002'
+alias kvm='qemu-system-x86_64 -enable-kvm'
 
 alias pacman='sudo pacman --color auto'
 alias update='sudo pacman -Syyu'
 # yay as aur helper - updates everything
 alias pksyua="yay -Syu --noconfirm"
+
+alias docker="sudo /usr/bin/docker"
+docker-tags() {
+  # https://stackoverflow.com/a/39454426/6040478
+  curl -s https://registry.hub.docker.com/v1/repositories/$1/tags \
+  | sed -e 's/[][]//g' -e 's/"//g' -e 's/ //g' | tr '}' '\n' \
+  | awk -F: '{print $3}'
+}
 
 #get fastest mirrors in your neighborhood
 alias mirror="sudo reflector --protocol https --latest 50 --number 20 --sort rate --save /etc/pacman.d/mirrorlist"
@@ -122,8 +130,9 @@ alias mirrors=mirror
 
 # python
 # python virutal env breaks many pacman-installed programs
-. /home/adabru/.virtualenv/bin/activate
-export PYTHONSTARTUP=$HOME/.pythonrc
+# . /home/adabru/.virtualenv/bin/activate
+# export PYTHONSTARTUP=$HOME/.pythonrc
+export PATH=~/.local/bin:$PATH
 
 # nodejs
 export NVM_DIR="/home/adabru/.nvm"

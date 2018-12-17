@@ -1,6 +1,6 @@
 #!/usr/bin/python
 
-import time, datetime, sys, re, subprocess
+import time, datetime, sys, re, subprocess, asyncio
 
 def cat(file):
   f = open(file,"r")
@@ -9,14 +9,19 @@ def cat(file):
   return res
 
 lastCpu = None
+ping = '∞'
 def status():
-  global lastCpu
+  global lastCpu, ping
   # see https://i3wm.org/docs/i3bar-protocol.html
   print('[')
 
   # wireless network
   network = subprocess.run('iwgetid --raw'.split(), encoding='UTF-8', capture_output=True).stdout.strip()
   print('{{"color":"#8888ff", "full_text":"{:}"}},'.format(network))
+
+  # ping
+  if network:
+    print('{{"color":"#8888ff", "full_text":"{:}ms"}},'.format(ping))
 
   # free memory
   regex = re.compile('MemAvailable: *([0-9]+).*SwapFree: *([0-9]+)', re.S)
@@ -54,8 +59,28 @@ def status():
   print('],')
   sys.stdout.flush()
 
-print('{"version":1}')
-print('[')
-while True:
-  status()
-  time.sleep(.5)
+
+# start ping
+async def getping():
+  global ping
+  pingChild = await asyncio.create_subprocess_exec(*'ping -On adabru.de'.split(), encoding='UTF-8', stdout=asyncio.subprocess.PIPE)
+  # pingChild = await asyncio.create_subprocess_exec(*'ping -n adabru.de'.split(), encoding='UTF-8', stdout=asyncio.subprocess.PIPE)
+  while not pingChild.stdout.at_eof():
+    line = await pingChild.stdout.readline()
+    m = re.compile('time=([0-9]+)').search(line.decode())
+    if m:
+      ping = m.group(1)
+    else:
+      ping = '>2000'
+
+async def printstatus():
+  print('{"version":1}')
+  print('[')
+  while True:
+    status()
+    await asyncio.sleep(.5)
+
+async def main():
+  await asyncio.gather(getping(), printstatus())
+asyncio.run(main())
+

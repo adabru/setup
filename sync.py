@@ -57,6 +57,7 @@ sync("~/setup/vscode_keybindings.json", "~/.config/Code - OSS/User/keybindings.j
 sync("~/setup/vscode_settings.json", "~/.config/Code - OSS/User/settings.json")
 
 # terminal + envs
+sync("~/setup/termite_config", "~/.config/termite/config")
 sync("~/setup/bashrc", "~/.bashrc")
 sync("~/setup/clingrc", "~/.clingrc")
 sync("~/setup/pythonrc", "~/.pythonrc")
@@ -85,3 +86,9 @@ sync("~/setup/bin/yt.py", "~/bin/yt")
 
 # bluetooth
 sync("~/setup/bin/bt.py", "~/bin/bt")
+
+# packaging
+sync("~/setup/makepkg.conf", "~/.makepkg.conf")
+
+# android emulator
+sync("~/setup/bin/whatsapp", "~/bin/whatsapp")
