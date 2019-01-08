@@ -139,6 +139,7 @@ export NVM_DIR="/home/adabru/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
 [[ -r $NVM_DIR/bash_completion ]] && . $NVM_DIR/bash_completion
 export PATH=./node_modules/.bin:$PATH
+export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # java
 # [ -s "/home/adabru/.jabba/jabba.sh" ] && source "/home/adabru/.jabba/jabba.sh"
@@ -221,3 +222,4 @@ gopen() {
 bench() {
   benchmark.py -r 5 "$@"
 }
+

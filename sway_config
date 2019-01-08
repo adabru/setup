@@ -56,7 +56,7 @@ bindsym $mod+Shift+KP_8 move container to workspace 8
 bindsym $mod+Shift+KP_9 move container to workspace 9
 bindsym $mod+Shift+KP_0 move container to workspace 10
 
-exec swayidle timeout 600 lockscreen.py
+# exec swayidle timeout 600 lockscreen.py
 
 input "1:1:AT_Translated_Set_2_keyboard" {
   repeat_delay 500
@@ -64,6 +64,7 @@ input "1:1:AT_Translated_Set_2_keyboard" {
 }
 input "2:7:SynPS/2_Synaptics_TouchPad" {
   tap enabled
+  natural_scroll enabled
 }
 # swaymsg -t get_inputs
 # man 5 sway-input

@@ -57,6 +57,8 @@
   # https://github.com/swaywm/sway/wiki
   yay -S wlroots-git sway-git
   export XKB_DEFAULT_LAYOUT=ab; sway
+  # setxkbmap -layout de
+  # setxkbmap -layout ab
 
   # browser
   yay -S vivaldi
@@ -248,6 +250,16 @@
   # for WhatsApp-Web, connect (compatible) webcam and run
   emulator @myandroid -webcam-list
   emulator @myandroid -camera-back webcam1
+
+  # cloud storage
+  pacman -S rclone
+  rclone config
+  # dropbox, google
+  rclone lsd dropbox:
+  rclone ls dropbox:
+  cd ~/portable/cloud/dropbox
+  rclone -P sync dropbox:Gemeindelieder ./Gemeindelieder
+  rclone lsd google:
   ```
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
   - `systemctl --failed`
@@ -266,7 +278,7 @@
     . ./bin/activate
     ```
   - @youtube-dl @ipython @plac @colorama @Pillow
-|@nvm / @npm|
+|@nvm / @yarn|
   - <https://github.com/creationix/nvm>
 
     ```
@@ -274,6 +286,11 @@
     curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
     exec bash
     nvm install node
+    ```
+  - <https://yarnpkg.com/en/docs/install#arch-rc>
+
+    ```
+    curl -L https://yarnpkg.com/install.sh | bash -s -- --rc
     ```
   - make node available outside of terminal, add `~/bin/node` :
 
@@ -304,3 +321,6 @@ tribler, vlc, python2-pyopenssl, python2-service-identity
                   # torrents
 pdfshuffler       # typesetting
 ghostscript       # typesetting
+pulseeffects      # audio playback
+godot             # mindcloud
+wine              # packaging

@@ -20,8 +20,7 @@ def status():
   print('{{"color":"#8888ff", "full_text":"{:}"}},'.format(network))
 
   # ping
-  if network:
-    print('{{"color":"#8888ff", "full_text":"{:}ms"}},'.format(ping))
+  print('{{"color":"#8888ff", "full_text":"{:}ms"}},'.format(ping))
 
   # free memory
   regex = re.compile('MemAvailable: *([0-9]+).*SwapFree: *([0-9]+)', re.S)
@@ -63,11 +62,11 @@ def status():
 # start ping
 async def getping():
   global ping
-  pingChild = await asyncio.create_subprocess_exec(*'ping -On adabru.de'.split(), encoding='UTF-8', stdout=asyncio.subprocess.PIPE)
-  # pingChild = await asyncio.create_subprocess_exec(*'ping -n adabru.de'.split(), encoding='UTF-8', stdout=asyncio.subprocess.PIPE)
-  while not pingChild.stdout.at_eof():
-    line = await pingChild.stdout.readline()
-    m = re.compile('time=([0-9]+)').search(line.decode())
+  while True:
+    await asyncio.sleep(1)
+    proc = await asyncio.create_subprocess_exec(*'ping -nc 1 -W 2 adabru.de'.split(), stdout=asyncio.subprocess.PIPE)
+    stdout, stderr = await proc.communicate()
+    m = re.compile('time=([0-9]+)').search(stdout.decode())
     if m:
       ping = m.group(1)
     else:
