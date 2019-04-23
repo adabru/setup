@@ -53,7 +53,7 @@ def status():
   print('{{"color":"{:}", "full_text":"{:.1f}"}},'.format(color, 100*battery))
 
   # date and time
-  print('{{"color":"#bbbbbb", "full_text":"{:}"}}'.format(datetime.datetime.now().strftime("%Y-%m-%d W%W   %H:%M:%S")))
+  print('{{"color":"#bbbbbb", "full_text":"{:}"}}'.format(datetime.datetime.now().strftime("%Y-%m-%d W%V   %H:%M:%S")))
 
   print('],')
   sys.stdout.flush()

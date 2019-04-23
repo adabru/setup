@@ -28,6 +28,8 @@ HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 bind '"\e[A": history-search-backward'
 bind '"\e[B": history-search-forward'
+# complete from history with Alt+Tab
+# search in history with Ctrl+R
 
 # prompt
 col() {
@@ -110,6 +112,7 @@ alias chx='chmod +x'
 alias tree2='tree -L 2'
 alias mymount='sudo mount -o gid=users,fmask=113,dmask=002'
 alias kvm='qemu-system-x86_64 -enable-kvm'
+alias r='rename.py'
 
 alias pacman='sudo pacman --color auto'
 alias update='sudo pacman -Syyu'
@@ -178,11 +181,14 @@ alias pan-='xrandr --output LVDS1 --panning 0x0'
 gamma() { xrandr --output LVDS1 --gamma $1:$1:$1; }
 bright() { xrandr --output LVDS1 --brightness $1; }
 gambri() { xrandr --output LVDS1 --gamma $1:$1:$1 --brightness $2; }
-copy() { (if [ -f "$1" ]; then cat $1; else printf "$1"; fi;) | xclip -sel p -f | xclip -sel c; }
+# copy() { (if [ -f "$1" ]; then cat $1; else printf "$1"; fi;) | xclip -sel p -f | xclip -sel c; }
+copy() { (if [ -f "$1" ]; then cat $1; elif [ -d "$1" ]; then realpath -z "$1"; else printf "$1"; fi;) | wl-copy; }
+
 
 alias h='history'
 alias doc='cd ~/repo/adabru-markup/ ; ./html/js/server.ls -d ~/portable/documentation --cache ~/.cache/adabru-markup'
 alias nnn='export EDITOR=vim ; nnn'
+alias diff='git diff --color-words --no-index'
 c() {
 for b in {40..47} {100..107} ; do
   for f in {30..37} {90..97} ; do
@@ -221,5 +227,8 @@ gopen() {
 }
 bench() {
   benchmark.py -r 5 "$@"
+}
+cdtmp() {
+  cd $(mktemp -d)
 }
 

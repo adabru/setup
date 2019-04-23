@@ -1,12 +1,13 @@
 #!/usr/bin/python
 
-import os, filecmp
+import os, filecmp, shutil
 
 if os.geteuid() == 0:
   print("Don't run as root. Exiting.")
   exit()
 
 def sync(source, target):
+  # symbolic links are not supported on FAT32, check with `os.stat(os.path.dirname(target)).st_uid != 0`
   print("\033[96m{:} \033[39m→ \033[94m{:}\033[39m: ".format(source, target), end="")
   source = os.path.expanduser(source)
   target = os.path.expanduser(target)
@@ -22,14 +23,18 @@ def sync(source, target):
     print("\033[33msource is a dir but target is a file")
   elif os.path.isfile(source) and os.path.isdir(target):
     print("\033[33msource is a file but target is a dir")
-  elif os.path.exists(target) and filecmp.cmp(source, target, shallow=False) and os.access(target, os.W_OK):
-    print("remove target and sync again")
-  elif os.path.exists(target) and filecmp.cmp(source, target, shallow=False) and not os.access(target, os.W_OK):
+  elif (os.path.exists(target) and (not os.access(target, os.W_OK) or os.stat(os.path.dirname(target)).st_uid == 0)
+      and filecmp.cmp(source, target, shallow=False)):
     print("\033[93m(✔)")
-  elif os.path.exists(target):
+  elif os.path.exists(target) and not filecmp.cmp(source, target, shallow=False):
     print("\033[33msource and target differ")
+  elif os.path.exists(target):
+    print("remove duplicate target and sync again to create a link")
   elif not os.access(os.path.dirname(target), os.W_OK):
     print("sudo copy source to target")
+  elif os.stat(os.path.dirname(target)).st_uid == 0:
+    shutil.copyfile(source, target)
+    print("\033[93m(✔)")
   else:
     os.symlink(source, target)
     print("\033[93m✔")
@@ -39,6 +44,10 @@ def sync(source, target):
 sync("~/setup/refind.conf", "/boot/efi/EFI/refind/refind.conf")
 sync("~/setup/os_arcolinux.png", "/boot/efi/EFI/refind/icons/os_arcolinux.png")
 sync("~/setup/os_grub.png", "/boot/efi/EFI/refind/icons/os_grub.png")
+sync("/boot/vmlinuz-linux", "/boot/efi/EFI/ArcoLinuxD/vmlinuz-linux.efi")
+sync("/boot/initramfs-linux.img", "/boot/efi/EFI/ArcoLinuxD/initramfs-linux.img")
+sync("/boot/initramfs-linux-fallback.img", "/boot/efi/EFI/ArcoLinuxD/initramfs-linux-fallback.img")
+sync("/boot/refind_linux.conf", "/boot/efi/EFI/ArcoLinuxD/refind_linux.conf")
 
 # keyboard
 sync("~/setup/kbd_ab.map", "/usr/share/kbd/keymaps/ab.map")
@@ -65,6 +74,7 @@ sync("~/setup/tmux.conf", "~/.tmux.conf")
 sync("~/setup/bin/copy.py", "~/bin/copy.py")
 sync("~/setup/XCompose", "~/.XCompose")
 sync("~/setup/bin/node", "~/bin/node")
+sync("~/setup/bin/rename.py", "~/bin/rename.py")
 
 # brightness
 sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
@@ -92,3 +102,10 @@ sync("~/setup/makepkg.conf", "~/.makepkg.conf")
 
 # android emulator
 sync("~/setup/bin/whatsapp", "~/bin/whatsapp")
+
+# documentation
+sync("~/repo/adabru-server/Readme", "~/portable/documentation/Homepage/Server")
+
+# mindcloud
+sync("~/repo/app/.godot/script_templates/UIState.gd", "~/.config/godot/script_templates/UIState.gd")
+sync("~/repo/app/.godot/script_templates/UIElement.gd", "~/.config/godot/script_templates/UIElement.gd")

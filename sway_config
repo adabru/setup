@@ -5,8 +5,9 @@
 set $mod Mod4
 
 bindsym $mod+Return exec termite -e tmux
-bindsym Ctrl+Space exec launcher.sh
-# exec albert || albert hide
+# bindsym Ctrl+Space exec launcher.sh
+bindsym Ctrl+Space exec albert toggle
+exec "(albert&) && sleep .1 && albert show"
 
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
@@ -66,7 +67,11 @@ input "2:7:SynPS/2_Synaptics_TouchPad" {
   tap enabled
   natural_scroll enabled
 }
+input "9317:25345:Microsoft_Corporation_Guest_Touchback_Board" {
+  map_to_output "HDMI-A-1"
+}
 # swaymsg -t get_inputs
+# swaymsg -t get_outputs
 # man 5 sway-input
 
 bindsym XF86AudioRaiseVolume exec brillo -A 10

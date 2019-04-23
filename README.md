@@ -60,6 +60,9 @@
   # setxkbmap -layout de
   # setxkbmap -layout ab
 
+  # git extension
+  yay -S git-lfs
+
   # browser
   yay -S vivaldi
 
@@ -98,9 +101,13 @@
 
   # data transfer
   pacman -S partitionmanager
-  # create FAT32 partition
+  # create 80gb FAT32 partition with label PORTABLE for data used by linux and windows
+  # create 50gb XFS partition with label VM for virtual drives
   sudo sh -c "echo \"/dev/disk/by-label/PORTABLE /home/adabru/portable vfat rw,umask=0000 0 0\" >> /etc/fstab"
+  sudo sh -c "echo \"/dev/disk/by-label/VM /home/adabru/vm xfs users 0 0\" >> /etc/fstab"
+
   mkdir ~/portable
+  mkdir ~/vm
   sudo mount -a
   # navigate to backup
   sudo mount /dev/disk/by-label/500_LapStore /mnt
@@ -227,7 +234,20 @@
   yay -S slurp grim
 
   # screencast
-  ./wlstream 24 vaapi /dev/dri/renderD128 libx264 nv12 12 /tmp/screen.mkv
+  yay -S wlstream
+  wlstream 25 vaapi /dev/dri/renderD128 libx264 nv12 12 /tmp/screen.mkv
+  # mkfifo /tmp/buffer.ts /tmp/screen.ts
+  # mbuffer -i /tmp/buffer.ts -o /tmp/screen.ts
+  # wlstream 25 vaapi /dev/dri/renderD128 libx264rgb bgr0 12 /tmp/buffer.ts
+
+  # gst-launch-1.0 -v filesrc location=/tmp/screen.mkv ! x264enc ! rtph264pay ! udpsink host=127.0.0.1 port=5000
+  # gst-launch-1.0 videotestsrc ! x264enc ! rtph264pay ! udpsink host=127.0.0.1 port=5000
+  # vlc test.sdp
+  #   c=IN IP4 10.5.110.117
+  #   m=video 5000 RTP/AVP 96
+  #   a=rtpmap:96 H264/90000
+
+
 
   # android emulator
   yay -S android-sdk
@@ -260,6 +280,11 @@
   cd ~/portable/cloud/dropbox
   rclone -P sync dropbox:Gemeindelieder ./Gemeindelieder
   rclone lsd google:
+
+  # ftp
+  usermod -a -G ftp adabru
+  pacman -S bftpd
+  sudo chmod 770 /srv/ftp
   ```
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
   - `systemctl --failed`
@@ -324,3 +349,4 @@ ghostscript       # typesetting
 pulseeffects      # audio playback
 godot             # mindcloud
 wine              # packaging
+stupid-ftpd       # local file shares
