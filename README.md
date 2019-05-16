@@ -130,7 +130,7 @@
   sudo vim /usr/lib/python3.7/site-packages/ranger/ext/img_display.py
   sudo vim /usr/lib/python3.7/site-packages/ranger/core/fm.py
 
-  # yay -S nautilus nautilus-open-terminal
+  # yay -S nautilus nautilus-open-terminal gvfs-smb
 
   # access documentation on 127.0.7.1:7000 via doc/
   pacman -S nftables

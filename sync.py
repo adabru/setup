@@ -83,7 +83,7 @@ sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
 sync("~/setup/bin/launcher.sh", "~/bin/launcher.sh")
 
 # inkscape
-# sync("~/setup/inkscape.xml", ???)
+sync("~/setup/inkscape.xml", "~/.config/inkscape/keys/default.xml")
 
 # virtual MIDI keyboard
 sync("~/setup/vkeybdmap", "~/.vkeybdmap")

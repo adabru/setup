@@ -2,8 +2,30 @@
 <keys
    name="My custom shortcuts">
   <bind
-     key="comma"
-     modifiers="Ctrl"
+     key="p"
+     modifiers="Ctrl,Shift"
      action="DialogPreferences"
      display="true" />
+  <bind
+     key="P"
+     modifiers="Ctrl,Shift"
+     action="DialogPreferences" />
+  <bind
+     key="i"
+     modifiers="Ctrl,Shift"
+     action="AlignVerticalCenter"
+     display="true" />
+  <bind
+     key="I"
+     modifiers="Ctrl,Shift"
+     action="AlignVerticalCenter" />
+  <bind
+     key="j"
+     modifiers="Ctrl,Shift"
+     action="AlignHorizontalCenter"
+     display="true" />
+  <bind
+     key="J"
+     modifiers="Ctrl,Shift"
+     action="AlignHorizontalCenter" />
 </keys>
