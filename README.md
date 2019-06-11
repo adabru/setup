@@ -158,7 +158,7 @@
   #   MindCloud Slack mind-cloud
   #   MindCloud https://trello.com/mindcloud77 https://d2k1ftgv7pobq7.cloudfront.net/meta/u/res/images/brand-assets/Logos/0099ec3754bf473d2bbf317204ab6fea/trello-logo-blue.png
   #   MindCloud https://calendar.google.com/calendar/r https://www.gstatic.com/images/branding/product/1x/calendar_48dp.png
-  #   InfoAG Slack infoaghh
+  #   Fablab Slack fablab-erkelenz
   #   i9 RocketChat https://rclufgi9.informatik.rwth-aachen.de/home
   #   WA Whatsapp
   #   yjs Gitter
@@ -248,7 +248,6 @@
   #   a=rtpmap:96 H264/90000
 
 
-
   # android emulator
   yay -S android-sdk
   sdkmanager --list
@@ -285,6 +284,37 @@
   usermod -a -G ftp adabru
   pacman -S bftpd
   sudo chmod 770 /srv/ftp
+
+  # opendns + hosts
+  yay -S ddclient hosts-update
+  sudo sh -c 'echo "
+  127.0.0.1   localhost
+  ::1         localhost
+  127.0.7.1   doc
+  " > /etc/hosts.local'
+  sudo hosts-update
+  sudo sh -c 'echo "
+  nameserver 208.67.222.222
+  nameserver 208.67.220.220
+  search fritz.box
+  nameserver 192.168.178.1
+  nameserver fd00::e228:6dff:fe95:24b5
+  " > /etc/resolv.conf'
+  # see https://support.opendns.com/hc/en-us/articles/227987727-Linux-IP-Updater-for-Dynamic-Networks
+  sudo sh -c 'echo "
+  ##
+  ## OpenDNS.com account-configuration
+  ##
+  protocol=dyndns2
+  use=web, web=myip.dnsomatic.com
+  ssl=yes
+  server=updates.opendns.com
+  login=opendns_username
+  password=‘opendns_password’
+  opendns_network_label
+  " > /etc/ddclient.conf'
+  # set username and password
+  sudo systemctl start ddclient
   ```
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
   - `systemctl --failed`

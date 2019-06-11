@@ -22,8 +22,8 @@ elif [ -f /etc/bash_completion ]; then
 fi
 
 # history
-HISTSIZE=50000
-HISTFILESIZE=50000
+HISTSIZE=100000
+HISTFILESIZE=100000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 bind '"\e[A": history-search-backward'
@@ -186,7 +186,7 @@ copy() { (if [ -f "$1" ]; then cat $1; elif [ -d "$1" ]; then realpath -z "$1"; 
 
 
 alias h='history'
-alias doc='cd ~/repo/adabru-markup/ ; ./html/js/server.ls -d ~/portable/documentation --cache ~/.cache/adabru-markup'
+alias doc='cd ~/repo/adabru-markup/ ; ./html/js/server.ls -d ~/documentation --cache ~/.cache/adabru-markup'
 alias nnn='export EDITOR=vim ; nnn'
 alias diff='git diff --color-words --no-index'
 c() {

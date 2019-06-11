@@ -81,6 +81,7 @@ sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
 
 # launcher
 sync("~/setup/bin/launcher.sh", "~/bin/launcher.sh")
+sync("~/setup/albert.conf", "~/.config/albert/albert.conf")
 
 # inkscape
 sync("~/setup/inkscape.xml", "~/.config/inkscape/keys/default.xml")
@@ -104,8 +105,12 @@ sync("~/setup/makepkg.conf", "~/.makepkg.conf")
 sync("~/setup/bin/whatsapp", "~/bin/whatsapp")
 
 # documentation
-sync("~/repo/adabru-server/Readme", "~/portable/documentation/Homepage/Server")
+sync("~/repo/adabru-server/Readme", "~/documentation/Homepage/Server")
 
 # mindcloud
 sync("~/repo/app/.godot/script_templates/UIState.gd", "~/.config/godot/script_templates/UIState.gd")
 sync("~/repo/app/.godot/script_templates/UIElement.gd", "~/.config/godot/script_templates/UIElement.gd")
+
+# geany
+sync("~/setup/geany.conf", "~/.config/geany/geany.conf")
+sync("~/setup/geany_keybindings.conf", "~/.config/geany/keybindings.conf")
