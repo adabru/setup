@@ -300,6 +300,13 @@
   nameserver 192.168.178.1
   nameserver fd00::e228:6dff:fe95:24b5
   " > /etc/resolv.conf'
+  # disable overwriting resolv.conf by network-manager https://askubuntu.com/a/623956/452398
+  sudo sh -c 'echo "
+  [main]
+  dns=none
+  " >> /etc/NetworkManager/NetworkManager.conf'
+  sudo systemctl restart NetworkManager
+  # check with `cat /etc/resolv.conf`
   # see https://support.opendns.com/hc/en-us/articles/227987727-Linux-IP-Updater-for-Dynamic-Networks
   sudo sh -c 'echo "
   ##
@@ -315,6 +322,21 @@
   " > /etc/ddclient.conf'
   # set username and password
   sudo systemctl start ddclient
+
+  # backup
+  yay -S squashfuse
+
+  # arduino
+  yay -S arduino
+  # install arduino extension in vscode
+  sudo usermod -a -G uucp,lock adabru
+  # logout → login
+  echo "ciao" > /dev/ttyUSB0
+  # see if lights are blinking
+  # set "port": "/dev/ttyUSB0" in arduino.json
+  # "open serial port" in vscode didn't work, using screen instead (cancel with CTRL+A K)
+  yay -S screen
+  screen /dev/ttyUSB0 19200
   ```
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
   - `systemctl --failed`

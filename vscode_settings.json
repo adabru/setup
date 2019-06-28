@@ -63,5 +63,6 @@
     },
     "keyboard.dispatch": "keyCode",
     "explorer.confirmDelete": false,
-    "explorer.confirmDragAndDrop": false
+    "explorer.confirmDragAndDrop": false,
+    "arduino.additionalUrls": "http://drazzy.com/package_drazzy.com_index.json"
 }

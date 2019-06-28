@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=SquashFS Mounter
+Icon=gtk-cdrom
+Exec=sqfs-mount.sh %u
+MimeType=application/vnd.squashfs;
+Terminal=false
+StartupNotify=false
+Type=Application
+NoDisplay=true

@@ -71,6 +71,7 @@ sync("~/setup/bashrc", "~/.bashrc")
 sync("~/setup/clingrc", "~/.clingrc")
 sync("~/setup/pythonrc", "~/.pythonrc")
 sync("~/setup/tmux.conf", "~/.tmux.conf")
+sync("~/setup/screenrc", "~/.screenrc")
 sync("~/setup/bin/copy.py", "~/bin/copy.py")
 sync("~/setup/XCompose", "~/.XCompose")
 sync("~/setup/bin/node", "~/bin/node")
@@ -114,3 +115,8 @@ sync("~/repo/app/.godot/script_templates/UIElement.gd", "~/.config/godot/script_
 # geany
 sync("~/setup/geany.conf", "~/.config/geany/geany.conf")
 sync("~/setup/geany_keybindings.conf", "~/.config/geany/keybindings.conf")
+
+# backup
+sync("~/documentation/Ubuntu/backup.py", "~/bin/backup.py")
+sync("~/setup/sqfs-mount.desktop", "/usr/share/applications/sqfs-mount.desktop")
+sync("~/setup/bin/sqfs-mount.sh", "~/bin/sqfs-mount.sh")
