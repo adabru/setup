@@ -80,6 +80,9 @@ sync("~/setup/bin/rename.py", "~/bin/rename.py")
 # brightness
 sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
 
+# hdmi sound
+sync("~/setup/udev_hdmi_sound.rules", "/etc/udev/rules.d/hdmi_sound.rules")
+
 # launcher
 sync("~/setup/bin/launcher.sh", "~/bin/launcher.sh")
 sync("~/setup/albert.conf", "~/.config/albert/albert.conf")
@@ -111,6 +114,7 @@ sync("~/repo/adabru-server/Readme", "~/documentation/Homepage/Server")
 # mindcloud
 sync("~/repo/app/.godot/script_templates/UIState.gd", "~/.config/godot/script_templates/UIState.gd")
 sync("~/repo/app/.godot/script_templates/UIElement.gd", "~/.config/godot/script_templates/UIElement.gd")
+sync("~/repo/app/.godot/editor_settings-3.tres", "~/.config/godot/editor_settings-3.tres")
 
 # geany
 sync("~/setup/geany.conf", "~/.config/geany/geany.conf")

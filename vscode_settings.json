@@ -64,5 +64,6 @@
     "keyboard.dispatch": "keyCode",
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
-    "arduino.additionalUrls": "http://drazzy.com/package_drazzy.com_index.json"
+   "arduino.additionalUrls": "http://drazzy.com/package_drazzy.com_index.json",
+   "mesonbuild.configureOnOpen": true
 }
