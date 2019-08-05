@@ -105,6 +105,8 @@
   # create 50gb XFS partition with label VM for virtual drives
   sudo sh -c "echo \"/dev/disk/by-label/PORTABLE /home/adabru/portable vfat rw,umask=0000 0 0\" >> /etc/fstab"
   sudo sh -c "echo \"/dev/disk/by-label/VM /home/adabru/vm xfs users 0 0\" >> /etc/fstab"
+  # if partitionmanager doesn't get permissions, you can use
+  # su && dbus-launch --exit-with-session partitionmanager
 
   mkdir ~/portable
   mkdir ~/vm
@@ -140,11 +142,12 @@
   sudo systemctl restart nftable
 
   # refind
-  pacman -S refind-efi
+  pacman -S refind-efi memtest86-efi
   refind-install
   sudo cp ~/setup/refind.conf /boot/efi/EFI/refind/refind.conf
   sudo cp ~/setup/os_grub.png /boot/efi/EFI/refind/icons/os_grub.png
   sudo cp ~/setup/os_arcolinux.png /boot/efi/EFI/refind/icons/os_arcolinux.png
+  sudo cp /usr/share/memtest86-efi/bootx64.efi /boot/efi/EFI/tools
   poweroff --reboot
 
   # messaging
@@ -177,16 +180,8 @@
 
   # eduroam
   # connect to mops
-  wget http://cdp.pca.dfn.de/global-root-ca/pub/cacert/cacert.pem
-  sudo mv ./cacert.pem "/etc/ca-certificates/trust-source/anchors/DFN-Verein PCA Global - G01.crt"
-  wget http://cdp.pca.dfn.de/rwth-ca/pub/cacert/cacert.pem
-  sudo mv ./cacert.pem "/etc/ca-certificates/trust-source/anchors/RWTH Aachen CA.crt"
-  wget http://cdp.pca.dfn.de/telekom-root-ca-2/pub/cacert/cacert.pem
-  sudo mv ./cacert.pem "/etc/ca-certificates/trust-source/anchors/Deutsche Telekom Root CA 2.crt"
-  sudo trust extract-compat
-  trust list | less
   nm-connection-editor
-  # SSID:eduroam, WPA2, PEAP, Deutsche_Telekom, MSCHAPv2, username, password
+  # SSID:eduroam, WPA2, PWD, username, password
   nmcli connection up id eduroam
 
   # create ssh-key for github and gitlab
@@ -216,6 +211,12 @@
   bluetoothctl power on
   bluetoothctl devices
   blueman
+
+  # disable wifi card if there are problems
+  lspci -k
+  sudo modprobe -r ath9k
+  # to make it permanent
+  sudo sh -c 'echo "blacklist ath9k" > /etc/modprobe.d/modprobe.conf'
 
   # printer
   pacman -S cups cups-pdf
@@ -323,6 +324,14 @@
   # set username and password
   sudo systemctl start ddclient
 
+  # setup IPv6 tunnel with hurricane electrics (free)
+  # login and create tunnel
+  # save commands to ~/bin/tunnel_ipv6.sh
+  # replace local ip4 from router by local ip4 of laptop, e.g. 192.168.178.41
+  echo 'echo "using wlan"' >> ~/bin/tunnel_ipv6.sh
+  sudo tunnel_ipv6.sh
+  # remove with `sudo ip tunnel del he-ipv6`
+
   # backup
   yay -S squashfuse
 
@@ -337,6 +346,10 @@
   # "open serial port" in vscode didn't work, using screen instead (cancel with CTRL+A K)
   yay -S screen
   screen /dev/ttyUSB0 19200
+
+  # wine
+  yay -S wine winetricks
+  winetricks dotnet452 corefonts
   ```
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
   - `systemctl --failed`
@@ -400,5 +413,4 @@ pdfshuffler       # typesetting
 ghostscript       # typesetting
 pulseeffects      # audio playback
 godot             # mindcloud
-wine              # packaging
 stupid-ftpd       # local file shares

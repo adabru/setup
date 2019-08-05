@@ -183,6 +183,7 @@ bright() { xrandr --output LVDS1 --brightness $1; }
 gambri() { xrandr --output LVDS1 --gamma $1:$1:$1 --brightness $2; }
 # copy() { (if [ -f "$1" ]; then cat $1; else printf "$1"; fi;) | xclip -sel p -f | xclip -sel c; }
 copy() { (if [ -f "$1" ]; then cat $1; elif [ -d "$1" ]; then realpath -z "$1"; else printf "$1"; fi;) | wl-copy; }
+find_file() { find . -name "*$1*"; }
 
 
 alias h='history'

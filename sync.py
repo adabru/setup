@@ -120,6 +120,9 @@ sync("~/repo/app/.godot/editor_settings-3.tres", "~/.config/godot/editor_setting
 sync("~/setup/geany.conf", "~/.config/geany/geany.conf")
 sync("~/setup/geany_keybindings.conf", "~/.config/geany/keybindings.conf")
 
+# ftp
+sync("~/setup/bin/ftp_here.sh", "~/bin/ftp_here.sh")
+
 # backup
 sync("~/documentation/Ubuntu/backup.py", "~/bin/backup.py")
 sync("~/setup/sqfs-mount.desktop", "/usr/share/applications/sqfs-mount.desktop")

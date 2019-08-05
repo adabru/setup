@@ -25,7 +25,7 @@ output * bg /home/adabru/graphics/desktop.jpg fill
 # swaymsg output "LVDS-1" scale 2
 exec xhost local:root
 # doc
-#exec "cd home/adabru/repo/adabru-markup/ && ./html/js/server.ls -d ~/portable/documentation --cache ~/.cache/adabru-markup > /home/adabru/debug"
+exec "cd home/adabru/repo/adabru-markup/ && ./html/js/server.ls -d ~/portable/documentation --cache ~/.cache/adabru-markup > /home/adabru/debug"
 
 bindsym $mod+KP_1 workspace 1
 bindsym $mod+KP_2 workspace 2
