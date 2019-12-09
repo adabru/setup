@@ -57,6 +57,9 @@ sync("~/setup/xkb_ab", "/usr/share/X11/xkb/symbols/ab")
 sync("~/setup/sway_config", "~/.config/sway/config")
 sync("~/setup/bin/statusbar.py", "~/bin/statusbar.py")
 
+# autologin
+sync("~/setup/getty.conf", "/etc/systemd/system/getty@tty1.service.d/override.conf")
+
 # firewall and doc
 sync("~/setup/nftables.conf", "/etc/nftables.conf")
 
