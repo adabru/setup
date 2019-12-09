@@ -64,6 +64,14 @@
     "keyboard.dispatch": "keyCode",
     "explorer.confirmDelete": false,
     "explorer.confirmDragAndDrop": false,
-   "arduino.additionalUrls": "http://drazzy.com/package_drazzy.com_index.json",
-   "mesonbuild.configureOnOpen": true
+   "arduino.additionalUrls": [
+      "http://drazzy.com/package_drazzy.com_index.json",
+      "https://dl.espressif.com/dl/package_esp32_index.json"
+   ],
+   "mesonbuild.configureOnOpen": true,
+   "latex-workshop.view.pdf.viewer": "tab",
+   "C_Cpp.updateChannel": "Insiders",
+   "[sql]": {},
+   "editor.selectionClipboard": false,
+   "python.jediEnabled": false
 }

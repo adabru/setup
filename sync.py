@@ -61,9 +61,10 @@ sync("~/setup/bin/statusbar.py", "~/bin/statusbar.py")
 sync("~/setup/nftables.conf", "/etc/nftables.conf")
 
 # VS Code config
-sync("~/repo/vscode-adabru-markup", "~/.vscode-oss/extensions/vscode-adabru-markup")
-sync("~/setup/vscode_keybindings.json", "~/.config/Code - OSS/User/keybindings.json")
-sync("~/setup/vscode_settings.json", "~/.config/Code - OSS/User/settings.json")
+sync("~/repo/vscode-adabru-markup", "~/.vscode-insiders/extensions/vscode-adabru-markup")
+sync("~/repo/app/addons/vscode-diff-plugin", "~/.vscode-insiders/extensions/vscode-diff-plugin")
+sync("~/setup/vscode_keybindings.json", "~/.config/Code - Insiders/User/keybindings.json")
+sync("~/setup/vscode_settings.json", "~/.config/Code - Insiders/User/settings.json")
 
 # terminal + envs
 sync("~/setup/termite_config", "~/.config/termite/config")

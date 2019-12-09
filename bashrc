@@ -22,8 +22,8 @@ elif [ -f /etc/bash_completion ]; then
 fi
 
 # history
-HISTSIZE=100000
-HISTFILESIZE=100000
+HISTSIZE=1000000
+HISTFILESIZE=1000000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 bind '"\e[A": history-search-backward'
@@ -233,3 +233,7 @@ cdtmp() {
   cd $(mktemp -d)
 }
 
+
+# tabtab source for electron-forge package
+# uninstall by removing these lines or running `tabtab uninstall electron-forge`
+[ -f /home/adabru/work/armin/kar-soft/html/node_modules/tabtab/.completions/electron-forge.bash ] && . /home/adabru/work/armin/kar-soft/html/node_modules/tabtab/.completions/electron-forge.bash

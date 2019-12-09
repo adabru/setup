@@ -106,7 +106,8 @@
   sudo sh -c "echo \"/dev/disk/by-label/PORTABLE /home/adabru/portable vfat rw,umask=0000 0 0\" >> /etc/fstab"
   sudo sh -c "echo \"/dev/disk/by-label/VM /home/adabru/vm xfs users 0 0\" >> /etc/fstab"
   # if partitionmanager doesn't get permissions, you can use
-  # su && dbus-launch --exit-with-session partitionmanager
+  # su
+  # dbus-launch --exit-with-session partitionmanager
 
   mkdir ~/portable
   mkdir ~/vm
@@ -167,7 +168,7 @@
   #   yjs Gitter
   #   Jungschar Threema
 
-  pacman -S geany
+  yay -S geany
 
   # font
   # see font coverage on https://www.fileformat.info/info/unicode/block/miscellaneous_symbols_and_pictographs/fontsupport.htm
@@ -335,6 +336,9 @@
   # backup
   yay -S squashfuse
 
+  # node
+  yay -S nodenv yarn
+
   # arduino
   yay -S arduino
   # install arduino extension in vscode
@@ -368,30 +372,6 @@
     . ./bin/activate
     ```
   - @youtube-dl @ipython @plac @colorama @Pillow
-|@nvm / @yarn|
-  - <https://github.com/creationix/nvm>
-
-    ```
-    mkdir ~/.nvm
-    curl -o- https://raw.githubusercontent.com/creationix/nvm/master/install.sh | bash
-    exec bash
-    nvm install node
-    ```
-  - <https://yarnpkg.com/en/docs/install#arch-rc>
-
-    ```
-    curl -L https://yarnpkg.com/install.sh | bash -s -- --rc
-    ```
-  - make node available outside of terminal, add `~/bin/node` :
-
-    ```
-    #!/bin/sh
-
-    export NVM_DIR="/home/adabru/.nvm"
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-    node $@
-    ```
-  - make executable: └▪chmod a+x ~/bin/node↵
 
 
 libreoffice-fresh # finance, work-table
@@ -414,3 +394,4 @@ ghostscript       # typesetting
 pulseeffects      # audio playback
 godot             # mindcloud
 stupid-ftpd       # local file shares
+texworks          # latex editor

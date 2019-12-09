@@ -100,14 +100,16 @@ bar {
         background #32323222
         inactive_workspace #32323200 #32323200 #5c5c5c
     }
+    # disable system tray
+    tray_output none
 }
 
+# kill focused window
+bindsym Mod1+f4 kill
 
-
-
-
-    # kill focused window
-    bindsym $mod+Shift+q kill
+# godot open scnee as floating
+for_window [instance="Godot_Engine"] floating enable ; move position 900 400
+for_window [title="[Extension Development Host]"] resize set width 30 ppt
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.
