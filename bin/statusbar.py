@@ -3,10 +3,8 @@
 import time, datetime, sys, re, subprocess, asyncio
 
 def cat(file):
-  f = open(file,"r")
-  res = f.read()
-  f.close()
-  return res
+  with open(file,"r") as f:
+    return f.read()
 
 lastCpu = None
 ping = '∞'
@@ -16,7 +14,7 @@ def status():
   print('[')
 
   # wireless network
-  network = subprocess.run('iwgetid --raw'.split(), encoding='UTF-8', capture_output=True).stdout.strip()
+  network = subprocess.run('nmcli -t -f name connection show --active'.split(), encoding='UTF-8', capture_output=True).stdout.strip()
   print('{{"color":"#8888ff", "full_text":"{:}"}},'.format(network))
 
   # ping
@@ -46,8 +44,18 @@ def status():
   lastCpu = currCpu
 
   # battery status
-  battery = ( float(cat('/sys/class/power_supply/BAT1/energy_now'))
-    / float(cat('/sys/class/power_supply/BAT1/energy_full')) )
+  try:
+    battery = ( float(cat('/sys/class/power_supply/BAT1/energy_now'))
+      / float(cat('/sys/class/power_supply/BAT1/energy_full')) )
+  except FileNotFoundError:
+    pass
+  try:
+    battery = ( float(cat('/sys/class/power_supply/BAT1/charge_now'))
+      / float(cat('/sys/class/power_supply/BAT1/charge_full')) )
+  except FileNotFoundError:
+    pass
+  if not battery:
+    battery = 0
   color = ( int(cat('/sys/class/power_supply/ACAD/online')) and '#bbbbbb'
     or  battery > .3 and '#77bb77' or battery > .15 and '#dddd88' or '#ff5555' )
   print('{{"color":"{:}", "full_text":"{:.1f}"}},'.format(color, 100*battery))

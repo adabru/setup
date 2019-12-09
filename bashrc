@@ -1,6 +1,7 @@
 
+export PATH="~/bin:$PATH"
 
-if [ $(tty) = "/dev/tty1" ]; then
+if [[ $(tty) = "/dev/tty1" && -x /usr/bin/sway ]]; then
   export XKB_DEFAULT_LAYOUT=ab
   export XKB_DEFAULT_OPTIONS=compose:menu
   export PATH=~/bin:$PATH

@@ -18,17 +18,28 @@
 - setup arcolinuxd
 
   ```sh
-  # git setup
-  git config --global user.email b.brunnmeier@gmx.de
-  git config --global user.name adabru
+  useradd -m adabru
+  passwd adabru
+  EDITOR=vim visudo
+  su adabru
 
-  # load keymap
-  # wget -O- https://github.com/adabru/setup/archive/master.tar.gz | tar xz
   git clone https://github.com/adabru/setup
-  sudo loadkeys setup-master/kbd_ab.map
+  sudo loadkeys setup/kbd_ab.map
+  setup/sync.py
+
+  # store keymap
   sudo cp ~/setup/kbd_ab.map /usr/share/kbd/keymaps/ab.map
   sudo sh -c "echo KEYMAP=ab > /etc/vconsole.conf"
   ~/setup/sync.py
+
+  # restore backup
+  pacman -S squashfuse rsync
+  # plugin drive
+  lsblk
+  sudo mount -o uid=adabru,ro /dev/sdb1 /mnt
+  sqfs-mount.sh /mnt/20xx-xx-xx-backup.sqfs
+  rsync -r --info=progress2 ~/mnt/20xx-xx-xx-backup.sqfs/xx ~/xx
+  # rsync -r --info=progress2 --exclude '*/node_modules/' ~/mnt/20xx-xx-xx-backup.sqfs/xx ~/xx
 
   # wlan
   # check wlan on/off switch
@@ -38,6 +49,7 @@
   nmcli connection
 
   # update system
+  pacman -S reflector
   mirror
   # alternatively `yay`
   update
@@ -55,28 +67,19 @@
   # install sway
   # https://wiki.archlinux.org/index.php/Sway#Installation
   # https://github.com/swaywm/sway/wiki
-  yay -S wlroots-git sway-git
+  pacman -S sway xorg-server-xwayland
   export XKB_DEFAULT_LAYOUT=ab; sway
   # setxkbmap -layout de
   # setxkbmap -layout ab
 
-  # git extension
-  yay -S git-lfs
+  # ssh
+  yay -S openssh
 
   # browser
-  yay -S vivaldi
-
-  wget -O- https://aur.archlinux.org/cgit/aur.git/snapshot/vivaldi-codecs-ffmpeg-extra-bin.tar.gz | tar xz
-  cd vivaldi*
-  yay -S pup-bin
-  ./update_pkg.sh
-  makepkg
-  pacman -U ./*.pkg.tar.xz
-
-  yay -S vivaldi-widevine
+  yay -S vivaldi vivaldi-widevine vivaldi-codecs-ffmpeg-extra-bin
 
   # albert
-  yay -S albert-lite
+  pacman -S albert
 
   # brightness
   yay -S brillo
@@ -88,11 +91,7 @@
   # https://wiki.archlinux.org/index.php/Systemd#Editing_provided_units
   # sudo systemctl edit getty^TAB
   sudo mkdir /etc/systemd/system/getty@tty1.service.d/
-  sudo sh -c 'echo "
-  [Service]
-  ExecStart=
-  ExecStart=-/usr/bin/agetty --autologin adabru --noclear %I $TERM
-  " > /etc/systemd/system/getty@tty1.service.d/override.conf'
+  sudo cp ~/setup/getty.conf /etc/systemd/system/getty@tty1.service.d/override.conf
   systemctl daemon-reload
 
   # sudo keep display
@@ -101,19 +100,15 @@
 
   # data transfer
   pacman -S partitionmanager
-  # create 80gb FAT32 partition with label PORTABLE for data used by linux and windows
   # create 50gb XFS partition with label VM for virtual drives
-  sudo sh -c "echo \"/dev/disk/by-label/PORTABLE /home/adabru/portable vfat rw,umask=0000 0 0\" >> /etc/fstab"
   sudo sh -c "echo \"/dev/disk/by-label/VM /home/adabru/vm xfs users 0 0\" >> /etc/fstab"
   # if partitionmanager doesn't get permissions, you can use
   # su && dbus-launch --exit-with-session partitionmanager
 
-  mkdir ~/portable
   mkdir ~/vm
   sudo mount -a
   # navigate to backup
   sudo mount /dev/disk/by-label/500_LapStore /mnt
-  tar xzf *portable.tar.gz -C ~/portable
   ```
 
 - setup other applications
@@ -123,16 +118,15 @@
   # visualstudio code
   pacman -S code
 
+  # git setup
+  git config --global user.email b.brunnmeier@gmx.de
+  git config --global user.name adabru
+
   # ranger
   # pacman -S thunar gvfs
-  pacman -S ranger highlight mediainfo mpv
-  # w3m image preview doesn't work in termite: https://github.com/thestinger/termite/issues/501
-  # mpv instead: https://github.com/ranger/ranger/wiki/Image-Previews#with-mpv
-  #   $ranger = /usr/lib/python3.7/site-packages/ranger/
-  sudo vim /usr/lib/python3.7/site-packages/ranger/ext/img_display.py
-  sudo vim /usr/lib/python3.7/site-packages/ranger/core/fm.py
+  pacman -S mpv
 
-  # yay -S nautilus nautilus-open-terminal gvfs-smb
+  yay -S nautilus nautilus-open-terminal gvfs-smb
 
   # access documentation on 127.0.7.1:7000 via doc/
   pacman -S nftables
@@ -171,7 +165,7 @@
 
   # font
   # see font coverage on https://www.fileformat.info/info/unicode/block/miscellaneous_symbols_and_pictographs/fontsupport.htm
-  yay -S symbola gucharmap
+  yay -S ttf-symbola ttf-unifont gucharmap
 
   # check Wayland/XWayland
   # https://fedoraproject.org/wiki/How_to_debug_Wayland_problems
@@ -228,9 +222,6 @@
   # pdf reader
   pacman -S evince
 
-  # flash
-  pacman -S pepper-flash
-
   # screenshot
   yay -S slurp grim
 
@@ -286,8 +277,12 @@
   pacman -S bftpd
   sudo chmod 770 /srv/ftp
 
+  # anti webspam
+  yay -S hosts-update
+  hosts-update
+
   # opendns + hosts
-  yay -S ddclient hosts-update
+  yay -S ddclient
   sudo sh -c 'echo "
   127.0.0.1   localhost
   ::1         localhost
@@ -332,8 +327,6 @@
   sudo tunnel_ipv6.sh
   # remove with `sudo ip tunnel del he-ipv6`
 
-  # backup
-  yay -S squashfuse
 
   # arduino
   yay -S arduino
@@ -414,3 +407,5 @@ ghostscript       # typesetting
 pulseeffects      # audio playback
 godot             # mindcloud
 stupid-ftpd       # local file shares
+git-lfs           # git repos with large binaries
+
