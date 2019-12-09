@@ -19,7 +19,7 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-output * bg /home/adabru/graphics/desktop.jpg fill
+output * bg /home/adabru/setup/desktop.jpg fill
 # swaymsg -t get_outputs
 # swaymsg output "LVDS-1" scale .5
 # swaymsg output "LVDS-1" scale 2

@@ -16,7 +16,12 @@ def sync(source, target):
   elif os.path.realpath(target) == source:
     print("\033[93m✔")
   elif not os.path.exists(os.path.dirname(target)):
-    print("\033[93mtarget dir doesn't exist (yet).")
+    print("trying to create direcotry {:}".format(os.path.dirname(target)))
+    try:
+      os.makedirs(os.path.dirname(target))
+      return sync(source, target)
+    except IOError:
+      print("\033[93mdirectory creation failed!")
   elif os.path.islink(target):
     print("\033[33mtarget already links to {:}".format(os.path.realpath(target)))
   elif os.path.isdir(source) and os.path.isfile(target):
