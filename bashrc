@@ -139,9 +139,6 @@ alias mirrors=mirror
 export PATH=~/.local/bin:$PATH
 
 # nodejs
-export NVM_DIR="/home/adabru/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-[[ -r $NVM_DIR/bash_completion ]] && . $NVM_DIR/bash_completion
 export PATH=./node_modules/.bin:$PATH
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
@@ -169,6 +166,20 @@ alias gco='git checkout'
 alias gcb='git checkout -b'
 alias glog="git log --pretty=format:'%C(bold)%h %C(cyan)%cr %C(reset)%C(yellow)%an %C(reset) %s %C(green)%d' --graph --decorate"
 
+git-https() {
+  echo 'was:'
+  git remote -v
+  git remote set-url origin $(git remote get-url origin | sed 's/^git@\(.*\):\/*\(.*\).git/https:\/\/\1\/\2.git/')
+  echo 'is:'
+  git remote -v
+}
+git-ssh() {
+  echo 'was:'
+  git remote -v
+  git remote set-url origin $(git remote get-url origin | sed 's/^https:\/\/\([^\/]*\)\/*\(.*\).git/git@\1:\2.git/')
+  echo 'is:'
+  git remote -v
+}
 
 # long running commands
 beep() { if [ $? == 0 ]; then paplay /usr/share/sounds/ubuntu/notifications/Positive.ogg

@@ -2,6 +2,7 @@
 # see `man 5 sway` for a complete configuration reference.
 
 # Mod1 = Alt
+# Mod4 = Super
 set $mod Mod4
 
 bindsym $mod+Return exec termite -e tmux
@@ -58,6 +59,18 @@ bindsym $mod+Shift+KP_7 move container to workspace 7
 bindsym $mod+Shift+KP_8 move container to workspace 8
 bindsym $mod+Shift+KP_9 move container to workspace 9
 bindsym $mod+Shift+KP_0 move container to workspace 10
+
+# keyboard layout
+# alternatively use:
+#   swaymsg "input 1:1:AT_Translated_Set_2_keyboard xkb_layout ab"
+# cat /usr/share/X11/xkb/rules/xorg.lst | grep compose
+# cat /usr/share/X11/xkb/rules/xorg.lst | grep grp
+# man xkeyboard-config
+input "1:1:AT_Translated_Set_2_keyboard" {
+    xkb_layout ab,ab(russian)
+    xkb_options grp:ctrls_toggle
+    xkb_options compose:menu
+}
 
 # exec swayidle timeout 600 lockscreen.py
 

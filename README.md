@@ -22,14 +22,14 @@ mount /dev/sda2 /mnt
 mount /dev/sda1 /mnt/boot
 mkswap /dev/sda3 swapon /dev/sda3
 
-pacstrap /mnt base base-devel linux linux-firmware vim git networkmanager python
+pacstrap /mnt base base-devel linux linux-firmware vim git networkmanager python bash-completion
 genfstab -p /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
 echo adabru-reserve > /etc/hostname
-echo LANG=de_DE.UTF-8 > /etc/locale.conf
 ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
-# uncomment de_DE.UTF-8 UTF-8 in /etc/locale.gen
+# uncomment 'de_DE.UTF-8 UTF-8' and 'en_US.UTF-8 UTF-8' in /etc/locale.gen
 locale-gen
+echo LANG=en_US.UTF-8 > /etc/locale.conf
 mkinitcpio -p linux
 passwd # set root passwd
 echo KEYMAP=de > /etc/vconsole.conf
@@ -135,14 +135,20 @@ export XKB_DEFAULT_LAYOUT=ab; sway
 # setxkbmap -layout de
 # setxkbmap -layout ab
 
+# install yay
+...
+# in /etc/pacman.conf :
+# uncomment option 'Color'
+# uncomment source [multilib]
+
 # ssh
-yay -S openssh
+pacman -S openssh
 
 # browser
 yay -S vivaldi vivaldi-widevine vivaldi-codecs-ffmpeg-extra-bin
 
 # albert
-pacman -S albert
+pacman -S albert muparser
 
 # brightness
 yay -S brillo
@@ -290,7 +296,7 @@ systemctl start org.cups.cupsd.service
 pacman -S evince
 
 # screenshot
-yay -S slurp grim
+yay -S slurp grim eog
 
 # screencast
 yay -S wlstream
@@ -396,7 +402,7 @@ sudo tunnel_ipv6.sh
 
 
 # node
-yay -S nodenv yarn
+yay -S nodejs yarn
 
 # arduino
 yay -S arduino

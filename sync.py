@@ -83,7 +83,6 @@ sync("~/setup/tmux.conf", "~/.tmux.conf")
 sync("~/setup/screenrc", "~/.screenrc")
 sync("~/setup/bin/copy.py", "~/bin/copy.py")
 sync("~/setup/XCompose", "~/.XCompose")
-sync("~/setup/bin/node", "~/bin/node")
 sync("~/setup/bin/rename.py", "~/bin/rename.py")
 
 # brightness
