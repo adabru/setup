@@ -171,14 +171,14 @@ alias glog="git log --pretty=format:'%C(bold)%h %C(cyan)%cr %C(reset)%C(yellow)%
 git-https() {
   echo 'was:'
   git remote -v
-  git remote set-url origin $(git remote get-url origin | sed 's/^git@\(.*\):\/*\(.*\).git/https:\/\/\1\/\2.git/')
+  git remote set-url origin $(git remote get-url origin | sed 's/^git@\(.*\):\/*\(.*\)/https:\/\/\1\/\2/')
   echo 'is:'
   git remote -v
 }
 git-ssh() {
   echo 'was:'
   git remote -v
-  git remote set-url origin $(git remote get-url origin | sed 's/^https:\/\/\([^\/]*\)\/*\(.*\).git/git@\1:\2.git/')
+  git remote set-url origin $(git remote get-url origin | sed 's/^https:\/\/\([^\/]*\)\/*\(.*\)/git@\1:\2/')
   echo 'is:'
   git remote -v
 }
