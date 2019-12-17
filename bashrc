@@ -117,6 +117,8 @@ alias r='rename.py'
 
 alias pacman='sudo pacman --color auto'
 alias update='sudo pacman -Syyu'
+alias t='trizen'
+alias tupdate='sudo trizen -Syyu'
 # yay as aur helper - updates everything
 alias pksyua="yay -Syu --noconfirm"
 

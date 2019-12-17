@@ -16,7 +16,6 @@ def sync(source, target):
   elif os.path.realpath(target) == source:
     print("\033[93m✔")
   elif not os.path.exists(os.path.dirname(target)):
-    print("trying to create direcotry {:}".format(os.path.dirname(target)))
     try:
       os.makedirs(os.path.dirname(target))
       return sync(source, target)
@@ -49,6 +48,7 @@ def sync(source, target):
 sync("~/setup/refind.conf", "/boot/efi/EFI/refind/refind.conf")
 sync("~/setup/os_arcolinux.png", "/boot/efi/EFI/refind/icons/os_arcolinux.png")
 sync("~/setup/os_grub.png", "/boot/efi/EFI/refind/icons/os_grub.png")
+sync("~/setup/rorschach.png", "/boot/efi/EFI/refind/rorschach.png")
 sync("/boot/vmlinuz-linux", "/boot/efi/EFI/ArcoLinuxD/vmlinuz-linux.efi")
 sync("/boot/initramfs-linux.img", "/boot/efi/EFI/ArcoLinuxD/initramfs-linux.img")
 sync("/boot/initramfs-linux-fallback.img", "/boot/efi/EFI/ArcoLinuxD/initramfs-linux-fallback.img")
@@ -77,6 +77,8 @@ sync("~/setup/vscode_settings.json", "~/.config/Code - Insiders/User/settings.js
 # terminal + envs
 sync("~/setup/termite_config", "~/.config/termite/config")
 sync("~/setup/bashrc", "~/.bashrc")
+sync("~/setup/trizen.conf", "~/.config/trizen/trizen.conf")
+sync("~/setup/vimrc", "~/.vimrc")
 sync("~/setup/clingrc", "~/.clingrc")
 sync("~/setup/pythonrc", "~/.pythonrc")
 sync("~/setup/tmux.conf", "~/.tmux.conf")
@@ -102,7 +104,7 @@ sync("~/setup/inkscape.xml", "~/.config/inkscape/keys/default.xml")
 sync("~/setup/vkeybdmap", "~/.vkeybdmap")
 
 # sync
-sync("~/setup/sync.py", "~/bin/sync.py")
+sync("~/setup/bin/sync.py", "~/bin/sync.py")
 
 # youtube
 sync("~/setup/bin/yt.py", "~/bin/yt")
@@ -132,6 +134,6 @@ sync("~/setup/geany_keybindings.conf", "~/.config/geany/keybindings.conf")
 sync("~/setup/bin/ftp_here.sh", "~/bin/ftp_here.sh")
 
 # backup
-sync("~/documentation/Ubuntu/backup.py", "~/bin/backup.py")
-sync("~/setup/sqfs-mount.desktop", "/usr/share/applications/sqfs-mount.desktop")
+sync("~/setup/bin/backup.py", "~/bin/backup.py")
 sync("~/setup/bin/sqfs-mount.sh", "~/bin/sqfs-mount.sh")
+sync("~/setup/sqfs-mount.desktop", "/usr/share/applications/sqfs-mount.desktop")

@@ -56,7 +56,7 @@ umount /mnt
   - install without internet to avoid updates
   - create a xGB partition during installation
 - disable fastboot via `powercfg.cpl`
-- update driver with device manager
+- update drivers with device manager
 - boot via arch pendrive to restore boot loader:
 
 ```sh
@@ -88,7 +88,7 @@ su adabru
 
 git clone https://github.com/adabru/setup
 sudo loadkeys setup/kbd_ab.map
-setup/sync.py
+setup/bin/sync.py
 
 # store keymap
 sudo cp ~/setup/kbd_ab.map /usr/share/kbd/keymaps/ab.map
@@ -100,23 +100,21 @@ pacman -S squashfuse rsync squashfs-tools
 # plugin drive
 lsblk
 sudo mount -o uid=adabru,ro /dev/sdb1 /mnt
-sqfs-mount.sh /mnt/20xx-xx-xx-backup.sqfs
-rsync -r --info=progress2 ~/mnt/20xx-xx-xx-backup.sqfs/xx ~/xx
+unsquashfs -f -d ~ /mnt/20xx-xx-xx-backup.sqfs
+# sqfs-mount.sh /mnt/20xx-xx-xx-backup.sqfs
+# rsync -r --info=progress2 ~/mnt/20xx-xx-xx-backup.sqfs/xx ~/xx
 # rsync -r --info=progress2 --exclude '*/node_modules/' ~/mnt/20xx-xx-xx-backup.sqfs/xx ~/xx
 
 # wlan
 # check wlan on/off switch
 rfkill list all
 nmcli device wifi
-nmcli device wifi connect your_ap_name_ssid
+nmcli device wifi connect -a your_ap_name_ssid
 nmcli connection
 
 # update system
 pacman -S reflector
 mirror
-# alternatively `yay`
-update
-pksyua
 
 # number of installed packages
 pacman -Qq | wc -l
@@ -135,8 +133,11 @@ export XKB_DEFAULT_LAYOUT=ab; sway
 # setxkbmap -layout de
 # setxkbmap -layout ab
 
-# install yay
-...
+# install trizen
+cd ~/repo
+git clone https://aur.archlinux.org/trizen.git
+cd trizen
+makepkg -si
 # in /etc/pacman.conf :
 # uncomment option 'Color'
 # uncomment source [multilib]
@@ -145,13 +146,13 @@ export XKB_DEFAULT_LAYOUT=ab; sway
 pacman -S openssh
 
 # browser
-yay -S vivaldi vivaldi-widevine vivaldi-codecs-ffmpeg-extra-bin
+t -S vivaldi vivaldi-widevine vivaldi-codecs-ffmpeg-extra-bin
 
 # albert
 pacman -S albert muparser
 
 # brightness
-yay -S brillo
+t -S brillo
 sudo cp setup/udev_backlight.rules /etc/udev/rules.d/backlight.rules
 grep XF86MonBrightness /usr/share/.../symbols
 
@@ -163,17 +164,14 @@ sudo mkdir /etc/systemd/system/getty@tty1.service.d/
 sudo cp ~/setup/getty.conf /etc/systemd/system/getty@tty1.service.d/override.conf
 systemctl daemon-reload
 
-# sudo keep display
-# https://askubuntu.com/questions/175611/cannot-connect-to-x-server-when-running-app-with-sudo#175615
-echo "xhost local:root" > ~/.xinitrc
-
-# data transfer
-pacman -S partitionmanager
+# partition managing
+pacman -S partitionmanager polkit-gnome
+# restart sway
 # create 50gb XFS partition with label VM for virtual drives
 sudo sh -c "echo \"/dev/disk/by-label/VM /home/adabru/vm xfs users 0 0\" >> /etc/fstab"
-# if partitionmanager doesn't get permissions, you can use
-# su
-# dbus-launch --exit-with-session partitionmanager
+# for gparted:
+pacman -S gparted xorg-xhost
+# restart sway
 
 mkdir ~/vm
 sudo mount -a
@@ -189,17 +187,17 @@ sudo mount /dev/disk/by-label/500_LapStore /mnt
 
 ```sh
 # visualstudio code
-yay -S visual-studio-code-insiders
+t -S visual-studio-code-insiders
 
 # git setup
 git config --global user.email b.brunnmeier@gmx.de
 git config --global user.name adabru
 
-# ranger
-# pacman -S thunar gvfs
+# multimedia playback
 pacman -S mpv
 
-yay -S nautilus nautilus-open-terminal gvfs-smb
+# file manager
+t -S nautilus nautilus-open-terminal gvfs-smb
 
 # access documentation on 127.0.7.1:7000 via doc/
 pacman -S nftables
@@ -218,7 +216,7 @@ sudo cp /usr/share/memtest86-efi/bootx64.efi /boot/efi/EFI/tools
 poweroff --reboot
 
 # messaging
-yay -S thunderbird rambox
+t -S thunderbird rambox
 # gmx https://support.gmx.com/pop-imap/imap/outlook.html
 # gmail
 # rwth https://www.welcome.itc.rwth-aachen.de/en/email.htm
@@ -234,11 +232,11 @@ yay -S thunderbird rambox
 #   yjs Gitter
 #   Jungschar Threema
 
-yay -S geany
+pacman -S geany
 
 # font
 # see font coverage on https://www.fileformat.info/info/unicode/block/miscellaneous_symbols_and_pictographs/fontsupport.htm
-yay -S ttf-symbola ttf-unifont gucharmap
+t -S ttf-symbola ttf-unifont gucharmap
 
 # check Wayland/XWayland
 # https://fedoraproject.org/wiki/How_to_debug_Wayland_problems
@@ -269,7 +267,7 @@ speaker-test
 # tmux
 # wl-clipboard as temporary workaround for https://github.com/swaywm/sway/issues/926
 # ctrl+shift+insert as temporary workaround for https://github.com/thestinger/termite/issues/645
-yay -S tmux wl-clipboard
+pacman -S tmux wl-clipboard
 
 # bluetooth
 pacman -S bluez bluez-utils pulseaudio-bluetooth blueman
@@ -287,7 +285,7 @@ sudo sh -c 'echo "blacklist ath9k" > /etc/modprobe.d/modprobe.conf'
 
 # printer
 pacman -S cups cups-pdf
-yay -S brother-mfc-9332cdw
+t -S brother-mfc-9332cdw
 systemctl enable org.cups.cupsd.service
 systemctl start org.cups.cupsd.service
 # setup printer at http://localhost:631/admin
@@ -296,10 +294,10 @@ systemctl start org.cups.cupsd.service
 pacman -S evince
 
 # screenshot
-yay -S slurp grim eog
+pacman -S slurp grim eog
 
 # screencast
-yay -S wlstream
+t -S wlstream
 wlstream 25 vaapi /dev/dri/renderD128 libx264 nv12 12 /tmp/screen.mkv
 # mkfifo /tmp/buffer.ts /tmp/screen.ts
 # mbuffer -i /tmp/buffer.ts -o /tmp/screen.ts
@@ -314,19 +312,21 @@ wlstream 25 vaapi /dev/dri/renderD128 libx264 nv12 12 /tmp/screen.mkv
 
 
 # android emulator
-yay -S android-sdk
+t -S jdk8-openjdk android-sdk
+export PATH="/opt/android-sdk/tools/bin:$PATH"
 sdkmanager --list
 # https://wiki.archlinux.org/index.php/Android#Android_Studio
 sudo chown -R adabru:adabru /opt/android-sdk/
 # see https://developer.android.com/about/dashboards/
+# increase /tmp size as sdkmanager takes a lot of it
+# 5G of free ram is needed, as sdkmanager downloads and unzips to /tmp
 sudo mount -o remount,size=5G /tmp/
 touch ~/.android/repositories.cfg
 sdkmanager "system-images;android-23;google_apis;x86_64"
 avdmanager create avd --name myandroid -k "system-images;android-23;google_apis;x86_64"
 avdmanager list avd
 sdkmanager emulator
-yay -S  android-sdk-platform-tools
-cd /opt/android-sdk/tools
+t -S android-sdk-platform-tools
 # https://developer.android.com/studio/run/emulator-commandline
 # https://developer.android.com/studio/run/emulator-comparison
 emulator @myandroid
@@ -351,11 +351,11 @@ pacman -S bftpd
 sudo chmod 770 /srv/ftp
 
 # anti webspam
-yay -S hosts-update
+t -S hosts-update
 hosts-update
 
 # opendns + hosts
-yay -S ddclient
+t -S ddclient
 sudo sh -c 'echo "
 127.0.0.1   localhost
 ::1         localhost
@@ -402,10 +402,10 @@ sudo tunnel_ipv6.sh
 
 
 # node
-yay -S nodejs yarn
+pacman -S nodejs yarn
 
 # arduino
-yay -S arduino
+pacman -S arduino
 # install arduino extension in vscode
 sudo usermod -a -G uucp,lock adabru
 # logout → login
@@ -413,17 +413,19 @@ echo "ciao" > /dev/ttyUSB0
 # see if lights are blinking
 # set "port": "/dev/ttyUSB0" in arduino.json
 # "open serial port" in vscode didn't work, using screen instead (cancel with CTRL+A K)
-yay -S screen
+pacman -S screen
 screen /dev/ttyUSB0 19200
 
 # wine
-yay -S wine winetricks
+pacman -S wine winetricks
 winetricks dotnet452 corefonts
 ```
 
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
   - `systemctl --failed`
   - `journalctl -p 3 -xb`
+  - update system with: `update` (pacman) or `tupdate` (trizen)
+
 
 |
 |@virtualenv / @pip|
@@ -440,26 +442,22 @@ winetricks dotnet452 corefonts
   - @youtube-dl @ipython @plac @colorama @Pillow
 
 
-libreoffice-fresh # finance, work-table
 gimp              # backgrounds, gifts
 inkscape          # svg editing
 graphicsmagick    # image conversion
-docker            # i9 work
-owncloud-client   # i9 work
-firefox           # web development (test)
+docker            # projects/work
+owncloud-client   # projects
+firefox            # web development (test)
 namcap            # AUR packaging
-spotify           # music streaming
 grive             # mindcloud
 cura              # 3d printing
 kvm               # i9 work
 tk                # python GUI, lockscreen
 tribler, vlc, python2-pyopenssl, python2-service-identity
                   # torrents
-pdfshuffler       # typesetting
+pdfshuffler         # typesetting
 ghostscript       # typesetting
-pulseeffects      # audio playback
+pulseeffects       # audio playback
 godot             # mindcloud
 stupid-ftpd       # local file shares
 git-lfs           # git repos with large binaries
-texworks          # latex editor
-
