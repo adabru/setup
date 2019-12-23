@@ -96,7 +96,7 @@ sudo sh -c "echo KEYMAP=ab > /etc/vconsole.conf"
 ~/setup/sync.py
 
 # restore backup
-pacman -S squashfuse rsync squashfs-tools
+pacman -S squashfuse rsync squashfs-tools ntfs-3g
 # plugin drive
 lsblk
 sudo mount -o uid=adabru,ro /dev/sdb1 /mnt
@@ -142,14 +142,10 @@ makepkg -si
 # uncomment option 'Color'
 # uncomment source [multilib]
 
-# ssh
 pacman -S openssh
-
-# browser
-t -S vivaldi vivaldi-widevine vivaldi-codecs-ffmpeg-extra-bin
-
-# albert
 pacman -S albert muparser
+pacman -S nm-connection-editor
+t -S vivaldi vivaldi-widevine vivaldi-codecs-ffmpeg-extra-bin
 
 # brightness
 t -S brillo
@@ -186,17 +182,13 @@ sudo mount /dev/disk/by-label/500_LapStore /mnt
 - setup other applications
 
 ```sh
-# visualstudio code
 t -S visual-studio-code-insiders
 
-# git setup
 git config --global user.email b.brunnmeier@gmx.de
 git config --global user.name adabru
 
-# multimedia playback
 pacman -S mpv
 
-# file manager
 t -S nautilus nautilus-open-terminal gvfs-smb
 
 # access documentation on 127.0.7.1:7000 via doc/
@@ -419,6 +411,16 @@ screen /dev/ttyUSB0 19200
 # wine
 pacman -S wine winetricks
 winetricks dotnet452 corefonts
+
+# mingw
+# add to /etc/pacman.conf :
+# [ownstuff]
+# # see https://github.com/Martchus/PKGBUILDs/issues/76
+# SigLevel = Never
+# Server = https://ftp.f3l.de/~martchus/$repo/os/$arch
+# Server = https://martchus.no-ip.biz/repo/arch/$repo/os/$arch
+t -Sy
+t -S mingw-w64
 ```
 
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
