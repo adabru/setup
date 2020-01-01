@@ -228,7 +228,7 @@ pacman -S geany
 
 # font
 # see font coverage on https://www.fileformat.info/info/unicode/block/miscellaneous_symbols_and_pictographs/fontsupport.htm
-t -S ttf-symbola ttf-unifont gucharmap
+t -S ttf-symbola ttf-dejavu ttf-unifont gucharmap
 
 # check Wayland/XWayland
 # https://fedoraproject.org/wiki/How_to_debug_Wayland_problems
