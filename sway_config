@@ -104,12 +104,12 @@ input "9317:25345:Microsoft_Corporation_Guest_Touchback_Board" {
 # swaymsg -t get_outputs
 # man 5 sway-input
 
-bindsym XF86MonBrightnessUp exec brillo -A 10
-bindsym Shift+XF86MonBrightnessUp exec brillo -A 1
-bindsym Shift+Ctrl+XF86MonBrightnessUp exec brillo -A .1
-bindsym XF86MonBrightnessDown exec brillo -U 10
-bindsym Shift+XF86MonBrightnessDown exec brillo -U 1
-bindsym Shift+Ctrl+XF86MonBrightnessDown exec brillo -U .1
+bindsym Ctrl+KP_7 exec brillo -A 10
+bindsym Ctrl+KP_8 exec brillo -A 1
+bindsym Ctrl+KP_9 exec brillo -A .1
+bindsym Ctrl+KP_4 exec brillo -U 10
+bindsym Ctrl+KP_5 exec brillo -U 1
+bindsym Ctrl+KP_6 exec brillo -U .1
 
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -10%
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +10%

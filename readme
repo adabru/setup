@@ -149,8 +149,9 @@ t -S vivaldi vivaldi-widevine vivaldi-codecs-ffmpeg-extra-bin
 
 # brightness
 t -S brillo
+usermod -a -G video adabru
 sudo cp setup/udev_backlight.rules /etc/udev/rules.d/backlight.rules
-grep XF86MonBrightness /usr/share/.../symbols
+grep XF86MonBrightness /usr/share/X11/xkb/symbols/*
 
 # autologin
 # https://wiki.archlinux.org/index.php/Getty#Virtual_console
@@ -255,6 +256,10 @@ pacman -S alsa-utils pulseaudio pavucontrol
 alsamixer
 speaker-test
 # reboot for pulseaudio to start
+
+# radio
+t -S goodvibes
+# find radio stations e.g. on https://www.radio.de/genre/film-and-musical
 
 # tmux
 # wl-clipboard as temporary workaround for https://github.com/swaywm/sway/issues/926

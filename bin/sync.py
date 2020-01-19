@@ -112,6 +112,9 @@ sync("~/setup/bin/yt.py", "~/bin/yt")
 # bluetooth
 sync("~/setup/bin/bt.py", "~/bin/bt")
 
+# radio stations
+sync("~/setup/goodvibes_stations.xml", "~/.local/share/goodvibes/stations.xml")
+
 # packaging
 sync("~/setup/makepkg.conf", "~/.makepkg.conf")
 

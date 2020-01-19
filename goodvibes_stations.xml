@@ -1,0 +1,86 @@
+<Stations>
+  <Station>
+    <uri>https://direct.fipradio.fr/live/fip-webradio1.mp3</uri>
+    <name>FIP Autour du Rock</name>
+  </Station>
+  <Station>
+    <uri>https://direct.fipradio.fr/live/fip-midfi.mp3</uri>
+    <name>FIP Paris</name>
+  </Station>
+  <Station>
+    <uri>https://direct.fipradio.fr/live/fip-webradio2.mp3</uri>
+    <name>FIP Autour du Jazz</name>
+  </Station>
+  <Station>
+    <uri>https://direct.fipradio.fr/live/fip-webradio3.mp3</uri>
+    <name>FIP Autour du Groove</name>
+  </Station>
+  <Station>
+    <uri>https://direct.fipradio.fr/live/fip-webradio4.mp3</uri>
+    <name>FIP Autour du Monde</name>
+  </Station>
+  <Station>
+    <uri>https://direct.fipradio.fr/live/fip-webradio5.mp3</uri>
+    <name>FIP Tout nouveau, tout FIP</name>
+  </Station>
+  <Station>
+    <uri>https://direct.fipradio.fr/live/fip-webradio6.mp3</uri>
+    <name>FIP Autour du Reggae</name>
+  </Station>
+  <Station>
+    <uri>https://direct.fipradio.fr/live/fip-webradio8.mp3</uri>
+    <name>FIP Autour de l&apos;Électro</name>
+  </Station>
+  <Station>
+    <uri>http://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>
+    <name>Nova</name>
+  </Station>
+  <Station>
+    <uri>http://nova-vnt.ice.infomaniak.ch/nova-vnt-128</uri>
+    <name>Nova Vintage</name>
+  </Station>
+  <Station>
+    <uri>http://nova-ln.ice.infomaniak.ch/nova-ln-128</uri>
+    <name>Nova la Nuit</name>
+  </Station>
+  <Station>
+    <uri>http://nova-vf.ice.infomaniak.ch/nova-vf-128</uri>
+    <name>Nova V.F.</name>
+  </Station>
+  <Station>
+    <uri>http://live.radiogrenouille.com/live</uri>
+    <name>Radio Grenouille</name>
+  </Station>
+  <Station>
+    <uri>https://listen.sonixcast.com/CSNX-8734</uri>
+    <name>epicROCKradio</name>
+  </Station>
+  <Station>
+    <uri>http://orion.shoutca.st:8049/stream</uri>
+    <name>FreshFM Trance</name>
+  </Station>
+  <Station>
+    <uri>http://hi.entranced.fm</uri>
+    <name>Entranced.FM</name>
+  </Station>
+  <Station>
+    <uri>http://stream.rpgamers.net:8000/rpgn</uri>
+    <name>RPGamers Network Game Music Radio</name>
+  </Station>
+  <Station>
+    <uri>http://94.23.51.96:8001/;</uri>
+    <name>Cinemix</name>
+  </Station>
+  <Station>
+    <uri>https://epicsoundsfm.stream.laut.fm/epicsoundsfm</uri>
+    <name>epicsoundsfm</name>
+  </Station>
+  <Station>
+    <uri>https://streamingv2.shoutcast.com/DLRP</uri>
+    <name>DLRP</name>
+  </Station>
+  <Station>
+    <uri>http://149.56.147.197:8716/stream/1/</uri>
+    <name>Gamer Sound Radio</name>
+  </Station>
+</Stations>
