@@ -73,5 +73,6 @@
    "C_Cpp.updateChannel": "Insiders",
    "[sql]": {},
    "editor.selectionClipboard": false,
-   "python.jediEnabled": false
+   "python.jediEnabled": false,
+   "javascript.updateImportsOnFileMove.enabled": "always"
 }

@@ -23,8 +23,8 @@ elif [ -f /etc/bash_completion ]; then
 fi
 
 # history
-HISTSIZE=1000000
-HISTFILESIZE=1000000
+HISTSIZE=10000000
+HISTFILESIZE=10000000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 bind '"\e[A": history-search-backward'
@@ -118,7 +118,7 @@ alias r='rename.py'
 alias pacman='sudo pacman --color auto'
 alias update='sudo pacman -Syyu'
 alias t='trizen'
-alias tupdate='sudo trizen -Syyu'
+alias tupdate='trizen -Syyu'
 # yay as aur helper - updates everything
 alias pksyua="yay -Syu --noconfirm"
 
