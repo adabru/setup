@@ -36,7 +36,7 @@ echo KEYMAP=de > /etc/vconsole.conf
 
 pacman -S grub os-prober
 # for UEFI:
-pacman -S efibootmgr
+pacman -S refind-efi
 
 grub-install /dev/sda
 # auto-detects windows via os-prober. if not, mount windows partition before
@@ -200,12 +200,17 @@ sudo systemctl enable nftables
 sudo systemctl restart nftable
 
 # refind
-pacman -S refind-efi memtest86-efi
+pacman -S refind-efi
+t -S memtest86-efi
 refind-install
-sudo cp ~/setup/refind.conf /boot/efi/EFI/refind/refind.conf
-sudo cp ~/setup/os_grub.png /boot/efi/EFI/refind/icons/os_grub.png
-sudo cp ~/setup/os_arcolinux.png /boot/efi/EFI/refind/icons/os_arcolinux.png
-sudo cp /usr/share/memtest86-efi/bootx64.efi /boot/efi/EFI/tools
+# if installing from live-usb system with chroot, /boot/refind_linux.conf must be changed
+# see https://wiki.archlinux.org/index.php/REFInd
+sudo cp ~/setup/os_grub.png /boot/EFI/refind/icons/os_grub.png
+sudo cp /usr/share/memtest86-efi/bootx64.efi /boot/EFI/tools
+sudo cp ~/setup/refind.conf /boot/EFI/refind/refind.conf
+# change PARTUUID to your root partition
+blkid
+sudo vim /boot/EFI/refind/refind.conf
 poweroff --reboot
 
 # messaging

@@ -8,7 +8,7 @@ if os.geteuid() == 0:
 
 def sync(source, target):
   # symbolic links are not supported on FAT32, check with `os.stat(os.path.dirname(target)).st_uid != 0`
-  print("\033[96m{:} \033[39m→ \033[94m{:}\033[39m: ".format(source, target), end="")
+  print("\033[96m{:} \033[39m \033[94m{:}\033[39m : ".format(source, target), end="")
   source = os.path.expanduser(source)
   target = os.path.expanduser(target)
   if not os.path.exists(source):
@@ -45,14 +45,9 @@ def sync(source, target):
   print("\033[39m", end="")
 
 # refind
-sync("~/setup/refind.conf", "/boot/efi/EFI/refind/refind.conf")
-sync("~/setup/os_arcolinux.png", "/boot/efi/EFI/refind/icons/os_arcolinux.png")
-sync("~/setup/os_grub.png", "/boot/efi/EFI/refind/icons/os_grub.png")
-sync("~/setup/rorschach.png", "/boot/efi/EFI/refind/rorschach.png")
-sync("/boot/vmlinuz-linux", "/boot/efi/EFI/ArcoLinuxD/vmlinuz-linux.efi")
-sync("/boot/initramfs-linux.img", "/boot/efi/EFI/ArcoLinuxD/initramfs-linux.img")
-sync("/boot/initramfs-linux-fallback.img", "/boot/efi/EFI/ArcoLinuxD/initramfs-linux-fallback.img")
-sync("/boot/refind_linux.conf", "/boot/efi/EFI/ArcoLinuxD/refind_linux.conf")
+sync("~/setup/refind.conf", "/boot/EFI/refind/refind.conf")
+sync("~/setup/os_grub.png", "/boot/EFI/refind/icons/os_grub.png")
+sync("~/setup/rorschach.png", "/boot/EFI/refind/rorschach.png")
 
 # keyboard
 sync("~/setup/kbd_ab.map", "/usr/share/kbd/keymaps/ab.map")
