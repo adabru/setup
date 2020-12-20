@@ -7,7 +7,7 @@ if [[ $(tty) = "/dev/tty1" && -x /usr/bin/sway ]]; then
   export PATH=~/bin:$PATH
   # export QT_QPA_PLATFORM=wayland-egl
   sway
-	exit 0
+  exit 0
 fi
 
 # If not running interactively, don't do anything
@@ -23,8 +23,8 @@ elif [ -f /etc/bash_completion ]; then
 fi
 
 # history
-HISTSIZE=10000000
-HISTFILESIZE=10000000
+HISTSIZE=1000000
+HISTFILESIZE=1000000
 HISTCONTROL=ignoreboth:erasedups
 shopt -s histappend
 bind '"\e[A": history-search-backward'
@@ -155,18 +155,23 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 export PATH="$PATH:$HOME/.rvm/bin"
 
 # git
+.  /usr/share/git/completion/git-completion.bash
 alias ga='git add'
 alias gall='git add -A'
 alias gd='git diff --ws-error-highlight=all'
+__git_complete gd _git_diff
 alias gus='git reset HEAD'
 alias gs='git status'
 alias gl='git pull'
 alias gp='git push'
 alias gc='git commit -v'
 alias gb='git branch'
+__git_complete gb _git_branch
 alias gco='git checkout'
+__git_complete gco _git_checkout
 alias gcb='git checkout -b'
 alias glog="git log --pretty=format:'%C(bold)%h %C(cyan)%cr %C(reset)%C(yellow)%an %C(reset) %s %C(green)%d' --graph --decorate"
+__git_complete glog _git_log
 
 git-https() {
   echo 'was:'
@@ -184,14 +189,20 @@ git-ssh() {
 }
 
 # long running commands
-beep() { if [ $? == 0 ]; then paplay /usr/share/sounds/ubuntu/notifications/Positive.ogg
-                         else paplay /usr/share/sounds/ubuntu/notifications/Blip.ogg      ;fi }
+beep() { if [ $? == 0 ]; then paplay /usr/share/sounds/freedesktop/stereo/dialog-information.oga
+                         else paplay /usr/share/sounds/freedesktop/stereo/dialog-error.oga ;fi }
 alias alert='notify-send --urgency=low -i "$([ $? = 0 ] && echo terminal || echo error)" "$(history|tail -n1|sed -e '\''s/^\s*[0-9]\+\s*//;s/[;&|]\s*alert$//'\'')"'
 
 
-alias pan+='xrandr --output LVDS1 -s 1366x768 --panning 1366x2048'
-alias pan++='xrandr --output LVDS1 -s 1366x768 --panning 2048x2048'
-alias pan-='xrandr --output LVDS1 --panning 0x0'
+# alias pan+='xrandr --output LVDS1 -s 1366x768 --panning 1366x2048'
+# alias pan++='xrandr --output LVDS1 -s 1366x768 --panning 2048x2048'
+# alias pan-='xrandr --output LVDS1 --panning 0x0'
+# swaymsg -t get_outputs
+# if font is pixelated try, some sway issue mentions:
+# swaymsg output "LVDS-1" subpixel rgb
+alias pan+='swaymsg output "LVDS-1" scale .75'
+alias pan++='swaymsg output "LVDS-1" scale .5'
+alias pan-='swaymsg output "LVDS-1" scale 1.0'
 gamma() { xrandr --output LVDS1 --gamma $1:$1:$1; }
 bright() { xrandr --output LVDS1 --brightness $1; }
 gambri() { xrandr --output LVDS1 --gamma $1:$1:$1 --brightness $2; }
@@ -246,8 +257,3 @@ bench() {
 cdtmp() {
   cd $(mktemp -d)
 }
-
-
-# tabtab source for electron-forge package
-# uninstall by removing these lines or running `tabtab uninstall electron-forge`
-[ -f /home/adabru/work/armin/kar-soft/html/node_modules/tabtab/.completions/electron-forge.bash ] && . /home/adabru/work/armin/kar-soft/html/node_modules/tabtab/.completions/electron-forge.bash

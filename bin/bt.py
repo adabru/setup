@@ -2,7 +2,7 @@
 
 import subprocess, re, sys, termios, tty
 
-print('powering bluetooth...')
+print('powering bluetooth (bluetoothctl power on)...')
 if subprocess.run('bluetoothctl power on'.split(), encoding='UTF-8').returncode != 0:
   exit()
 

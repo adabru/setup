@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Steps
+Exec=sh -c "featherpad -w /home/adabru/👣/*"
+Type=Application

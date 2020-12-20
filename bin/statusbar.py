@@ -61,7 +61,11 @@ def status():
   print('{{"color":"{:}", "full_text":"{:.1f}"}},'.format(color, 100*battery))
 
   # date and time
-  print('{{"color":"#bbbbbb", "full_text":"{:}"}}'.format(datetime.datetime.now().strftime("%Y-%m-%d W%V   %H:%M:%S")))
+  print('{{"color":"#bbbbbb", "full_text":"{:}"}},'.format(datetime.datetime.now().strftime("%Y-%m-%d W%V   %H:%M:%S")))
+
+  # mic mute
+  captureInfo = subprocess.run('amixer get Capture'.split(), encoding='UTF-8', capture_output=True).stdout
+  print('{{"color":"#ff8888", "full_text":"{:}"}}'.format("🎙" if captureInfo.find("[off]") != -1 else ""))
 
   print('],')
   sys.stdout.flush()

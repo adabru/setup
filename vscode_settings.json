@@ -74,5 +74,33 @@
    "[sql]": {},
    "editor.selectionClipboard": false,
    "python.jediEnabled": false,
-   "javascript.updateImportsOnFileMove.enabled": "always"
+   "javascript.updateImportsOnFileMove.enabled": "always",
+   "showoffset.offsetType": "byte",
+   "editor.minimap.enabled": false,
+   "breadcrumbs.enabled": true,
+   "diffEditor.ignoreTrimWhitespace": true,
+   "diffEditor.renderSideBySide": true,
+   "update.mode": "none",
+   "[dart]": {
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true,
+      "editor.rulers": [
+         80
+      ],
+      "editor.selectionHighlight": false,
+      "editor.suggest.snippetsPreventQuickSuggestions": false,
+      "editor.suggestSelection": "first",
+      "editor.tabCompletion": "onlySnippets",
+      "editor.wordBasedSuggestions": false,
+      "editor.defaultFormatter": "Dart-Code.dart-code"
+   },
+   "[javascript]": {
+      "editor.defaultFormatter": "esbenp.prettier-vscode",
+      "editor.formatOnSave": true,
+      "editor.formatOnType": true
+   },
+   "editor.defaultFormatter": "esbenp.prettier-vscode",
+   "prettier.semi": false,
+   "prettier.singleQuote": true,
+   "prettier.printWidth": 120
 }

@@ -9,6 +9,7 @@ bindsym $mod+Return exec termite -e tmux
 # bindsym Ctrl+Space exec launcher.sh
 bindsym Ctrl+Space exec albert toggle
 exec "(albert&) && sleep .1 && albert show"
+exec "headset_daemon.py"
 
 bindsym $mod+Left focus left
 bindsym $mod+Down focus down
@@ -21,7 +22,7 @@ bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
 # workaround for clipboard issue when copy-pasting from xwayland to wayland
-bindsym Ctrl+Shift+C exec wl-paste | wl-copy
+bindsym Ctrl+Shift+C exec wl-paste -n | wl-copy
 
 output * bg /home/adabru/setup/desktop.jpg fill
 # swaymsg -t get_outputs
@@ -69,6 +70,16 @@ bindsym $mod+Shift+KP_7 move container to workspace 7
 bindsym $mod+Shift+KP_8 move container to workspace 8
 bindsym $mod+Shift+KP_9 move container to workspace 9
 bindsym $mod+Shift+KP_0 move container to workspace 10
+bindsym $mod+Shift+1 move container to workspace 1
+bindsym $mod+Shift+2 move container to workspace 2
+bindsym $mod+Shift+3 move container to workspace 3
+bindsym $mod+Shift+4 move container to workspace 4
+bindsym $mod+Shift+5 move container to workspace 5
+bindsym $mod+Shift+6 move container to workspace 6
+bindsym $mod+Shift+7 move container to workspace 7
+bindsym $mod+Shift+8 move container to workspace 8
+bindsym $mod+Shift+9 move container to workspace 9
+bindsym $mod+Shift+0 move container to workspace 10
 
 # keyboard layout
 # alternatively use:
@@ -80,19 +91,24 @@ bindsym $mod+Shift+KP_0 move container to workspace 10
 # cat /usr/share/X11/xkb/rules/xorg.lst | grep grp
 # man xkeyboard-config
 #
+# keyboard modifiers are shared between devices of same layout and repeat-info
+# see `man sway-input` → 'keyboard_grouping' and `sudo libinput debug-events`
+#
 input type:keyboard {
     xkb_layout ab,ab(russian)
-    xkb_options grp:ctrls_toggle,compose:menu
+    xkb_options compose:menu
+#    xkb_options grp:ctrls_toggle,compose:menu → ctrls_toggle doesnt work and additionally it breaks flutter app ctrl+click
+    repeat_delay 500
+    repeat_rate 30
+}
+input "76:620:Roberts_Tastatur" {
+    xkb_options altwin:swap_alt_win,lv5:rwin_switch_lock
 }
 bindsym Ctrl+KP_1 input type:keyboard xkb_switch_layout 0
 bindsym Ctrl+KP_2 input type:keyboard xkb_switch_layout 1
 
 # exec swayidle timeout 600 lockscreen.py
 
-input "1:1:AT_Translated_Set_2_keyboard" {
-  repeat_delay 500
-  repeat_rate 30
-}
 input "2:7:SynPS/2_Synaptics_TouchPad" {
   tap enabled
   natural_scroll enabled
@@ -111,13 +127,26 @@ bindsym Ctrl+KP_4 exec brillo -U 10
 bindsym Ctrl+KP_5 exec brillo -U 1
 bindsym Ctrl+KP_6 exec brillo -U .1
 
+bindsym XF86MonBrightnessUp exec brillo -A 10
+bindsym Shift+XF86MonBrightnessUp exec brillo -A 1
+bindsym Ctrl+Shift+XF86MonBrightnessUp exec brillo -A .1
+bindsym XF86MonBrightnessDown exec brillo -U 10
+bindsym Shift+XF86MonBrightnessDown exec brillo -U 1
+bindsym Ctrl+Shift+XF86MonBrightnessDown exec brillo -U .1
+
 bindsym XF86AudioLowerVolume exec pactl set-sink-volume 0 -10%
+bindsym Shift+XF86AudioLowerVolume exec pactl set-sink-volume 0 -2%
 bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +10%
+bindsym Shift+XF86AudioRaiseVolume exec pactl set-sink-volume 0 +2%
+
+# mute mic
+bindsym $mod+m exec amixer set Capture toggle
 
 bindsym XF86Sleep exec systemctl suspend
 bindsym Ctrl+XF86Sleep exec systemctl hibernate
 
 bindsym Print exec slurp | grim -g - ~/s.png
+bindsym Shift+Print exec maim -s ~/s.png
 
 # man 5 sway-bar
 bar {
@@ -125,8 +154,9 @@ bar {
     position top
     colors {
         statusline #ffffff
-        background #32323222
-        inactive_workspace #32323200 #32323200 #5c5c5c
+        background #00000000
+        inactive_workspace #00000000 #00000000 #200020
+        focused_workspace #00000000 #00000000 #ff0070
     }
     # disable system tray
     tray_output none
@@ -138,6 +168,9 @@ bindsym Mod1+f4 kill
 # godot open scnee as floating
 for_window [instance="Godot_Engine"] floating enable ; move position 600 300
 for_window [title="[Extension Development Host]"] resize set width 30 ppt
+
+# window colors
+client.focused #0F000F #0F000F80 #888888 #000000 #000000
 
     # Drag floating windows by holding down $mod and left mouse button.
     # Resize them with right mouse button + $mod.

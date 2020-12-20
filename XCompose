@@ -4679,7 +4679,7 @@
 <Multi_key> <parenleft> <v> <parenright> 	: "ⓥ"   U24E5 # CIRCLED LATIN SMALL LETTER V
 <Multi_key> <parenleft> <w> <parenright> 	: "ⓦ"   U24E6 # CIRCLED LATIN SMALL LETTER W
 <Multi_key> <parenleft> <x> <parenright> 	: "ⓧ"   U24E7 # CIRCLED LATIN SMALL LETTER X
-<Multi_key> <parenleft> <y> <parenright> 	: "ⓨ"   U24E8 # CIRCLED LATIN SMALL LETTER Y
+#<Multi_key> <parenleft> <y> <parenright> 	: "ⓨ"   U24E8 # CIRCLED LATIN SMALL LETTER Y
 <Multi_key> <parenleft> <z> <parenright> 	: "ⓩ"   U24E9 # CIRCLED LATIN SMALL LETTER Z
 <Multi_key> <parenleft> <0> <parenright> 	: "⓪"   U24EA # CIRCLED DIGIT ZERO
 <Multi_key> <parenleft> <KP_0> <parenright> 	: "⓪"   U24EA # CIRCLED DIGIT ZERO
@@ -6220,6 +6220,11 @@
 <Multi_key> <j> <l> <s> : "╪"
 <Multi_key> <j> <l> <e> : "╫"
 
+
+################## multilanguage
+
+<Multi_key> <slash> <e>                  : "é"
+<Multi_key> <backslash> <e>              : "è"
 
 ################## other
 

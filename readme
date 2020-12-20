@@ -27,6 +27,8 @@ genfstab -p /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
 echo adabru-reserve > /etc/hostname
 ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
+# enable network time sync
+timedatectl set-ntp true
 # uncomment 'de_DE.UTF-8 UTF-8' and 'en_US.UTF-8 UTF-8' in /etc/locale.gen
 locale-gen
 echo LANG=en_US.UTF-8 > /etc/locale.conf
@@ -145,7 +147,10 @@ makepkg -si
 pacman -S openssh
 pacman -S albert muparser
 pacman -S nm-connection-editor
-t -S vivaldi vivaldi-widevine vivaldi-codecs-ffmpeg-extra-bin
+t -S vivaldi
+# proprietary codecs
+sudo /opt/vivaldi/update-ffmpeg
+sudo /opt/vivaldi/update-widevine
 
 # brightness
 t -S brillo
@@ -187,10 +192,11 @@ t -S visual-studio-code-insiders
 
 git config --global user.email b.brunnmeier@gmx.de
 git config --global user.name adabru
+git config --global pull.ff only
 
 pacman -S mpv
 
-t -S nautilus nautilus-open-terminal gvfs-smb
+t -S nautilus nautilus-open-terminal gvfs-smb gvfs-mtp
 
 # access documentation on 127.0.7.1:7000 via doc/
 pacman -S nftables
@@ -212,23 +218,21 @@ sudo cp ~/setup/refind.conf /boot/EFI/refind/refind.conf
 blkid
 sudo vim /boot/EFI/refind/refind.conf
 poweroff --reboot
+# if some other installation or package has overwritten the boot order, use:
+# sudo refind-mkdefault
 
 # messaging
-t -S thunderbird rambox
+t -S thunderbird pidgin slack-libpurple-git telegram-purple-git purple-matrix-git purple-discord-git
 # gmx https://support.gmx.com/pop-imap/imap/outlook.html
 # gmail
 # rwth https://www.welcome.itc.rwth-aachen.de/en/email.htm
-# rambox:
-#   Mail http://localhost:33411 https://www.mailpile.is/img/icon-512x512.png
+# pidgin:
 #   FB https://facebook.com https://en.facebookbrand.com/wp-content/uploads/2016/05/flogo_rgb_hex-brc-site-250.png
 #   MindCloud Slack mind-cloud
-#   MindCloud https://trello.com/mindcloud77 https://d2k1ftgv7pobq7.cloudfront.net/meta/u/res/images/brand-assets/Logos/0099ec3754bf473d2bbf317204ab6fea/trello-logo-blue.png
-#   MindCloud https://calendar.google.com/calendar/r https://www.gstatic.com/images/branding/product/1x/calendar_48dp.png
 #   Fablab Slack fablab-erkelenz
 #   i9 RocketChat https://rclufgi9.informatik.rwth-aachen.de/home
-#   WA Whatsapp
-#   yjs Gitter
-#   Jungschar Threema
+#   Telegram
+#   Discord "Hückelhoven Skills"
 
 pacman -S geany
 
@@ -257,7 +261,13 @@ ssh -T git@github.com
 ssh -T git@gitlab.com
 
 # audio
-pacman -S alsa-utils pulseaudio pavucontrol
+pacman -S alsa-utils pulseaudio pavucontrol evtest
+# internal microphone boost is not saved per default because pulseaudio resets it
+# see https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Pulse_overwrites_ALSA_settings)
+# and https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Microphone_distorted_due_to_automatic_adjustment
+# the workaround vie setting the [Element * Mic Boost] volume to 50 in sudo vim /usr/share/alsa-card-profile/mixer/paths/analog-input-mic.conf
+# failed to work, too; so a daemon is used in the background to detect headset plugin and set the value
+usermod -a -G input adabru
 alsamixer
 speaker-test
 # reboot for pulseaudio to start
@@ -299,19 +309,8 @@ pacman -S evince
 pacman -S slurp grim eog
 
 # screencast
-t -S wlstream
-wlstream 25 vaapi /dev/dri/renderD128 libx264 nv12 12 /tmp/screen.mkv
-# mkfifo /tmp/buffer.ts /tmp/screen.ts
-# mbuffer -i /tmp/buffer.ts -o /tmp/screen.ts
-# wlstream 25 vaapi /dev/dri/renderD128 libx264rgb bgr0 12 /tmp/buffer.ts
-
-# gst-launch-1.0 -v filesrc location=/tmp/screen.mkv ! x264enc ! rtph264pay ! udpsink host=127.0.0.1 port=5000
-# gst-launch-1.0 videotestsrc ! x264enc ! rtph264pay ! udpsink host=127.0.0.1 port=5000
-# vlc test.sdp
-#   c=IN IP4 10.5.110.117
-#   m=video 5000 RTP/AVP 96
-#   a=rtpmap:96 H264/90000
-
+t -S obs-studio wlrobs-hg
+# then select "Wayland output (scpy)" for the whole screen or "Window Capture (Xcomposite)" for X windows
 
 # android emulator
 t -S jdk8-openjdk android-sdk
@@ -351,6 +350,10 @@ rclone lsd google:
 usermod -a -G ftp adabru
 pacman -S bftpd
 sudo chmod 770 /srv/ftp
+sudo bftpd -D # share /
+
+t -S stupid-ftpd
+ftp_here.sh
 
 # anti webspam
 t -S hosts-update
@@ -471,5 +474,4 @@ pdfshuffler         # typesetting
 ghostscript       # typesetting
 pulseeffects       # audio playback
 godot             # mindcloud
-stupid-ftpd       # local file shares
 git-lfs           # git repos with large binaries

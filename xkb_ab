@@ -3,6 +3,7 @@
 // sources:
 // http://www.charvolant.org/~doug/xkb/html/node5.html#SECTION00058300000000000000
 // http://stackoverflow.com/questions/32822857/how-to-emulate-integrated-numeric-keypad-cursor-keys-in-linux
+// https://unix.stackexchange.com/a/65614/218172
 
 default
 xkb_symbols "basic" {
@@ -12,6 +13,10 @@ xkb_symbols "basic" {
   include "de(neo)"
   include "ab(neo_extension)"
 
+  key <ESC> {
+    type[Group1]="PC_CONTROL_LEVEL2",
+    symbols[Group1]= [ Escape, ISO_Next_Group ]
+  };
   key <AD01> { [          q,          Q ] };
   key <AD02> { [          w,          W ] };
   key <AD03> { [          e,          E ] };

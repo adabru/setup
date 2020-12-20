@@ -64,10 +64,10 @@ sync("~/setup/getty.conf", "/etc/systemd/system/getty@tty1.service.d/override.co
 sync("~/setup/nftables.conf", "/etc/nftables.conf")
 
 # VS Code config
-sync("~/repo/vscode-adabru-markup", "~/.vscode-insiders/extensions/vscode-adabru-markup")
-sync("~/repo/app/addons/vscode-diff-plugin", "~/.vscode-insiders/extensions/vscode-diff-plugin")
-sync("~/setup/vscode_keybindings.json", "~/.config/Code - Insiders/User/keybindings.json")
-sync("~/setup/vscode_settings.json", "~/.config/Code - Insiders/User/settings.json")
+sync("~/repo/vscode-adabru-markup", "~/.vscode-oss/extensions/vscode-adabru-markup")
+sync("~/repo/app/addons/vscode-diff-plugin", "~/.vscode-oss/extensions/vscode-diff-plugin")
+sync("~/setup/vscode_keybindings.json", "~/.config/Code - OSS/User/keybindings.json")
+sync("~/setup/vscode_settings.json", "~/.config/Code - OSS/User/settings.json")
 
 # terminal + envs
 sync("~/setup/termite_config", "~/.config/termite/config")
@@ -81,6 +81,10 @@ sync("~/setup/screenrc", "~/.screenrc")
 sync("~/setup/bin/copy.py", "~/bin/copy.py")
 sync("~/setup/XCompose", "~/.XCompose")
 sync("~/setup/bin/rename.py", "~/bin/rename.py")
+sync("~/setup/bin/dates.py", "~/bin/dates.py")
+
+# headset mic boost
+sync("~/setup/bin/headset_daemon.py", "~/bin/headset_daemon.py")
 
 # brightness
 sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
@@ -91,6 +95,7 @@ sync("~/setup/udev_hdmi_sound.rules", "/etc/udev/rules.d/hdmi_sound.rules")
 # launcher
 sync("~/setup/bin/launcher.sh", "~/bin/launcher.sh")
 sync("~/setup/albert.conf", "~/.config/albert/albert.conf")
+sync("~/setup/applications", "~/.local/share/applications/adabru")
 
 # inkscape
 sync("~/setup/inkscape.xml", "~/.config/inkscape/keys/default.xml")
@@ -124,12 +129,11 @@ sync("~/repo/app/.godot/script_templates/UIState.gd", "~/.config/godot/script_te
 sync("~/repo/app/.godot/script_templates/UIElement.gd", "~/.config/godot/script_templates/UIElement.gd")
 sync("~/repo/app/.godot/editor_settings-3.tres", "~/.config/godot/editor_settings-3.tres")
 
-# geany
-sync("~/setup/geany.conf", "~/.config/geany/geany.conf")
-sync("~/setup/geany_keybindings.conf", "~/.config/geany/keybindings.conf")
-
 # ftp
 sync("~/setup/bin/ftp_here.sh", "~/bin/ftp_here.sh")
+
+# wake up timer
+sync("~/setup/bin/wake_me_up.py", "~/bin/wake_me_up.py")
 
 # backup
 sync("~/setup/bin/backup.py", "~/bin/backup.py")
