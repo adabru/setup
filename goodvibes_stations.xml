@@ -1,57 +1,5 @@
 <Stations>
   <Station>
-    <uri>https://direct.fipradio.fr/live/fip-webradio1.mp3</uri>
-    <name>FIP Autour du Rock</name>
-  </Station>
-  <Station>
-    <uri>https://direct.fipradio.fr/live/fip-midfi.mp3</uri>
-    <name>FIP Paris</name>
-  </Station>
-  <Station>
-    <uri>https://direct.fipradio.fr/live/fip-webradio2.mp3</uri>
-    <name>FIP Autour du Jazz</name>
-  </Station>
-  <Station>
-    <uri>https://direct.fipradio.fr/live/fip-webradio3.mp3</uri>
-    <name>FIP Autour du Groove</name>
-  </Station>
-  <Station>
-    <uri>https://direct.fipradio.fr/live/fip-webradio4.mp3</uri>
-    <name>FIP Autour du Monde</name>
-  </Station>
-  <Station>
-    <uri>https://direct.fipradio.fr/live/fip-webradio5.mp3</uri>
-    <name>FIP Tout nouveau, tout FIP</name>
-  </Station>
-  <Station>
-    <uri>https://direct.fipradio.fr/live/fip-webradio6.mp3</uri>
-    <name>FIP Autour du Reggae</name>
-  </Station>
-  <Station>
-    <uri>https://direct.fipradio.fr/live/fip-webradio8.mp3</uri>
-    <name>FIP Autour de l&apos;Électro</name>
-  </Station>
-  <Station>
-    <uri>http://novazz.ice.infomaniak.ch/novazz-128.mp3</uri>
-    <name>Nova</name>
-  </Station>
-  <Station>
-    <uri>http://nova-vnt.ice.infomaniak.ch/nova-vnt-128</uri>
-    <name>Nova Vintage</name>
-  </Station>
-  <Station>
-    <uri>http://nova-ln.ice.infomaniak.ch/nova-ln-128</uri>
-    <name>Nova la Nuit</name>
-  </Station>
-  <Station>
-    <uri>http://nova-vf.ice.infomaniak.ch/nova-vf-128</uri>
-    <name>Nova V.F.</name>
-  </Station>
-  <Station>
-    <uri>http://live.radiogrenouille.com/live</uri>
-    <name>Radio Grenouille</name>
-  </Station>
-  <Station>
     <uri>https://listen.sonixcast.com/CSNX-8734</uri>
     <name>epicROCKradio</name>
   </Station>
@@ -82,5 +30,13 @@
   <Station>
     <uri>http://149.56.147.197:8716/stream/1/</uri>
     <name>Gamer Sound Radio</name>
+  </Station>
+  <Station>
+    <uri>http://162.244.80.106:8108/;</uri>
+    <name>TUNE Disney RADIO</name>
+  </Station>
+  <Station>
+    <uri>http://listen.radionomy.com/EpicForeverRadio?icy=http</uri>
+    <name>EpicForeverRadio</name>
   </Station>
 </Stations>

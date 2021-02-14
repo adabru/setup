@@ -188,6 +188,7 @@ sudo mount /dev/disk/by-label/500_LapStore /mnt
 - setup other applications
 
 ```sh
+# i tried community/code twice, but switched to insiders due to issues (the second time marketplace didn't work)
 t -S visual-studio-code-insiders
 
 git config --global user.email b.brunnmeier@gmx.de
@@ -271,6 +272,20 @@ usermod -a -G input adabru
 alsamixer
 speaker-test
 # reboot for pulseaudio to start
+# enable audio loopback device with:
+sudo modprobe snd-aloop
+# route input to output, see https://thelinuxexperiment.com/pulseaudio-monitoring-your-line-in-interface/
+pactl unload-module module-loopback
+pactl load-module module-loopback latency_msec=1
+# alternatively, see https://gist.github.com/ericbolo/1261438048147b97316ff65f1ee
+# pactl list sources
+# pactl list sinks short
+# pacat -r --latency-msec=1 -d alsa_input.pci-0000_00_1b.0.analog-stereo | pacat -p --latency-msec=1 -d alsa_output.pci-0000_00_1b.0.analog-stereo
+
+aplay -l
+arecord -l
+alsaloop -C hw:0,0 -P hw:0,0
+
 
 # radio
 t -S goodvibes
@@ -367,20 +382,9 @@ sudo sh -c 'echo "
 127.0.7.1   doc
 " > /etc/hosts.local'
 sudo hosts-update
-sudo sh -c 'echo "
-nameserver 208.67.222.222
-nameserver 208.67.220.220
-search fritz.box
-nameserver 192.168.178.1
-nameserver fd00::e228:6dff:fe95:24b5
-" > /etc/resolv.conf'
-# disable overwriting resolv.conf by network-manager https://askubuntu.com/a/623956/452398
-sudo sh -c 'echo "
-[main]
-dns=none
-" >> /etc/NetworkManager/NetworkManager.conf'
+sync.py
 sudo systemctl restart NetworkManager
-# check with `cat /etc/resolv.conf`
+# check `cat /etc/resolv.conf`
 # see https://support.opendns.com/hc/en-us/articles/227987727-Linux-IP-Updater-for-Dynamic-Networks
 sudo sh -c 'echo "
 ##

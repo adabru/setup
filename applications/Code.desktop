@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code Default
-Exec=code-oss /home/adabru/.cache/vscode-default/default.code-workspace
+Exec=code-insiders /home/adabru/.cache/vscode-default/default.code-workspace
 Type=Application

@@ -6,6 +6,7 @@ if [[ $(tty) = "/dev/tty1" && -x /usr/bin/sway ]]; then
   export XKB_DEFAULT_OPTIONS=compose:menu
   export PATH=~/bin:$PATH
   # export QT_QPA_PLATFORM=wayland-egl
+  #exec startxfce4
   sway
   exit 0
 fi

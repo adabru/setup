@@ -169,6 +169,9 @@ bindsym Mod1+f4 kill
 for_window [instance="Godot_Engine"] floating enable ; move position 600 300
 for_window [title="[Extension Development Host]"] resize set width 30 ppt
 
+# panda3d window as floating
+for_window [title="Panda"] floating enable
+
 # window colors
 client.focused #0F000F #0F000F80 #888888 #000000 #000000
 
