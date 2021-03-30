@@ -243,6 +243,9 @@ t -S ttf-symbola ttf-dejavu ttf-unifont gucharmap
 
 # check Wayland/XWayland
 # https://fedoraproject.org/wiki/How_to_debug_Wayland_problems
+# 1. check with QT_QPA_PLATFORM=xcb or other env var if known
+# 2. check on other VTE ctrl+alt+fx with `weston-launch` (ctrl+alt+backspace to quit)
+# 3. use startxfce4
 xlsclients
 xwininfo
 

@@ -1,13 +1,16 @@
 
-export PATH="~/bin:$PATH"
+export PATH="$HOME/bin:$PATH"
+export XKB_DEFAULT_LAYOUT=ab
+export XKB_DEFAULT_OPTIONS=compose:menu
 
 if [[ $(tty) = "/dev/tty1" && -x /usr/bin/sway ]]; then
-  export XKB_DEFAULT_LAYOUT=ab
-  export XKB_DEFAULT_OPTIONS=compose:menu
-  export PATH=~/bin:$PATH
   # export QT_QPA_PLATFORM=wayland-egl
   #exec startxfce4
-  sway
+  # delete old sway.log
+  if [[ `find ~/sway.log -name sway.log -mmin +1` != '' ]]; then
+    rm ~/sway.log
+  fi
+  sway >>~/sway.log 2>&1
   exit 0
 fi
 
@@ -123,7 +126,8 @@ alias tupdate='trizen -Syyu'
 # yay as aur helper - updates everything
 alias pksyua="yay -Syu --noconfirm"
 
-alias docker="sudo /usr/bin/docker"
+# -E: preserve env to be able to pass env vars to the container
+alias docker="sudo -E /usr/bin/docker"
 docker-tags() {
   # https://stackoverflow.com/a/39454426/6040478
   curl -s https://registry.hub.docker.com/v1/repositories/$1/tags \
@@ -258,3 +262,4 @@ bench() {
 cdtmp() {
   cd $(mktemp -d)
 }
+

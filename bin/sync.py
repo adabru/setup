@@ -62,6 +62,8 @@ sync("~/setup/xkb_ab", "/usr/share/X11/xkb/symbols/ab")
 # sway
 sync("~/setup/sway_config", "~/.config/sway/config")
 sync("~/setup/bin/statusbar.py", "~/bin/statusbar.py")
+sync("~/setup/bin/statuswindow.py", "~/bin/statuswindow.py")
+sync("~/setup/bin/toggle_mic.py", "~/bin/toggle_mic.py")
 
 # autologin
 sync("~/setup/getty.conf", "/etc/systemd/system/getty@tty1.service.d/override.conf")
@@ -158,3 +160,6 @@ sync("~/setup/resolv.conf", "/etc/resolv.conf")
 sync("~/setup/bin/backup.py", "~/bin/backup.py")
 sync("~/setup/bin/sqfs-mount.sh", "~/bin/sqfs-mount.sh")
 sync("~/setup/sqfs-mount.desktop", "/usr/share/applications/sqfs-mount.desktop")
+
+# work
+sync("~/setup/bin/karsoft_workspace.sh", "~/bin/karsoft_workspace.sh")

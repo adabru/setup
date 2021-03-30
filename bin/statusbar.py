@@ -23,20 +23,21 @@ def status():
     print('[')
 
     # wireless network
-    network = subprocess.run('nmcli -t -f name connection show --active'.split(),
+    network = subprocess.run('nmcli -t -f general.connection device show wlp2s0'.split(),
                              encoding='UTF-8', capture_output=True).stdout.strip()
-    print('{{"color":"#8888ff", "full_text":"{:}"}},'.format(network))
+    network = network.removeprefix('GENERAL.CONNECTION:')
+    print('{"color":"#8888ff", "full_text":"%s"},' % network)
 
     # ping
-    print('{{"color":"#8888ff", "full_text":"{:}ms"}},'.format(ping))
+    print('{"color":"#8888ff", "full_text":"%sms"},' % ping)
 
     # free memory
     regex = re.compile('MemAvailable: *([0-9]+).*SwapFree: *([0-9]+)', re.S)
     m = regex.search(cat('/proc/meminfo'))
     mem, swap = int(m.group(1)), int(m.group(2))
     color = mem < 1e6 and '#ff5555' or '#bbbbbb'
-    print('{{"color":"{:}", "full_text":"{:.1f} {:.1f}"}},'.format(
-        color, mem/1e6, swap/1e6))
+    print('{"color":"%s", "full_text":"%.1f"},' % (color, mem/1e6))
+    print('{"color":"#bbbbbb77", "full_text":"%.1f"},' % (swap/1e6))
 
     # cpu load
     def cpu():
@@ -51,7 +52,7 @@ def status():
     currCpu = cpu()
     if lastCpu == None:
         lastCpu = currCpu
-    print('{{"color":"#bbbbbb88", "full_text":"{:}"}},'.format(
+    print('{{"color":"#bbbbbb77", "full_text":"{:}"}},'.format(
         ' '.join([cpuload(curr, last) for curr, last in zip(currCpu, lastCpu)])))
     lastCpu = currCpu
 
@@ -74,8 +75,11 @@ def status():
     print('{{"color":"{:}", "full_text":"{:.1f}"}},'.format(color, 100*battery))
 
     # date and time
-    print('{{"color":"#bbbbbb", "full_text":"{:}"}},'.format(
-        datetime.datetime.now().strftime("%Y-%m-%d W%V   %H:%M:%S")))
+    t = datetime.datetime.now()
+    print('{"color":"#bbbbbb88", "full_text":"%s"},' %
+          t.strftime("%Y-%m-%d W%V   %H:%M:%S"))
+    # print('{"color":"#bbbbbb", "full_text":"%s"},' %
+    #       t.strftime("%Y-%m-%d W%V   %H:%M:%S"))
 
     # mic mute
     captureInfo = subprocess.run('amixer get Capture'.split(

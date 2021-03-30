@@ -30,35 +30,32 @@ output * bg /home/adabru/setup/desktop.jpg fill
 # swaymsg output "LVDS-1" scale 2
 
 # needed for gparted or kde partitionmanager, see https://wiki.archlinux.org/index.php/Polkit
+# TODO: make systemd service
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
-
-# sudo keep display (gparted)
-# https://askubuntu.com/questions/175611/cannot-connect-to-x-server-when-running-app-with-sudo#175615
-# exec xhost local:root
 
 # doc
 # exec "cd home/adabru/repo/adabru-markup/ && ./html/js/server.ls -d ~/portable/documentation --cache ~/.cache/adabru-markup > /home/adabru/debug"
 
-bindsym $mod+KP_1 workspace 1
-bindsym $mod+KP_2 workspace 2
-bindsym $mod+KP_3 workspace 3
-bindsym $mod+KP_4 workspace 4
-bindsym $mod+KP_5 workspace 5
-bindsym $mod+KP_6 workspace 6
-bindsym $mod+KP_7 workspace 7
-bindsym $mod+KP_8 workspace 8
-bindsym $mod+KP_9 workspace 9
-bindsym $mod+KP_0 workspace 10
-bindsym $mod+1 workspace 1
-bindsym $mod+2 workspace 2
-bindsym $mod+3 workspace 3
-bindsym $mod+4 workspace 4
-bindsym $mod+5 workspace 5
-bindsym $mod+6 workspace 6
-bindsym $mod+7 workspace 7
-bindsym $mod+8 workspace 8
-bindsym $mod+9 workspace 9
-bindsym $mod+0 workspace 10
+bindsym $mod+KP_1 workspace 1 ; exec notify-send -t 100 "1" ; client.focused #FF0000 #FF0000 #FF0000
+bindsym $mod+KP_2 workspace 2 ; exec notify-send -t 100 "2" ; client.focused #00FF00 #00FF00 #00FF00
+bindsym $mod+KP_3 workspace 3 ; exec notify-send -t 100 "3" ; client.focused #0000FF #0000FF #0000FF
+bindsym $mod+KP_4 workspace 4 ; exec notify-send -t 100 "4" ; client.focused #FFFF00 #FFFF00 #FFFF00
+bindsym $mod+KP_5 workspace 5 ; exec notify-send -t 100 "5" ; client.focused #FF00FF #FF00FF #FF00FF
+bindsym $mod+KP_6 workspace 6 ; exec notify-send -t 100 "6" ; client.focused #00FFFF #00FFFF #00FFFF
+bindsym $mod+KP_7 workspace 7 ; exec notify-send -t 100 "7" ; client.focused #FFFFFF #FFFFFF #FFFFFF
+bindsym $mod+KP_8 workspace 8 ; exec notify-send -t 100 "8" ; client.focused #8800FF #8800FF #8800FF
+bindsym $mod+KP_9 workspace 9 ; exec notify-send -t 100 "9" ; client.focused #000000 #000000 #000000
+bindsym $mod+KP_0 workspace 10 ; exec notify-send -t 100 "10" ; client.focused #000000 #000000 #000000
+bindsym $mod+1 workspace 1 ; exec notify-send -t 100 "1"
+bindsym $mod+2 workspace 2 ; exec notify-send -t 100 "2"
+bindsym $mod+3 workspace 3 ; exec notify-send -t 100 "3"
+bindsym $mod+4 workspace 4 ; exec notify-send -t 100 "4"
+bindsym $mod+5 workspace 5 ; exec notify-send -t 100 "5"
+bindsym $mod+6 workspace 6 ; exec notify-send -t 100 "6"
+bindsym $mod+7 workspace 7 ; exec notify-send -t 100 "7"
+bindsym $mod+8 workspace 8 ; exec notify-send -t 100 "8"
+bindsym $mod+9 workspace 9 ; exec notify-send -t 100 "9"
+bindsym $mod+0 workspace 10 ; exec notify-send -t 100 "10"
 # move focused container to workspace
 bindsym $mod+Shift+KP_1 move container to workspace 1
 bindsym $mod+Shift+KP_2 move container to workspace 2
@@ -80,6 +77,19 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
+
+# window style and colors
+# client.focused #FF0000 #FF0000 #FF0000 #FF0000 #FF0000
+font pango:monospace 0
+titlebar_border_thickness 1
+titlebar_padding 1 1
+default_border pixel 1
+# client.focused #0F000F #0F000F80 #888888 #000000 #000000
+
+# per workspace colors
+# for_window [workspace="1"] client.unfocused #AA0000 #AA0000 #AA0000 #AA0000 #AA0000
+# for_window [workspace="2"] client.focused #00FF00 #00FF00 #00FF00 #00FF00 #00FF00
+
 
 # keyboard layout
 # alternatively use:
@@ -140,7 +150,7 @@ bindsym XF86AudioRaiseVolume exec pactl set-sink-volume 0 +10%
 bindsym Shift+XF86AudioRaiseVolume exec pactl set-sink-volume 0 +2%
 
 # mute mic
-bindsym $mod+m exec amixer set Capture toggle
+bindsym $mod+m exec toggle_mic.py
 
 bindsym XF86Sleep exec systemctl suspend
 bindsym Ctrl+XF86Sleep exec systemctl hibernate
@@ -149,92 +159,98 @@ bindsym Print exec slurp | grim -g - ~/s.png
 bindsym Shift+Print exec maim -s ~/s.png
 
 # man 5 sway-bar
-bar {
-    status_command statusbar.py
-    position top
-    colors {
-        statusline #ffffff
-        background #00000000
-        inactive_workspace #00000000 #00000000 #200020
-        focused_workspace #00000000 #00000000 #ff0070
-    }
-    # disable system tray
-    tray_output none
-}
+# bar {
+#     status_command statusbar.py
+#     position top
+#     colors {
+#         statusline #ffffff
+#         background #00000000
+#         inactive_workspace #00000000 #00000000 #200020
+#         focused_workspace #00000000 #00000000 #ff0070
+#     }
+#     # disable system tray
+#     tray_output none
+# }
+bindsym KP_enter exec statuswindow.py
+for_window [title="^statuswindow$"] floating enable; sticky enable
+
 
 # kill focused window
 bindsym Mod1+f4 kill
 
-# godot open scnee as floating
+# godot open scene as floating
 for_window [instance="Godot_Engine"] floating enable ; move position 600 300
 for_window [title="[Extension Development Host]"] resize set width 30 ppt
 
 # panda3d window as floating
 for_window [title="Panda"] floating enable
 
-# window colors
-client.focused #0F000F #0F000F80 #888888 #000000 #000000
+# python plot window as floating
+for_window [title="float"] floating enable
 
-    # Drag floating windows by holding down $mod and left mouse button.
-    # Resize them with right mouse button + $mod.
-    # Despite the name, also works for non-floating windows.
-    # Change normal to inverse to use left mouse button for resizing and right
-    # mouse button for dragging.
-    floating_modifier $mod normal
+# Drag floating windows by holding down $mod and left mouse button.
+# Resize them with right mouse button + $mod.
+# Despite the name, also works for non-floating windows.
+# Change normal to inverse to use left mouse button for resizing and right
+# mouse button for dragging.
+floating_modifier $mod normal
 
-    # reload the configuration file
-    bindsym $mod+Shift+c reload
+# reload the configuration file
+bindsym $mod+Shift+c reload
 
-    # exit sway (logs you out of your Wayland session)
-    bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-#
-#
-# Layout stuff:
-#
-    bindsym $mod+b splith
-    bindsym $mod+v splitv
+# exit sway (logs you out of your Wayland session)
+bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
-    # Switch the current container between different layout styles
-    bindsym $mod+s layout stacking
-    bindsym $mod+w layout tabbed
-    bindsym $mod+e layout toggle split
+# bindsym $mod+b splith
+# bindsym $mod+v splitv
 
-    # Make the current focus fullscreen
-    bindsym $mod+f fullscreen
+# Switch the current container between different layout styles
+bindsym $mod+s layout stacking
+bindsym $mod+w layout tabbed
+bindsym $mod+e layout toggle split
 
-    # Toggle the current focus between tiling and floating mode
-    bindsym $mod+Shift+space floating toggle
+# Make the current focus fullscreen
+bindsym $mod+f fullscreen
 
-    # Swap focus between the tiling area and the floating area
-    bindsym $mod+space focus mode_toggle
+# Toggle the current focus between tiling and floating mode
+bindsym $mod+Shift+space floating toggle
 
-    # move focus to the parent container
-    bindsym $mod+a focus parent
+# # Swap focus between the tiling area and the floating area
+# bindsym $mod+space focus mode_toggle
+
+# # move focus to the parent container
+# bindsym $mod+a focus parent
+
 #
 # Scratchpad:
 #
-    # Sway has a "scratchpad", which is a bag of holding for windows.
-    # You can send windows there and get them back later.
+# Sway has a "scratchpad", which is a bag of holding for windows.
+# You can send windows there and get them back later.
 
-    # Move the currently focused window to the scratchpad
-    bindsym $mod+Shift+minus move scratchpad
+# Move the currently focused window to the scratchpad
+bindsym $mod+Shift+minus move scratchpad
+bindsym $mod+Shift+j move scratchpad
 
-    # Show the next scratchpad window or hide the focused scratchpad window.
-    # If there are multiple scratchpad windows, this command cycles through them.
-    bindsym $mod+minus scratchpad show
+# Show the next scratchpad window or hide the focused scratchpad window.
+# If there are multiple scratchpad windows, this command cycles through them.
+bindsym $mod+minus scratchpad show
+bindsym $mod+j scratchpad show
+
 #
 # Resizing containers:
 #
-mode "resize" {
-    bindsym Left resize shrink width 10px
-    bindsym Down resize grow height 10px
-    bindsym Up resize shrink height 10px
-    bindsym Right resize grow width 10px
+# mode "resize" {
+#     bindsym Left resize shrink width 10px
+#     bindsym Down resize grow height 10px
+#     bindsym Up resize shrink height 10px
+#     bindsym Right resize grow width 10px
 
-    # return to default mode
-    bindsym Return mode "default"
-    bindsym Escape mode "default"
-}
-bindsym $mod+r mode "resize"
+#     # return to default mode
+#     bindsym Return mode "default"
+#     bindsym Escape mode "default"
+# }
+# bindsym $mod+r mode "resize"
 
 include /etc/sway/config.d/*
+
+exec notify-send -t 5000 "Welcome, Clue!"
