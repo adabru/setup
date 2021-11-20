@@ -2,16 +2,21 @@
 export PATH="$HOME/bin:$PATH"
 export XKB_DEFAULT_LAYOUT=ab
 export XKB_DEFAULT_OPTIONS=compose:menu
+export PYOPENGL_PLATFORM=egl
 
 if [[ $(tty) = "/dev/tty1" && -x /usr/bin/sway ]]; then
   # export QT_QPA_PLATFORM=wayland-egl
-  #exec startxfce4
+  # exec startxfce4
   # delete old sway.log
   if [[ `find ~/sway.log -name sway.log -mmin +1` != '' ]]; then
     rm ~/sway.log
   fi
   sway >>~/sway.log 2>&1
   exit 0
+elif [[ $(tty) = "/dev/tty3" && -x /usr/bin/startxfce4 ]]; then
+  # see https://wiki.archlinux.org/title/Xfce#Starting
+  # see https://wiki.archlinux.org/title/Xinit#Override_xinitrc
+  startx /usr/bin/startxfce4 -- :1
 fi
 
 # If not running interactively, don't do anything
@@ -126,6 +131,11 @@ alias tupdate='trizen -Syyu'
 # yay as aur helper - updates everything
 alias pksyua="yay -Syu --noconfirm"
 
+# enforce password to check whether it is disabled
+alias sshpwd="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
+# activate proxy
+alias proxy_socks="ssh -D 61359 adabru.de"
+
 # -E: preserve env to be able to pass env vars to the container
 alias docker="sudo -E /usr/bin/docker"
 docker-tags() {
@@ -175,7 +185,7 @@ __git_complete gb _git_branch
 alias gco='git checkout'
 __git_complete gco _git_checkout
 alias gcb='git checkout -b'
-alias glog="git log --pretty=format:'%C(bold)%h %C(cyan)%cr %C(reset)%C(yellow)%an %C(reset) %s %C(green)%d' --graph --decorate"
+alias glog="git log --pretty=format:'%C(bold)%h%C(reset)/%ct %C(bold)%C(cyan)%cr %C(reset)%C(yellow)%an %C(reset) %s %C(green)%d' --graph --decorate"
 __git_complete glog _git_log
 
 git-https() {
@@ -220,6 +230,7 @@ alias h='history'
 alias doc='cd ~/repo/adabru-markup/ ; ./html/js/server.ls -d ~/documentation --cache ~/.cache/adabru-markup'
 alias nnn='export EDITOR=vim ; nnn'
 alias diff='git diff --color-words --no-index'
+alias lxcr='_JAVA_AWT_WM_NONREPARENTING=1 lxcr'
 c() {
 for b in {40..47} {100..107} ; do
   for f in {30..37} {90..97} ; do

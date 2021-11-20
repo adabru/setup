@@ -2,11 +2,24 @@
 
 ## Arch Setup
 
-- download from https://www.archlinux.de/download
-- burn to stick with rufus dd (alternatively via dd from linux), see https://wiki.archlinux.org/index.php/USB_flash_installation_media#Using_Rufus
-- make backup via ~/bin/backup.py
-- connect lan (if connected lateron, run `dhcpcd`)
-- boot from pendrive
+Download arch.iso from https://www.archlinux.de/download
+
+- For single boot, burn to stick with rufus dd-mode or `pv arch.iso > /dev/sdx`. For dualboot download windows.iso from https://www.microsoft.com/de-de/software-download/windows10ISO , install ventoy on your pendrive:
+
+  ```sh
+  sudo pacman -S ventoy
+  lsblk
+  sudo ventoy -i /dev/sdx
+  sudo mount /dev/sdx1 /mnt
+  cp ~/Downloads/<windows.iso> /mnt && sync
+  cp ~/Downloads/<arch.iso> /mnt && sync
+  sudo umount /mnt
+  sudo eject /dev/sdx # may fail, doesn't matter
+  ```
+
+- Make backup via ~/bin/backup.py .
+- Connect lan (if connected lateron, run `dhcpcd`).
+- Boot from pendrive.
 
 ```sh
 # following commands come from https://wiki.archlinux.de/title/Arch_Install_Scripts
@@ -39,6 +52,7 @@ echo KEYMAP=de > /etc/vconsole.conf
 pacman -S grub os-prober
 # for UEFI:
 pacman -S refind-efi
+# see further below how to install
 
 grub-install /dev/sda
 # auto-detects windows via os-prober. if not, mount windows partition before
@@ -53,7 +67,7 @@ umount /mnt
 
 - poweroff
 - eject pendrive and boot
-- install  windows
+- install windows
   - download and burn latest iso
   - install without internet to avoid updates
   - create a xGB partition during installation
@@ -122,7 +136,7 @@ mirror
 pacman -Qq | wc -l
 
 # install terminal
-pacman -S termite
+pacman -S alacritty
 
 # setup xkb layout
 sudo cp ~/setup/xkb_ab /usr/share/X11/xkb/symbols/ab
@@ -164,6 +178,8 @@ grep XF86MonBrightness /usr/share/X11/xkb/symbols/*
 # sudo systemctl edit getty^TAB
 sudo mkdir /etc/systemd/system/getty@tty1.service.d/
 sudo cp ~/setup/getty.conf /etc/systemd/system/getty@tty1.service.d/override.conf
+sudo mkdir /etc/systemd/system/getty@tty3.service.d/
+sudo cp ~/setup/getty.conf /etc/systemd/system/getty@tty3.service.d/override.conf
 systemctl daemon-reload
 
 # partition managing
@@ -180,8 +196,6 @@ sudo mount -a
 # navigate to backup
 sudo mount /dev/disk/by-label/500_LapStore /mnt
 ```
-
-
 
 ## Further Software
 
@@ -441,6 +455,37 @@ winetricks dotnet452 corefonts
 # Server = https://martchus.no-ip.biz/repo/arch/$repo/os/$arch
 t -Sy
 t -S mingw-w64
+
+pacman -S youtube-dl # ipython graphicsmagick
+
+# virtualenv + pip if needed, see https://virtualenv.pypa.io/en/latest/installation.html
+wget -O- https://pypi.python.org/packages/source/v/virtualenv/virtualenv-16.0.0.tar.gz | tar xz
+cd virtualenv-*
+python setup.py install --prefix ~/.virtualenv
+cd ~/.virtualenv
+export PYTHONPATH=./lib/python3.7/site-packages
+./bin/virtualenv -p python3 .
+. ./bin/activate
+
+
+# gamepad: nintendo switch pro controller
+## Alternative A
+# https://wiki.archlinux.org/title/Gamepad
+gpg --keyserver keyserver.ubuntu.com --recv-key E23B7E70B467F0BF
+t -S hid-nintendo-dkms xf86-input-joystick ydotool
+# https://gamepad-tester.com
+systemctl --user enable --now ydotool
+ydotool mousemove --absolute 100 100
+## Alternative B
+t -S sc-controller
+## Alternative C
+# https://wiki.archlinux.org/title/Gamepad#iPEGA-9017s_and_other_Bluetooth_gamepads
+# https://www.reddit.com/r/RetroPie/comments/67lhv3/nintendo_switch_pro_controller_is_fully_working/
+t -S xboxdrv
+sudo cp ~/setup/gamepad/udev_bt_switch_pro.rules /etc/udev/rules.d/99-bt_switch_pro.rules
+sudo udevadm control --reload-rules
+xboxdrv_switch_pro.conf
+xboxdrv --evdev /dev/btjoy --config .config/xboxdrv/ipega.conf
 ```
 
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
@@ -448,37 +493,10 @@ t -S mingw-w64
   - `journalctl -p 3 -xb`
   - update system with: `update` (pacman) or `tupdate` (trizen)
 
+## Postinstall Windows
 
-|
-|@virtualenv / @pip|
-  - <https://virtualenv.pypa.io/en/latest/installation.html>
-  - ```
-    wget -O- https://pypi.python.org/packages/source/v/virtualenv/virtualenv-16.0.0.tar.gz | tar xz
-    cd virtualenv-*
-    python setup.py install --prefix ~/.virtualenv
-    cd ~/.virtualenv
-    export PYTHONPATH=./lib/python3.7/site-packages
-    ./bin/virtualenv -p python3 .
-    . ./bin/activate
-    ```
-  - @youtube-dl @ipython @plac @colorama @Pillow
+Prepare an unallocated space on your hard drive for Windows.
 
+Didn't try yet it could be possible to install via kvm: <https://askubuntu.com/a/249169/452398>. Possibly with help of sysprep.
 
-gimp              # backgrounds, gifts
-inkscape          # svg editing
-graphicsmagick    # image conversion
-docker            # projects/work
-owncloud-client   # projects
-firefox            # web development (test)
-namcap            # AUR packaging
-grive             # mindcloud
-cura              # 3d printing
-kvm               # i9 work
-tk                # python GUI, lockscreen
-tribler, vlc, python2-pyopenssl, python2-service-identity
-                  # torrents
-pdfshuffler         # typesetting
-ghostscript       # typesetting
-pulseeffects       # audio playback
-godot             # mindcloud
-git-lfs           # git repos with large binaries
+Else create a dual boot usb stick (s. above) and do the default Windows installation where you can select the prepared unallocated space for installation. Because of efi I was even able to boot linux from the hard disk afterwards with the bios boot device selection.

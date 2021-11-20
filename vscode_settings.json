@@ -97,5 +97,9 @@
   },
   "astyle.astylerc": "/usr/share/arduino/lib/formatter.conf",
   "dart.debugExternalLibraries": true,
-  "dart.debugSdkLibraries": true
+  "dart.debugSdkLibraries": true,
+  "git.enabled": false,
+  "files.exclude": {
+    "**/node_modules": true
+  }
 }

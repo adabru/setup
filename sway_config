@@ -5,21 +5,21 @@
 # Mod4 = Super
 set $mod Mod4
 
-bindsym $mod+Return exec termite -e tmux
+bindsym $mod+Return exec alacritty -e tmux
 # bindsym Ctrl+Space exec launcher.sh
 bindsym Ctrl+Space exec albert toggle
 exec "(albert&) && sleep .1 && albert show"
 exec "headset_daemon.py"
 
-bindsym $mod+Left focus left
-bindsym $mod+Down focus down
-bindsym $mod+Up focus up
-bindsym $mod+Right focus right
+bindsym $mod+s focus left
+bindsym $mod+d focus down
+bindsym $mod+e focus up
+bindsym $mod+f focus right
 
-bindsym $mod+Shift+Left move left
-bindsym $mod+Shift+Down move down
-bindsym $mod+Shift+Up move up
-bindsym $mod+Shift+Right move right
+bindsym $mod+Shift+s move left
+bindsym $mod+Shift+d move down
+bindsym $mod+Shift+e move up
+bindsym $mod+Shift+f move right
 
 # workaround for clipboard issue when copy-pasting from xwayland to wayland
 bindsym Ctrl+Shift+C exec wl-paste -n | wl-copy
@@ -28,6 +28,14 @@ output * bg /home/adabru/setup/desktop.jpg fill
 # swaymsg -t get_outputs
 # swaymsg output "LVDS-1" scale .5
 # swaymsg output "LVDS-1" scale 2
+
+# rotate screen
+bindsym $mod+Ctrl+Up output LVDS-1 transform 0
+bindsym $mod+Ctrl+Right output LVDS-1 transform 90
+bindsym $mod+Ctrl+Down output LVDS-1 transform 180
+bindsym $mod+Ctrl+Left output LVDS-1 transform 270
+# swaymsg -t output LVDS-1 transform 0
+
 
 # needed for gparted or kde partitionmanager, see https://wiki.archlinux.org/index.php/Polkit
 # TODO: make systemd service
@@ -46,16 +54,26 @@ bindsym $mod+KP_7 workspace 7 ; exec notify-send -t 100 "7" ; client.focused #FF
 bindsym $mod+KP_8 workspace 8 ; exec notify-send -t 100 "8" ; client.focused #8800FF #8800FF #8800FF
 bindsym $mod+KP_9 workspace 9 ; exec notify-send -t 100 "9" ; client.focused #000000 #000000 #000000
 bindsym $mod+KP_0 workspace 10 ; exec notify-send -t 100 "10" ; client.focused #000000 #000000 #000000
-bindsym $mod+1 workspace 1 ; exec notify-send -t 100 "1"
-bindsym $mod+2 workspace 2 ; exec notify-send -t 100 "2"
-bindsym $mod+3 workspace 3 ; exec notify-send -t 100 "3"
-bindsym $mod+4 workspace 4 ; exec notify-send -t 100 "4"
-bindsym $mod+5 workspace 5 ; exec notify-send -t 100 "5"
-bindsym $mod+6 workspace 6 ; exec notify-send -t 100 "6"
-bindsym $mod+7 workspace 7 ; exec notify-send -t 100 "7"
-bindsym $mod+8 workspace 8 ; exec notify-send -t 100 "8"
-bindsym $mod+9 workspace 9 ; exec notify-send -t 100 "9"
-bindsym $mod+0 workspace 10 ; exec notify-send -t 100 "10"
+bindsym ctrl+KP_1 workspace 1 ; exec notify-send -t 100 "1" ; client.focused #FF0000 #FF0000 #FF0000
+bindsym ctrl+KP_2 workspace 2 ; exec notify-send -t 100 "2" ; client.focused #00FF00 #00FF00 #00FF00
+bindsym ctrl+KP_3 workspace 3 ; exec notify-send -t 100 "3" ; client.focused #0000FF #0000FF #0000FF
+bindsym ctrl+KP_4 workspace 4 ; exec notify-send -t 100 "4" ; client.focused #FFFF00 #FFFF00 #FFFF00
+bindsym ctrl+KP_5 workspace 5 ; exec notify-send -t 100 "5" ; client.focused #FF00FF #FF00FF #FF00FF
+bindsym ctrl+KP_6 workspace 6 ; exec notify-send -t 100 "6" ; client.focused #00FFFF #00FFFF #00FFFF
+bindsym ctrl+KP_7 workspace 7 ; exec notify-send -t 100 "7" ; client.focused #FFFFFF #FFFFFF #FFFFFF
+bindsym ctrl+KP_8 workspace 8 ; exec notify-send -t 100 "8" ; client.focused #8800FF #8800FF #8800FF
+bindsym ctrl+KP_9 workspace 9 ; exec notify-send -t 100 "9" ; client.focused #000000 #000000 #000000
+bindsym ctrl+KP_0 workspace 10 ; exec notify-send -t 100 "10" ; client.focused #000000 #000000 #000000
+bindsym $mod+1 workspace 1 ; exec notify-send -t 100 "1" ; client.focused #FF0000 #FF0000 #FF0000
+bindsym $mod+2 workspace 2 ; exec notify-send -t 100 "2" ; client.focused #00FF00 #00FF00 #00FF00
+bindsym $mod+3 workspace 3 ; exec notify-send -t 100 "3" ; client.focused #0000FF #0000FF #0000FF
+bindsym $mod+4 workspace 4 ; exec notify-send -t 100 "4" ; client.focused #FFFF00 #FFFF00 #FFFF00
+bindsym $mod+5 workspace 5 ; exec notify-send -t 100 "5" ; client.focused #FF00FF #FF00FF #FF00FF
+bindsym $mod+6 workspace 6 ; exec notify-send -t 100 "6" ; client.focused #00FFFF #00FFFF #00FFFF
+bindsym $mod+7 workspace 7 ; exec notify-send -t 100 "7" ; client.focused #FFFFFF #FFFFFF #FFFFFF
+bindsym $mod+8 workspace 8 ; exec notify-send -t 100 "8" ; client.focused #8800FF #8800FF #8800FF
+bindsym $mod+9 workspace 9 ; exec notify-send -t 100 "9" ; client.focused #000000 #000000 #000000
+bindsym $mod+0 workspace 10 ; exec notify-send -t 100 "10" ; client.focused #000000 #000000 #000000
 # move focused container to workspace
 bindsym $mod+Shift+KP_1 move container to workspace 1
 bindsym $mod+Shift+KP_2 move container to workspace 2
@@ -114,8 +132,6 @@ input type:keyboard {
 input "76:620:Roberts_Tastatur" {
     xkb_options altwin:swap_alt_win,lv5:rwin_switch_lock
 }
-bindsym Ctrl+KP_1 input type:keyboard xkb_switch_layout 0
-bindsym Ctrl+KP_2 input type:keyboard xkb_switch_layout 1
 
 # exec swayidle timeout 600 lockscreen.py
 
@@ -129,13 +145,6 @@ input "9317:25345:Microsoft_Corporation_Guest_Touchback_Board" {
 # swaymsg -t get_inputs
 # swaymsg -t get_outputs
 # man 5 sway-input
-
-bindsym Ctrl+KP_7 exec brillo -A 10
-bindsym Ctrl+KP_8 exec brillo -A 1
-bindsym Ctrl+KP_9 exec brillo -A .1
-bindsym Ctrl+KP_4 exec brillo -U 10
-bindsym Ctrl+KP_5 exec brillo -U 1
-bindsym Ctrl+KP_6 exec brillo -U .1
 
 bindsym XF86MonBrightnessUp exec brillo -A 10
 bindsym Shift+XF86MonBrightnessUp exec brillo -A 1
@@ -196,21 +205,21 @@ for_window [title="float"] floating enable
 floating_modifier $mod normal
 
 # reload the configuration file
-bindsym $mod+Shift+c reload
+bindsym $mod+Ctrl+c reload
 
 # exit sway (logs you out of your Wayland session)
-bindsym $mod+Shift+e exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
+bindsym $mod+Ctrl+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
 # bindsym $mod+b splith
 # bindsym $mod+v splitv
 
 # Switch the current container between different layout styles
-bindsym $mod+s layout stacking
-bindsym $mod+w layout tabbed
-bindsym $mod+e layout toggle split
+# bindsym $mod+s layout stacking
+bindsym $mod+Ctrl+w layout tabbed
+bindsym $mod+Ctrl+e layout toggle split
 
 # Make the current focus fullscreen
-bindsym $mod+f fullscreen
+bindsym $mod+Ctrl+f fullscreen
 
 # Toggle the current focus between tiling and floating mode
 bindsym $mod+Shift+space floating toggle

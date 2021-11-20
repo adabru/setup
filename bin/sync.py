@@ -18,7 +18,7 @@ def sync(source, target):
     if not os.path.exists(source):
         print("\033[33msource doesn't exist")
     elif os.path.realpath(target) == source:
-        print("\033[93m✔")
+        print("\033[92m✔")
     elif not os.path.exists(os.path.dirname(target)):
         try:
             os.makedirs(os.path.dirname(target))
@@ -34,19 +34,19 @@ def sync(source, target):
         print("\033[33msource is a file but target is a dir")
     elif (os.path.exists(target) and (not os.access(target, os.W_OK) or os.stat(os.path.dirname(target)).st_uid == 0)
           and filecmp.cmp(source, target, shallow=False)):
-        print("\033[93m(✔)")
+        print("\033[92m(✔)")
     elif os.path.exists(target) and not filecmp.cmp(source, target, shallow=False):
-        print("\033[33msource and target differ")
+        print("\033[93msource and target differ")
     elif os.path.exists(target):
         print("remove duplicate target and sync again to create a link")
     elif not os.access(os.path.dirname(target), os.W_OK):
-        print("sudo copy source to target")
+        print("\033[93msudo copy source to target")
     elif os.stat(os.path.dirname(target)).st_uid == 0:
         shutil.copyfile(source, target)
-        print("\033[93m(✔)")
+        print("\033[92m(✔)")
     else:
         os.symlink(source, target)
-        print("\033[93m✔")
+        print("\033[92m✔")
     print("\033[39m", end="")
 
 
@@ -83,7 +83,7 @@ sync("~/setup/vscode_settings.json",
      "~/.config/Code - Insiders/User/settings.json")
 
 # terminal + envs
-sync("~/setup/termite_config", "~/.config/termite/config")
+sync("~/setup/alacritty.yml", "~/.config/alacritty/alacritty.yml")
 sync("~/setup/bashrc", "~/.bashrc")
 sync("~/setup/trizen.conf", "~/.config/trizen/trizen.conf")
 sync("~/setup/vimrc", "~/.vimrc")

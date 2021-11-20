@@ -52,66 +52,91 @@ def run():
             self.is_visible = is_visible
             self.lastCpu = None
             self._quit = False
+            self.s_cpu = '…'
+            self.s_mem = '…'
+            self.s_bat = '…'
+            self.s_dat = '…'
+            self.s_net = '…'
+            self.s_srv = '…'
 
         def run(self):
+            network = None
+            serverstatus = None
             while not self._quit:
                 with self.condition:
                     self.condition.wait_for(self.is_visible)
-                self.update_signal.emit(self.get_message())
+                self.s_dat = self._time()
+                self._update()
+                self.s_cpu = self._cpuload()
+                self.s_mem = self._memory()
+                self.s_bat = self._battery()
+                self.s_dat = self._time()
+                self._update()
+                self.s_srv = self._serverstatus()
+                self.s_net = self._network()
+                self.s_dat = self._time()
+                self._update()
                 time.sleep(.5)
+
+        def _update(self):
+            # for supported html elements, see https://doc.qt.io/qt-5/richtext-html-subset.html
+            message = '<div><p>%s</p><p>%s %s</p><p>%s</p><p>%s</p><p>%s</p></div>' % (
+                self.s_cpu, self.s_net, self.s_srv, self.s_mem, self.s_bat, self.s_dat)
+            self.update_signal.emit(message)
 
         def quit(self):
             self._quit = True
             with condition:
                 condition.notify()
 
-        def get_message(self):
-            def cat(file):
-                with open(file, "r") as f:
-                    return f.read()
+        def cat(self, file):
+            with open(file, "r") as f:
+                return f.read()
 
-            # wireless network
+        def _network(self):
             network = subprocess.run('nmcli -t -f general.connection device show wlp2s0'.split(),
                                      encoding='UTF-8', capture_output=True).stdout.strip()
             network = network.removeprefix('GENERAL.CONNECTION:')
             network = '<font color=#8888ff>%s</font>' % network
+            return network
 
-            # adabru http request
+        def _serverstatus(self):
             t0 = time.time()
             try:
                 request = urllib.request.Request(
                     'https://adabru.de', method='HEAD')
                 with urllib.request.urlopen(request) as response:
                     if response.status == 200:
-                        adabrustatus = '%dms' % ((time.time() - t0) * 1000)
+                        status = '%dms' % ((time.time() - t0) * 1000)
                     else:
-                        adabrustatus = '🕱'
+                        status = '🕱'
             except urllib.error.URLError:
-                adabrustatus = '🕱'
+                status = '🕱'
+            return status
 
-            # free memory
+        def _memory(self):
             regex = re.compile(
                 'MemAvailable: *([0-9]+).*SwapFree: *([0-9]+)', re.S)
-            m = regex.search(cat('/proc/meminfo'))
+            m = regex.search(self.cat('/proc/meminfo'))
             mem, swap = int(m.group(1))/1e6, int(m.group(2))/1e6
             color = '#ff4444' if mem < 1 else '#aaaaaa'
-            memory = '<font color=%s>%.1f %.1f</font>' % (
+            return '<font color=%s>%.1f %.1f</font>' % (
                 color, mem, swap)
 
-            # battery status
+        def _battery(self):
             battery = None
             try:
-                battery = (float(cat('/sys/class/power_supply/BAT1/energy_now'))
-                           / float(cat('/sys/class/power_supply/BAT1/energy_full')))
+                battery = (float(self.cat('/sys/class/power_supply/BAT1/energy_now'))
+                           / float(self.cat('/sys/class/power_supply/BAT1/energy_full')))
             except FileNotFoundError:
                 pass
             try:
-                battery = (float(cat('/sys/class/power_supply/BAT1/charge_now'))
-                           / float(cat('/sys/class/power_supply/BAT1/charge_full')))
+                battery = (float(self.cat('/sys/class/power_supply/BAT1/charge_now'))
+                           / float(self.cat('/sys/class/power_supply/BAT1/charge_full')))
             except FileNotFoundError:
                 pass
             mode = '🔌' if int(
-                cat('/sys/class/power_supply/ACAD/online')) else '🔋'
+                self.cat('/sys/class/power_supply/ACAD/online')) else '🔋'
             if not battery:
                 battery = 0
             if battery > .3:
@@ -120,32 +145,29 @@ def run():
                 color = '#aaaa22'
             else:
                 color = '#ff4444'
-            battery = '<font color=%s>%.1f</font>%s' % (
+            return '<font color=%s>%.1f</font>%s' % (
                 color, 100*battery, mode)
 
-            # date and time
-            t = datetime.now().strftime("<font color=#aaaaaa>%Y-%m-%d W%V</font><br>%H:%M:%S")
+        def _time(self):
+            return datetime.now().strftime("<font color=#aaaaaa>%Y-%m-%d W%V</font>    %H:%M:%S")
 
-            # cpu load
+        def _cpuload(self):
             def cpu():
                 def sum(line):
                     x = line.split()
                     return (int(x[1]) + int(x[2]) + int(x[3]) + int(x[6]) + int(x[7]) + int(x[8]) + int(x[9]) + int(x[10]),
                             int(x[4]) + int(x[5]))
-                return [sum(line) for line in cat('/proc/stat').split('\n')[1:5]]
+                return [sum(line) for line in self.cat('/proc/stat').split('\n')[1:5]]
 
             def cpuload(curr, last):
                 return '{:3.0%}'.format(float(curr[0]-last[0]) / (curr[0]-last[0]+curr[1]-last[1]+1))
             currCpu = cpu()
             if self.lastCpu == None:
                 self.lastCpu = currCpu
-            load = '<font color=#aaaaaa>%s</font>' % ' '.join([cpuload(curr, last)
-                                                               for curr, last in zip(currCpu, self.lastCpu)])
+            result = '<font color=#aaaaaa>%s</font>' % ' '.join([cpuload(curr, last)
+                                                                 for curr, last in zip(currCpu, self.lastCpu)])
             self.lastCpu = currCpu
-
-            message = '%s<br>%s %s<br>%s<br>%s<br>%s' % (
-                load, network, adabrustatus, memory, battery, t)
-            return message
+            return result
 
     class App(QObject):
         def __init__(self, condition):
@@ -153,9 +175,7 @@ def run():
             self.condition = condition
             self.widget = QWidget()
             self.label = QLabel()
-            font = QFont()
-            font.setPointSize(12)
-            self.label.setFont(font)
+            self.label.setStyleSheet('QLabel { font-size: 12pt; }')
             layout = QHBoxLayout()
             self.widget.setLayout(layout)
             layout.addWidget(self.label)

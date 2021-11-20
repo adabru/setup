@@ -1,0 +1,2 @@
+#Create a symlink to appropriate /dev/input/eventX at /dev/btjoy
+ACTION=="add", SUBSYSTEM=="input", ATTRS{name}=="Pro Controller", SYMLINK+="btjoy"
