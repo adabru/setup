@@ -9,29 +9,25 @@ if len(sys.argv) < 2:
     print('to backup archive (once), use\n  mksquashfs ~/archive /path/to/archive.sqfs -comp lz4 \n')
     exit()
 
-# ~/👣
-# ~/audio
-# ~/bin/tunnel_ipv6.sh
-# ~/desktop
-# ~/documentation
-# ~/graphics
-# ~/repo
-# ~/setup
-# ~/work
-# ~/.bash_history
-# ~/.config/vivaldi/
-# ~/.ssh/
-# ~/.thunderbird/
-
 subprocess.call([argument.replace('~', os.path.expanduser('~')) for argument in ("""mksquashfs
-~
+~/👣
+~/audio
+~/bin/tunnel_ipv6.sh
+~/desktop
+~/documentation
+~/graphics
+~/repo
+~/setup
+~/work
+~/.bash_history
+~/.config/vivaldi/
+~/.ssh/
+~/.thunderbird/
 """+sys.argv[1]+"""
 -comp
 lz4
+-no-strip
 -wildcards
 -e
-... node_modules
-!(👣|audio|desktop|documentation|graphics|repo|setup|work|.bash_history|.ssh|.thunderbird|bin|.config)
-bin/!(tunnel_ipv6.sh)
-.config/!(vivaldi)
+node_modules
 """).split('\n')])

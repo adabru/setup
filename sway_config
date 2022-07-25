@@ -5,11 +5,13 @@
 # Mod4 = Super
 set $mod Mod4
 
+# reload lthe configuration file
+bindsym $mod+Ctrl+c reload
+
 bindsym $mod+Return exec alacritty -e tmux
-# bindsym Ctrl+Space exec launcher.sh
 bindsym Ctrl+Space exec albert toggle
-exec "(albert&) && sleep .1 && albert show"
-exec "headset_daemon.py"
+
+seat seat0 xcursor_theme default 10
 
 bindsym $mod+s focus left
 bindsym $mod+d focus down
@@ -203,9 +205,6 @@ for_window [title="float"] floating enable
 # Change normal to inverse to use left mouse button for resizing and right
 # mouse button for dragging.
 floating_modifier $mod normal
-
-# reload the configuration file
-bindsym $mod+Ctrl+c reload
 
 # exit sway (logs you out of your Wayland session)
 bindsym $mod+Ctrl+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'

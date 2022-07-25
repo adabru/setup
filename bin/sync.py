@@ -1,51 +1,60 @@
 #!/usr/bin/python
 
-import os
-import filecmp
-import shutil
+import os, filecmp, shutil, subprocess
+from pathlib import Path
 
 if os.geteuid() == 0:
     print("Don't run as root. Exiting.")
     exit()
 
 
+def is_git(path):
+    return subprocess.run(["git", "rev-parse"], cwd=path.parent).returncode == 0
+
+
 def sync(source, target):
-    # symbolic links are not supported on FAT32, check with `os.stat(os.path.dirname(target)).st_uid != 0`
-    print("\033[96m{:} \033[39m \033[94m{:}\033[39m : ".format(
-        source, target), end="")
-    source = os.path.expanduser(source)
-    target = os.path.expanduser(target)
-    if not os.path.exists(source):
+    # symbolic links are not supported on FAT32, check with target.parent.owner() != "root"
+    print("\033[96m{:} \033[39m \033[94m{:}\033[39m : ".format(source, target), end="")
+    source = Path(source).expanduser()
+    target = Path(target).expanduser()
+    if not source.exists():
         print("\033[33msource doesn't exist")
-    elif os.path.realpath(target) == source:
+    elif target.resolve() == source:
         print("\033[92m✔")
-    elif not os.path.exists(os.path.dirname(target)):
+    elif not target.parent.exists():
         try:
-            os.makedirs(os.path.dirname(target))
+            target.parent.mkdir(parents=True)
             return sync(source, target)
         except IOError:
             print("\033[93mdirectory creation failed!")
-    elif os.path.islink(target):
-        print("\033[33mtarget already links to {:}".format(
-            os.path.realpath(target)))
-    elif os.path.isdir(source) and os.path.isfile(target):
+    elif target.is_symlink():
+        print("\033[33mtarget already links to {:}".format(target.resolve()))
+    elif source.is_dir() and target.is_file():
         print("\033[33msource is a dir but target is a file")
-    elif os.path.isfile(source) and os.path.isdir(target):
+    elif source.is_file() and target.is_dir():
         print("\033[33msource is a file but target is a dir")
-    elif (os.path.exists(target) and (not os.access(target, os.W_OK) or os.stat(os.path.dirname(target)).st_uid == 0)
-          and filecmp.cmp(source, target, shallow=False)):
+    elif (
+        target.exists()
+        and (not os.access(target, os.W_OK) or target.parent.owner() == "root")
+        and filecmp.cmp(source, target, shallow=False)
+    ):
         print("\033[92m(✔)")
-    elif os.path.exists(target) and not filecmp.cmp(source, target, shallow=False):
+    elif target.exists() and not filecmp.cmp(source, target, shallow=False):
         print("\033[93msource and target differ")
-    elif os.path.exists(target):
+    elif target.exists() and is_git(target):
+        print("duplicate target")
+    elif target.exists():
         print("remove duplicate target and sync again to create a link")
-    elif not os.access(os.path.dirname(target), os.W_OK):
+    elif not os.access(target.parent, os.W_OK):
         print("\033[93msudo copy source to target")
-    elif os.stat(os.path.dirname(target)).st_uid == 0:
+    elif target.parent.owner() == "root":
+        shutil.copyfile(source, target)
+        print("\033[92m(✔)")
+    elif is_git(target):
         shutil.copyfile(source, target)
         print("\033[92m(✔)")
     else:
-        os.symlink(source, target)
+        target.symlink_to(source)
         print("\033[92m✔")
     print("\033[39m", end="")
 
@@ -73,14 +82,18 @@ sync("~/setup/nftables.conf", "/etc/nftables.conf")
 
 # VS Code config
 
-sync("~/repo/vscode-adabru-markup",
-     "~/.vscode-insiders/extensions/vscode-adabru-markup")
-sync("~/repo/app/godot/addons/vscode-diff-plugin",
-     "~/.vscode-insiders/extensions/vscode-diff-plugin")
-sync("~/setup/vscode_keybindings.json",
-     "~/.config/Code - Insiders/User/keybindings.json")
-sync("~/setup/vscode_settings.json",
-     "~/.config/Code - Insiders/User/settings.json")
+sync(
+    "~/repo/vscode-adabru-markup", "~/.vscode-insiders/extensions/vscode-adabru-markup"
+)
+sync(
+    "~/repo/app/godot/addons/vscode-diff-plugin",
+    "~/.vscode-insiders/extensions/vscode-diff-plugin",
+)
+sync(
+    "~/setup/vscode/keybindings.json", "~/.config/Code - Insiders/User/keybindings.json"
+)
+sync("~/setup/vscode/settings.json", "~/.config/Code - Insiders/User/settings.json")
+sync("~/setup/vscode/snippets", "~/.config/Code - Insiders/User/snippets")
 
 # terminal + envs
 sync("~/setup/alacritty.yml", "~/.config/alacritty/alacritty.yml")
@@ -98,6 +111,10 @@ sync("~/setup/bin/dates.py", "~/bin/dates.py")
 
 # headset mic boost
 sync("~/setup/bin/headset_daemon.py", "~/bin/headset_daemon.py")
+sync(
+    "~/setup/services/adabru.headset.service",
+    "/etc/systemd/user/adabru.headset.service",
+)
 
 # brightness
 sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
@@ -106,7 +123,9 @@ sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
 sync("~/setup/udev_hdmi_sound.rules", "/etc/udev/rules.d/hdmi_sound.rules")
 
 # launcher
-sync("~/setup/bin/launcher.sh", "~/bin/launcher.sh")
+sync(
+    "~/setup/services/adabru.albert.service", "/etc/systemd/user/adabru.albert.service"
+)
 sync("~/setup/albert.conf", "~/.config/albert/albert.conf")
 sync("~/setup/user-dirs.dirs", "~/.config/user-dirs.dirs")
 sync("~/setup/applications", "~/.local/share/applications/adabru")
@@ -138,14 +157,6 @@ sync("~/setup/bin/whatsapp", "~/bin/whatsapp")
 # documentation
 sync("~/repo/adabru-server/Readme", "~/documentation/Homepage/Server")
 
-# mindcloud
-sync("~/repo/app/.godot/script_templates/UIState.gd",
-     "~/.config/godot/script_templates/UIState.gd")
-sync("~/repo/app/.godot/script_templates/UIElement.gd",
-     "~/.config/godot/script_templates/UIElement.gd")
-sync("~/repo/app/.godot/editor_settings-3.tres",
-     "~/.config/godot/editor_settings-3.tres")
-
 # ftp
 sync("~/setup/bin/ftp_here.sh", "~/bin/ftp_here.sh")
 
@@ -163,3 +174,14 @@ sync("~/setup/sqfs-mount.desktop", "/usr/share/applications/sqfs-mount.desktop")
 
 # work
 sync("~/setup/bin/karsoft_workspace.sh", "~/bin/karsoft_workspace.sh")
+
+# eye tracking + speech
+sync("~/repo/speech/cursor/AdabruCursors", "~/.icons/AdabruCursors")
+sync("~/repo/speech/parrot_patterns.json", "~/.talon/parrot/patterns.json")
+sync(
+    "~/repo/speech/adabru_talon/cursorless-settings",
+    "~/.talon/user/cursorless-settings",
+)
+sync("~/repo/gists/unix_socket.py", "~/repo/eyeput/unix_socket.py")
+sync("~/repo/gists/unix_socket.py", "~/repo/speech/adabru_talon/code/unix_socket.py")
+sync("~/repo/gists/unix_socket.py", "~/repo/speech/run/unix_socket.py")

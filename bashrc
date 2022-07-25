@@ -2,9 +2,8 @@
 export PATH="$HOME/bin:$PATH"
 export XKB_DEFAULT_LAYOUT=ab
 export XKB_DEFAULT_OPTIONS=compose:menu
-export PYOPENGL_PLATFORM=egl
 
-if [[ $(tty) = "/dev/tty1" && -x /usr/bin/sway ]]; then
+if [[ $(tty) = "/dev/tty3" && -x /usr/bin/sway ]]; then
   # export QT_QPA_PLATFORM=wayland-egl
   # exec startxfce4
   # delete old sway.log
@@ -13,7 +12,7 @@ if [[ $(tty) = "/dev/tty1" && -x /usr/bin/sway ]]; then
   fi
   sway >>~/sway.log 2>&1
   exit 0
-elif [[ $(tty) = "/dev/tty3" && -x /usr/bin/startxfce4 ]]; then
+elif [[ $(tty) = "/dev/tty1" && -x /usr/bin/startxfce4 ]]; then
   # see https://wiki.archlinux.org/title/Xfce#Starting
   # see https://wiki.archlinux.org/title/Xinit#Override_xinitrc
   startx /usr/bin/startxfce4 -- :1
@@ -221,8 +220,8 @@ alias pan-='swaymsg output "LVDS-1" scale 1.0'
 gamma() { xrandr --output LVDS1 --gamma $1:$1:$1; }
 bright() { xrandr --output LVDS1 --brightness $1; }
 gambri() { xrandr --output LVDS1 --gamma $1:$1:$1 --brightness $2; }
-# copy() { (if [ -f "$1" ]; then cat $1; else printf "$1"; fi;) | xclip -sel p -f | xclip -sel c; }
-copy() { (if [ -f "$1" ]; then cat $1; elif [ -d "$1" ]; then realpath -z "$1"; else printf "$1"; fi;) | wl-copy; }
+# copy() { (if [ -f "$1" ]; then cat $1; elif [ -d "$1" ]; then realpath -z "$1"; else printf "$1"; fi;) | wl-copy; }
+copy() { (if [ -f "$1" ]; then cat $1; elif [ -d "$1" ]; then realpath -z "$1"; else printf "$1"; fi;) | xclip -sel p -f | xclip -sel c; }
 find_file() { find . -name "*$1*"; }
 
 
@@ -274,3 +273,10 @@ cdtmp() {
   cd $(mktemp -d)
 }
 
+alias l1="journalctl --user -u speech.talon -e"
+alias f1="journalctl --user -u speech.talon -ef"
+alias s1="systemctl --user status speech.talon.service"
+alias r1="systemctl --user restart speech.talon.service"
+
+
+export PATH="$PATH:/opt/android-sdk/platform-tools"

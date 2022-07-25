@@ -1,5 +1,4 @@
 {
-  "window.zoomLevel": -1,
   "editor.tabSize": 2,
   "window.enableMenuBarMnemonics": false,
   "editor.multiCursorModifier": "ctrlCmd",
@@ -50,7 +49,6 @@
   "python.jediEnabled": false,
   "javascript.updateImportsOnFileMove.enabled": "always",
   "showoffset.offsetType": "byte",
-  "editor.minimap.enabled": false,
   "breadcrumbs.enabled": true,
   "diffEditor.ignoreTrimWhitespace": false,
   "diffEditor.renderSideBySide": true,
@@ -83,14 +81,10 @@
   },
   "git.countBadge": "off",
   "git.enableStatusBarSync": false,
-  "workbench.editorAssociations": [
-    {
-      "viewType": "jupyter-notebook",
-      "filenamePattern": "*.ipynb"
-    }
-  ],
+  "workbench.editorAssociations": {
+    "*.ipynb": "jupyter-notebook"
+  },
   "python.languageServer": "Pylance",
-  "python.insidersChannel": "weekly",
   "[python]": {
     "editor.defaultFormatter": "ms-python.python",
     "editor.tabSize": 4
@@ -98,8 +92,15 @@
   "astyle.astylerc": "/usr/share/arduino/lib/formatter.conf",
   "dart.debugExternalLibraries": true,
   "dart.debugSdkLibraries": true,
-  "git.enabled": false,
   "files.exclude": {
     "**/node_modules": true
-  }
+  },
+  "python.formatting.provider": "black",
+  "window.zoomLevel": -1,
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "cursorless.hatSizeAdjustment": -30,
+  "python.analysis.extraPaths": [
+    "/home/adabru/downloads/talon-linux-109-0.2.0-357-g3b3e/talon/resources/python/lib/python3.9/site-packages/"
+  ]
 }

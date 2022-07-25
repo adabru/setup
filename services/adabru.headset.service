@@ -1,0 +1,12 @@
+[Unit]
+Description=boost mic on plugging in
+
+[Service]
+Type=simple
+ExecStart=/home/adabru/bin/headset_daemon.py
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=default.target
+

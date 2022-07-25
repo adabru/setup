@@ -202,6 +202,9 @@ sudo mount /dev/disk/by-label/500_LapStore /mnt
 - setup other applications
 
 ```sh
+systemctl --user enable --now adabru.albert
+systemctl --user enable --now adabru.headset
+
 # i tried community/code twice, but switched to insiders due to issues (the second time marketplace didn't work)
 t -S visual-studio-code-insiders
 

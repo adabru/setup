@@ -57,11 +57,11 @@
     "command": "-workbench.view.debug"
   },
   {
-    "key": "alt+s",
+    "key": "alt+left",
     "command": "workbench.action.previousEditor"
   },
   {
-    "key": "alt+f",
+    "key": "alt+right",
     "command": "workbench.action.nextEditor"
   },
   {
@@ -293,7 +293,7 @@
     "when": "terminalFocus && terminalProcessSupported"
   },
   {
-    "key": "shift+alt+d",
+    "key": "shift+alt+down",
     "command": "editor.action.insertCursorBelow",
     "when": "editorTextFocus"
   },
@@ -303,7 +303,7 @@
     "when": "editorTextFocus"
   },
   {
-    "key": "shift+alt+e",
+    "key": "shift+alt+up",
     "command": "editor.action.insertCursorAbove",
     "when": "editorTextFocus"
   },
@@ -311,5 +311,15 @@
     "key": "shift+alt+up",
     "command": "-editor.action.insertCursorAbove",
     "when": "editorTextFocus"
+  },
+  {
+    "key": "shift+alt+up",
+    "command": "-notebook.cell.copyUp",
+    "when": "notebookEditorFocused && !inputFocus"
+  },
+  {
+    "key": "shift+alt+down",
+    "command": "-notebook.cell.copyDown",
+    "when": "notebookEditorFocused && !inputFocus"
   }
 ]
