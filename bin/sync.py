@@ -122,6 +122,10 @@ sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
 # hdmi sound
 sync("~/setup/udev_hdmi_sound.rules", "/etc/udev/rules.d/hdmi_sound.rules")
 
+# no beep
+sync("~/setup/udev_no_beep.conf", "/etc/modprobe.d/udev_no_beep.conf")
+
+
 # launcher
 sync(
     "~/setup/services/adabru.albert.service", "/etc/systemd/user/adabru.albert.service"
@@ -178,6 +182,7 @@ sync("~/setup/bin/karsoft_workspace.sh", "~/bin/karsoft_workspace.sh")
 # eye tracking + speech
 sync("~/repo/speech/cursor/AdabruCursors", "~/.icons/AdabruCursors")
 sync("~/repo/speech/parrot_patterns.json", "~/.talon/parrot/patterns.json")
+sync("~/repo/speech/adabru_talon", "~/.talon/user/adabru")
 sync(
     "~/repo/speech/adabru_talon/cursorless-settings",
     "~/.talon/user/cursorless-settings",

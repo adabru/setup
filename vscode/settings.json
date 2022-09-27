@@ -102,5 +102,6 @@
   "cursorless.hatSizeAdjustment": -30,
   "python.analysis.extraPaths": [
     "/home/adabru/downloads/talon-linux-109-0.2.0-357-g3b3e/talon/resources/python/lib/python3.9/site-packages/"
-  ]
+  ],
+  "git.confirmSync": false
 }
