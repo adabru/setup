@@ -321,5 +321,33 @@
     "key": "shift+alt+down",
     "command": "-notebook.cell.copyDown",
     "when": "notebookEditorFocused && !inputFocus"
+  },
+  {
+    "key": "f1",
+    "command": "cursorless.keyboard.modal.modeOn",
+    "when": "editorTextFocus"
+  },
+  {
+    "key": "escape",
+    "command": "cursorless.keyboard.escape",
+    "when": "cursorless.keyboard.listening && editorTextFocus && !suggestWidgetMultipleSuggestions && !suggestWidgetVisible"
+  },
+  {
+    "key": "backspace",
+    "command": "cursorless.keyboard.targeted.runActionOnTarget",
+    "args": "remove",
+    "when": "cursorless.keyboard.modal.mode && editorTextFocus"
+  },
+  {
+    "key": "f4",
+    "command": "workbench.action.toggleSidebarVisibility"
+  },
+  {
+    "key": "f1",
+    "command": "-workbench.action.showCommands"
+  },
+  {
+    "key": "alt+x",
+    "command": "extension.transpose"
   }
 ]

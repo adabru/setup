@@ -3,16 +3,15 @@ export PATH="$HOME/bin:$PATH"
 export XKB_DEFAULT_LAYOUT=ab
 export XKB_DEFAULT_OPTIONS=compose:menu
 
-if [[ $(tty) = "/dev/tty3" && -x /usr/bin/sway ]]; then
+if [[ $(tty) = "/dev/tty1" && -x /usr/bin/sway ]]; then
   # export QT_QPA_PLATFORM=wayland-egl
-  # exec startxfce4
   # delete old sway.log
   if [[ `find ~/sway.log -name sway.log -mmin +1` != '' ]]; then
     rm ~/sway.log
   fi
   sway >>~/sway.log 2>&1
   exit 0
-elif [[ $(tty) = "/dev/tty1" && -x /usr/bin/startxfce4 ]]; then
+elif [[ $(tty) = "/dev/tty3" && -x /usr/bin/startxfce4 ]]; then
   # see https://wiki.archlinux.org/title/Xfce#Starting
   # see https://wiki.archlinux.org/title/Xinit#Override_xinitrc
   startx /usr/bin/startxfce4 -- :1
@@ -124,6 +123,10 @@ alias kvm='qemu-system-x86_64 -enable-kvm'
 alias r='rename.py'
 
 alias pacman='sudo pacman --color auto'
+alias i="pacman -S"
+alias iy="pacman -Sy"
+alias u="pacman -Rs"
+alias S="pacman -Ss"
 alias update='sudo pacman -Syyu'
 alias t='trizen'
 alias tupdate='trizen -Syyu'
@@ -278,5 +281,11 @@ alias f1="journalctl --user -u speech.talon -ef"
 alias s1="systemctl --user status speech.talon.service"
 alias r1="systemctl --user restart speech.talon.service"
 
+alias yd='youtube-dl --playlist-start 1 -f 250/251 -o "%(title)s.opus" '
+alias ydc='bash -c "youtube-dl --playlist-start 1 -f 250/251 -o \"%(title)s.opus\" \"$(wl-paste)\""'
+alias yd2='youtube-dl --playlist-start 1 -f 140 -o "%(title)s.m4a" '
+
+alias s="sync.py"
+alias sgr="sync.py | grep "
 
 export PATH="$PATH:/opt/android-sdk/platform-tools"

@@ -149,6 +149,17 @@ export XKB_DEFAULT_LAYOUT=ab; sway
 # setxkbmap -layout de
 # setxkbmap -layout ab
 
+# install albert
+# add to /etc/pacman.conf :
+# # see https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
+# [home_manuelschneid3r_Arch]
+# Server = https://download.opensuse.org/repositories/home:/manuelschneid3r/Arch/$arch
+key=$(curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/Arch/$(uname -m)/home_manuelschneid3r_Arch.key)
+fingerprint=$(gpg --quiet --with-colons --import-options show-only --import --fingerprint <<< "${key}" | awk -F: '$1 == "fpr" { print $10 }')
+sudo pacman-key --add - <<< "${key}"
+sudo pacman-key --lsign-key "${fingerprint}"
+pacman -Sy home_manuelschneid3r_Arch/albert
+
 # install trizen
 cd ~/repo
 git clone https://aur.archlinux.org/trizen.git
@@ -159,7 +170,7 @@ makepkg -si
 # uncomment source [multilib]
 
 pacman -S openssh
-pacman -S albert muparser
+pacman -S muparser
 pacman -S nm-connection-editor
 t -S vivaldi
 # proprietary codecs

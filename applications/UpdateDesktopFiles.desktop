@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Update Desktop Files
+Exec=bash -c "update-desktop-database ~/.local/share/applications"
+Type=Application

@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Login
+Exec=bash -c "~/bin/authentication.py type \"$(wl-paste)\" &> ~/s.log"
+Type=Application

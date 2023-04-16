@@ -103,5 +103,64 @@
   "python.analysis.extraPaths": [
     "/home/adabru/downloads/talon-linux-109-0.2.0-357-g3b3e/talon/resources/python/lib/python3.9/site-packages/"
   ],
-  "git.confirmSync": false
+  "git.confirmSync": false,
+  "arduino.useArduinoCli": true,
+  "cursorless.experimental.keyboard.modal.keybindings.scopes": {
+    "l": "line",
+    "sp": "paragraph",
+    ";": "statement",
+    ",": "collectionItem",
+    ".": "functionCall",
+    "'": "string",
+    "sf": "namedFunction",
+    "sc": "class",
+    "st": "token",
+    "sy": "type",
+    "sv": "value",
+    "sk": "collectionKey",
+    "sw": "nonWhitespaceSequence",
+    "ss": "boundedNonWhitespaceSequence",
+    "sa": "argumentOrParameter",
+    "sl": "url",
+    "si": "section"
+  },
+  "cursorless.experimental.keyboard.modal.keybindings.actions": {
+    " ": "setSelection",
+    "h": "setSelectionBefore",
+    " f": "setSelectionAfter",
+    "O": "editNewLineBefore",
+    "o": "editNewLineAfter",
+    "k": "insertCopyBefore",
+    "ay": "insertCopyAfter",
+    "u": "replaceWithTarget",
+    "m": "moveToTarget",
+    "as": "swapTargets",
+    "af": "foldRegion",
+    "ak": "insertEmptyLineBefore",
+    "aj": "insertEmptyLineAfter",
+    "ai": "insertEmptyLinesAround",
+    "c": "copyToClipboard",
+    "ax": "cutToClipboard",
+    "v": "pasteFromClipboard",
+    "ad": "followLink",
+    "j": "toggleLineComment"
+  },
+  "cursorless.experimental.keyboard.modal.keybindings.colors": {
+    "d": "default",
+    "b": "blue",
+    "y": "yellow",
+    "r": "red",
+    "g": "green",
+    "p": "pink"
+  }
+  // "cursorless.experimental.keyboard.modal.keybindings.shapes": {
+  //   "x": "ex",
+  //   "f": "fox",
+  //   "q": "frame",
+  //   "v": "curve",
+  //   "e": "eye",
+  //   "y": "play",
+  //   "z": "bolt",
+  //   "w": "crosshairs"
+  // }
 }

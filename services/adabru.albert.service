@@ -3,10 +3,12 @@ Description=start launcher after boot
 
 [Service]
 Type=simple
+# wayland workaround, should be removed
+# Environment="QT_QPA_PLATFORM=xcb"
 ExecStart=/usr/bin/albert
 Restart=on-failure
 RestartSec=30s
 
 [Install]
-WantedBy=default.target
-
+# not functional, see https://unix.stackexchange.com/a/598055/218172
+WantedBy=graphical-session.target

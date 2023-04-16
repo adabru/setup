@@ -9,6 +9,9 @@ set $mod Mod4
 bindsym $mod+Ctrl+c reload
 
 bindsym $mod+Return exec alacritty -e tmux
+# workaround for now, see https://unix.stackexchange.com/a/598055/218172
+# timeout as albert reports "can't connect to display" otherwise
+exec sleep .5 && systemctl --user start adabru.albert
 bindsym Ctrl+Space exec albert toggle
 
 seat seat0 xcursor_theme default 10
@@ -126,9 +129,9 @@ default_border pixel 1
 #
 input type:keyboard {
     xkb_layout ab,ab(russian)
-    xkb_options compose:menu
+    xkb_options grp:win_space_toggle,compose:menu
 #    xkb_options grp:ctrls_toggle,compose:menu → ctrls_toggle doesnt work and additionally it breaks flutter app ctrl+click
-    repeat_delay 500
+    repeat_delay 50000
     repeat_rate 30
 }
 input "76:620:Roberts_Tastatur" {
@@ -137,8 +140,10 @@ input "76:620:Roberts_Tastatur" {
 
 # exec swayidle timeout 600 lockscreen.py
 
-input "2:7:SynPS/2_Synaptics_TouchPad" {
+# input "2:7:SynPS/2_Synaptics_TouchPad" {
+input type:touchpad {
   tap enabled
+  dwt disabled
   natural_scroll enabled
 }
 input "9317:25345:Microsoft_Corporation_Guest_Touchback_Board" {

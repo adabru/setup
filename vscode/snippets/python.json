@@ -39,7 +39,7 @@
   },
   "Function definition": {
     "prefix": "func",
-    "body": ["def ${1:name}(${2:args}):", "\t\"\"\"${3:...}\"\"\"", "\t$0"]
+    "body": ["def ${1:name}(${2:self}):", "\t\"\"\"${3:...}\"\"\"", "\t$0"]
   },
   "Store variable": {
     "prefix": "store",
