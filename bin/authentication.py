@@ -100,7 +100,9 @@ elif command == "edit":
             file.write(raw)
 
         # edit externally
-        process = await asyncio.subprocess.create_subprocess_exec("featherpad", tmp)
+        process = await asyncio.subprocess.create_subprocess_exec(
+            "featherpad", "-s", tmp
+        )
         await asyncio.sleep(0.5)
         tmp.unlink()
         await process.wait()
@@ -117,11 +119,11 @@ elif command == "edit":
 
 elif command == "type":
     raw = open_vault(vault)
-    domain = argv[2]
+    query = argv[2]
     # extract domain name
-    domain = re.sub(r".+//|www.|/.*", "", domain)
+    query = re.sub(r".+//|www.|/.*", "", query)
     for match in findall(r"\((.*)\)\n(.*)\n(.*)\n\n", raw):
-        if domain == match[0]:
+        if query in match[0].lower().split(" "):
             user = match[1]
             password = match[2]
             break

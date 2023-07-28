@@ -1,11 +1,9 @@
 [Unit]
-Description=start launcher after boot
+Description=clipboard manager
 
 [Service]
 Type=simple
-# wayland workaround, should be removed
-#Environment="QT_QPA_PLATFORM=xcb"
-ExecStart=/usr/bin/albert
+ExecStart=/usr/bin/copyq
 Restart=on-failure
 RestartSec=30s
 

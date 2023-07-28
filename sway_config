@@ -26,10 +26,16 @@ bindsym $mod+Shift+d move down
 bindsym $mod+Shift+e move up
 bindsym $mod+Shift+f move right
 
-# workaround for clipboard issue when copy-pasting from xwayland to wayland
-bindsym Ctrl+Shift+C exec wl-paste -n | wl-copy
+# clipboard manager
+# sets floating only first time, see https://github.com/swaywm/sway/issues/6606
+# window only updates on title change or restart, this doesn't work https://unix.stackexchange.com/a/635514/218172
+for_window [class="^copyq$"] floating enable; sticky enable
+bindsym $mod+V exec copyq toggle
+# see https://github.com/hluk/CopyQ/issues/1882
+exec copyq config hide_main_window true
+exec sleep .5 && systemctl --user start adabru.copyq
 
-output * bg /home/adabru/setup/desktop.jpg fill
+output * bg /home/adabru/setup/wallpapers/LVDS-1/_default.jpg fill
 # swaymsg -t get_outputs
 # swaymsg output "LVDS-1" scale .5
 # swaymsg output "LVDS-1" scale 2
@@ -129,7 +135,7 @@ default_border pixel 1
 #
 input type:keyboard {
     xkb_layout ab,ab(russian)
-    xkb_options grp:win_space_toggle,compose:menu
+    xkb_options grp:alt_altgr_toggle,compose:menu
 #    xkb_options grp:ctrls_toggle,compose:menu → ctrls_toggle doesnt work and additionally it breaks flutter app ctrl+click
     repeat_delay 50000
     repeat_rate 30

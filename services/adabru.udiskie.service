@@ -1,0 +1,11 @@
+[Unit]
+Description=enable automount of sd card and usb drives
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/udiskie
+Restart=on-failure
+RestartSec=30s
+
+[Install]
+WantedBy=default.target

@@ -129,6 +129,8 @@ alias u="pacman -Rs"
 alias S="pacman -Ss"
 alias update='sudo pacman -Syyu'
 alias t='trizen'
+alias ti='trizen -S'
+alias tS='trizen -Ss'
 alias tupdate='trizen -Syyu'
 # yay as aur helper - updates everything
 alias pksyua="yay -Syu --noconfirm"
@@ -276,16 +278,39 @@ cdtmp() {
   cd $(mktemp -d)
 }
 
-alias l1="journalctl --user -u speech.talon -e"
-alias f1="journalctl --user -u speech.talon -ef"
-alias s1="systemctl --user status speech.talon.service"
-alias r1="systemctl --user restart speech.talon.service"
+alias Lt="journalctl --user -u speech.talon -e"
+alias Ft="journalctl --user -u speech.talon -ef"
+alias St="systemctl --user status speech.talon.service"
+alias Rt="systemctl --user restart speech.talon.service"
+alias Ht="systemctl --user stop speech.talon.service"
+
+alias La="journalctl --user -u adabru.albert -e"
+alias Fa="journalctl --user -u adabru.albert -ef"
+alias Sa="systemctl --user status adabru.albert.service"
+alias Ra="systemctl --user restart adabru.albert.service"
+alias Ha="systemctl --user stop adabru.albert.service"
+
+alias Le="journalctl --user -u speech.eyeput -e"
+alias Fe="journalctl --user -u speech.eyeput -ef"
+alias Se="systemctl --user status speech.eyeput.service"
+alias Re="systemctl --user restart speech.eyeput.service"
+alias He="systemctl --user stop speech.eyeput.service"
+
+alias E="systemctl --user enable --now"
+alias D="systemctl --user disable --now"
+
 
 alias yd='youtube-dl --playlist-start 1 -f 250/251 -o "%(title)s.opus" '
+ydci() {
+  youtube-dl --playlist-start "$1" -f 250/251 -o "%(title)s.opus" "$(wl-paste)"
+}
 alias ydc='bash -c "youtube-dl --playlist-start 1 -f 250/251 -o \"%(title)s.opus\" \"$(wl-paste)\""'
 alias yd2='youtube-dl --playlist-start 1 -f 140 -o "%(title)s.m4a" '
 
 alias s="sync.py"
 alias sgr="sync.py | grep "
+
+alias cde="cd ~/repo/eyeput"
+alias cds="cd ~/repo/speech"
 
 export PATH="$PATH:/opt/android-sdk/platform-tools"

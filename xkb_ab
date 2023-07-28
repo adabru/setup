@@ -123,9 +123,9 @@ xkb_symbols "russian" {
 
   key <AD01> { [       Cyrillic_ya,       Cyrillic_YA  ] };
   key <AD02> { [       Cyrillic_ve,       Cyrillic_VE  ] };
-  key <AD03> { [       Cyrillic_ie,       Cyrillic_IE,       Cyrillic_io,     Cyrillic_IO ] };
+  key <AD03> { [       Cyrillic_ie,       Cyrillic_IE,        Cyrillic_io,     Cyrillic_IO ] };
   key <AD04> { [       Cyrillic_er,       Cyrillic_ER  ] };
-  key <AD05> { [       Cyrillic_te,       Cyrillic_TE  ] };
+  key <AD05> { [       Cyrillic_te,       Cyrillic_TE,        Cyrillic_che,      Cyrillic_CHE  ] };
   key <AD06> { [       Cyrillic_ze,       Cyrillic_ZE,        Cyrillic_zhe,      Cyrillic_ZHE  ] };
   key <AD07> { [        Cyrillic_u,        Cyrillic_U  ] };
   key <AD08> { [        Cyrillic_i,        Cyrillic_I,     Cyrillic_shorti,   Cyrillic_SHORTI  ] };

@@ -263,7 +263,7 @@ t -S thunderbird pidgin slack-libpurple-git telegram-purple-git purple-matrix-gi
 #   Telegram
 #   Discord "Hückelhoven Skills"
 
-pacman -S geany
+pacman -S featherpad
 
 # font
 # see font coverage on https://www.fileformat.info/info/unicode/block/miscellaneous_symbols_and_pictographs/fontsupport.htm
@@ -470,7 +470,7 @@ winetricks dotnet452 corefonts
 t -Sy
 t -S mingw-w64
 
-pacman -S youtube-dl # ipython graphicsmagick
+pacman -S youtube-dl
 
 # virtualenv + pip if needed, see https://virtualenv.pypa.io/en/latest/installation.html
 wget -O- https://pypi.python.org/packages/source/v/virtualenv/virtualenv-16.0.0.tar.gz | tar xz
@@ -500,6 +500,13 @@ sudo cp ~/setup/gamepad/udev_bt_switch_pro.rules /etc/udev/rules.d/99-bt_switch_
 sudo udevadm control --reload-rules
 xboxdrv_switch_pro.conf
 xboxdrv --evdev /dev/btjoy --config .config/xboxdrv/ipega.conf
+
+# auto mount
+i udiskie
+systemctl --user enable --now adabru.albert
+
+# wallpapers
+ti multibg-sway
 ```
 
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:

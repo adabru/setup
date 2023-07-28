@@ -95,6 +95,12 @@ if command == "setup":
     # autologin
     sync("~/setup/getty.conf", "/etc/systemd/system/getty@tty1.service.d/override.conf")
 
+    # automount
+    sync(
+        "~/setup/services/adabru.udiskie.service",
+        "/etc/systemd/user/adabru.udiskie.service",
+    )
+
     # firewall and doc
     sync("~/setup/nftables.conf", "/etc/nftables.conf")
 
@@ -143,6 +149,12 @@ if command == "setup":
 
     # no beep
     sync("~/setup/udev_no_beep.conf", "/etc/modprobe.d/udev_no_beep.conf")
+
+    # clipboard manager
+    sync(
+        "~/setup/services/adabru.copyq.service",
+        "/etc/systemd/user/adabru.copyq.service",
+    )
 
     # launcher
     sync(
@@ -199,6 +211,10 @@ if command == "setup":
     sync("~/setup/bin/karsoft_workspace.sh", "~/bin/karsoft_workspace.sh")
 
     # eye tracking + speech
+    sync(
+        "~/repo/speech/service/speech.eyeput.service",
+        "/etc/systemd/user/speech.eyeput.service",
+    )
     sync("~/repo/speech/cursor/AdabruCursors", "~/.icons/AdabruCursors")
     sync("~/repo/speech/parrot_patterns.json", "~/.talon/parrot/patterns.json")
     sync("~/repo/speech/adabru_talon", "~/.talon/user/adabru")
@@ -224,10 +240,12 @@ if command == "setup":
     sync("~/setup/bin/authentication.py", "~/bin/authentication.py")
 
 elif command == "audio":
-    ip = "192.168.0.211"
+    ip = "192.168.178.78"
     home = Path.home()
     # see https://rafaelc.org/posts/mounting-kde-connect-filesystem-via-cli/
     exec(
         f"sshfs -o rw,nosuid,nodev,identityfile={home}/.config/kdeconnect/privateKey.pem,port=1740,HostKeyAlgorithms=+ssh-rsa,PubkeyAcceptedKeyTypes=+ssh-rsa kdeconnect@{ip}:/ {home}/mnt"
     )
-    exec(f"rsync -avh --progress --update {home}/audio/ {home}/mnt/Music/")
+    exec(
+        f'rsync -avh --progress --update --delete --exclude=".*" {home}/audio/ {home}/mnt/Music/'
+    )
