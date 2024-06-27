@@ -9,7 +9,7 @@ def run():
     import subprocess
     import urllib.request
     import re
-    from datetime import datetime
+    from datetime import datetime, timezone
     import time
     import sys
     from threading import Condition
@@ -30,7 +30,7 @@ def run():
         def run(self):
             while not self._quit:
                 # wait for someone to write to the exit pipe
-                with open(self.path, 'r') as f:
+                with open(self.path, "r") as f:
                     command = f.read()
                     self.toggle_signal.emit()
 
@@ -52,12 +52,12 @@ def run():
             self.is_visible = is_visible
             self.lastCpu = None
             self._quit = False
-            self.s_cpu = '…'
-            self.s_mem = '…'
-            self.s_bat = '…'
-            self.s_dat = '…'
-            self.s_net = '…'
-            self.s_srv = '…'
+            self.s_cpu = "…"
+            self.s_mem = "…"
+            self.s_bat = "…"
+            self.s_dat = "…"
+            self.s_net = "…"
+            self.s_srv = "…"
 
         def run(self):
             network = None
@@ -76,12 +76,18 @@ def run():
                 self.s_net = self._network()
                 self.s_dat = self._time()
                 self._update()
-                time.sleep(.5)
+                time.sleep(0.5)
 
         def _update(self):
             # for supported html elements, see https://doc.qt.io/qt-5/richtext-html-subset.html
-            message = '<div><p>%s</p><p>%s %s</p><p>%s</p><p>%s</p><p>%s</p></div>' % (
-                self.s_cpu, self.s_net, self.s_srv, self.s_mem, self.s_bat, self.s_dat)
+            message = "<div><p>%s</p><p>%s %s</p><p>%s</p><p>%s</p><p>%s</p></div>" % (
+                self.s_cpu,
+                self.s_net,
+                self.s_srv,
+                self.s_mem,
+                self.s_bat,
+                self.s_dat,
+            )
             self.update_signal.emit(message)
 
         def quit(self):
@@ -94,78 +100,97 @@ def run():
                 return f.read()
 
         def _network(self):
-            network = subprocess.run('nmcli -t -f general.connection device show wlp2s0'.split(),
-                                     encoding='UTF-8', capture_output=True).stdout.strip()
-            network = network.removeprefix('GENERAL.CONNECTION:')
-            network = '<font color=#8888ff>%s</font>' % network
+            network = subprocess.run(
+                "nmcli -t -f general.connection device show wlp2s0".split(),
+                encoding="UTF-8",
+                capture_output=True,
+            ).stdout.strip()
+            network = network.removeprefix("GENERAL.CONNECTION:")
+            network = "<font color=#8888ff>%s</font>" % network
             return network
 
         def _serverstatus(self):
             t0 = time.time()
             try:
-                request = urllib.request.Request(
-                    'https://adabru.de', method='HEAD')
+                request = urllib.request.Request("https://adabru.de", method="HEAD")
                 with urllib.request.urlopen(request) as response:
                     if response.status == 200:
-                        status = '%dms' % ((time.time() - t0) * 1000)
+                        status = "%dms" % ((time.time() - t0) * 1000)
                     else:
-                        status = '🕱'
+                        status = ""
             except urllib.error.URLError:
-                status = '🕱'
+                status = ""
             return status
 
         def _memory(self):
-            regex = re.compile(
-                'MemAvailable: *([0-9]+).*SwapFree: *([0-9]+)', re.S)
-            m = regex.search(self.cat('/proc/meminfo'))
-            mem, swap = int(m.group(1))/1e6, int(m.group(2))/1e6
-            color = '#ff4444' if mem < 1 else '#aaaaaa'
-            return '<font color=%s>%.1f %.1f</font>' % (
-                color, mem, swap)
+            regex = re.compile("MemAvailable: *([0-9]+).*SwapFree: *([0-9]+)", re.S)
+            m = regex.search(self.cat("/proc/meminfo"))
+            mem, swap = int(m.group(1)) / 1e6, int(m.group(2)) / 1e6
+            color = "#ff4444" if mem < 1 else "#aaaaaa"
+            return "<font color=%s>%.1f %.1f</font>" % (color, mem, swap)
 
         def _battery(self):
             battery = None
             try:
-                battery = (float(self.cat('/sys/class/power_supply/BAT1/energy_now'))
-                           / float(self.cat('/sys/class/power_supply/BAT1/energy_full')))
+                battery = float(
+                    self.cat("/sys/class/power_supply/BAT1/energy_now")
+                ) / float(self.cat("/sys/class/power_supply/BAT1/energy_full"))
             except FileNotFoundError:
                 pass
             try:
-                battery = (float(self.cat('/sys/class/power_supply/BAT1/charge_now'))
-                           / float(self.cat('/sys/class/power_supply/BAT1/charge_full')))
+                battery = float(
+                    self.cat("/sys/class/power_supply/BAT1/charge_now")
+                ) / float(self.cat("/sys/class/power_supply/BAT1/charge_full"))
             except FileNotFoundError:
                 pass
-            mode = '🔌' if int(
-                self.cat('/sys/class/power_supply/ACAD/online')) else '🔋'
+            mode = "" if int(self.cat("/sys/class/power_supply/ACAD/online")) else ""
             if not battery:
                 battery = 0
-            if battery > .3:
-                color = '#aaaaaa'
-            elif battery > .15:
-                color = '#aaaa22'
+            if battery > 0.3:
+                color = "#aaaaaa"
+            elif battery > 0.15:
+                color = "#aaaa22"
             else:
-                color = '#ff4444'
-            return '<font color=%s>%.1f</font>%s' % (
-                color, 100*battery, mode)
+                color = "#ff4444"
+            return "<font color=%s>%.1f</font>%s" % (color, 100 * battery, mode)
 
         def _time(self):
-            return datetime.now().strftime("<font color=#aaaaaa>%Y-%m-%d W%V</font>    %H:%M:%S")
+            local_now = datetime.now()
+            utc_now = datetime.now(timezone.utc)
+            return local_now.strftime(
+                "<font color=#aaaaaa>%Y-%m-%d W%V</font>    %H:%M:%S"
+            ) + utc_now.strftime(" <font color=#bbbbbb>%H:%MUTC</font>")
 
         def _cpuload(self):
             def cpu():
                 def sum(line):
                     x = line.split()
-                    return (int(x[1]) + int(x[2]) + int(x[3]) + int(x[6]) + int(x[7]) + int(x[8]) + int(x[9]) + int(x[10]),
-                            int(x[4]) + int(x[5]))
-                return [sum(line) for line in self.cat('/proc/stat').split('\n')[1:5]]
+                    return (
+                        int(x[1])
+                        + int(x[2])
+                        + int(x[3])
+                        + int(x[6])
+                        + int(x[7])
+                        + int(x[8])
+                        + int(x[9])
+                        + int(x[10]),
+                        int(x[4]) + int(x[5]),
+                    )
+
+                return [sum(line) for line in self.cat("/proc/stat").split("\n")[1:5]]
 
             def cpuload(curr, last):
-                return '{:3.0%}'.format(float(curr[0]-last[0]) / (curr[0]-last[0]+curr[1]-last[1]+1))
+                return "{:3.0%}".format(
+                    float(curr[0] - last[0])
+                    / (curr[0] - last[0] + curr[1] - last[1] + 1)
+                )
+
             currCpu = cpu()
             if self.lastCpu == None:
                 self.lastCpu = currCpu
-            result = '<font color=#aaaaaa>%s</font>' % ' '.join([cpuload(curr, last)
-                                                                 for curr, last in zip(currCpu, self.lastCpu)])
+            result = "<font color=#aaaaaa>%s</font>" % " ".join(
+                [cpuload(curr, last) for curr, last in zip(currCpu, self.lastCpu)]
+            )
             self.lastCpu = currCpu
             return result
 
@@ -175,7 +200,7 @@ def run():
             self.condition = condition
             self.widget = QWidget()
             self.label = QLabel()
-            self.label.setStyleSheet('QLabel { font-size: 12pt; }')
+            self.label.setStyleSheet("QLabel { font-size: 12pt; }")
             layout = QHBoxLayout()
             self.widget.setLayout(layout)
             layout.addWidget(self.label)
@@ -212,7 +237,7 @@ def run():
     statusthread.start()
     pipethread.start()
     qapp.exec_()
-    print('Quit, collecting threads.')
+    print("Quit, collecting threads.")
     statusthread.quit()
     pipethread.quit()
     statusthread.wait()
@@ -221,7 +246,7 @@ def run():
 
 
 # nonblocking pipe communication, see https://stackoverflow.com/a/34754523/6040478
-pipepath = '/tmp/statuswindow_toggle'
+pipepath = "/tmp/statuswindow_toggle"
 try:
     os.mkfifo(pipepath)
 except FileExistsError:

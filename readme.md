@@ -1,44 +1,62 @@
 # Setup & Configuration
 
-## Arch Setup
+## Arch Setup (dual boot)
 
-Download arch.iso from https://www.archlinux.de/download
+Arch can be installed on existing Windows installation and Windows can be installed on existing Arch installation.
 
-- For single boot, burn to stick with rufus dd-mode or `pv arch.iso > /dev/sdx`. For dualboot download windows.iso from https://www.microsoft.com/de-de/software-download/windows10ISO , install ventoy on your pendrive:
+Preferred way is to install Windows first (https://wiki.archlinux.org/title/Dual_boot_with_Windows#Installation)
 
-  ```sh
-  sudo pacman -S ventoy
-  lsblk
-  sudo ventoy -i /dev/sdx
-  sudo mount /dev/sdx1 /mnt
-  cp ~/Downloads/<windows.iso> /mnt && sync
-  cp ~/Downloads/<arch.iso> /mnt && sync
-  sudo umount /mnt
-  sudo eject /dev/sdx # may fail, doesn't matter
-  ```
+Download arch.iso from https://www.archlinux.de/download .
+Download windows.iso from https://www.microsoft.com/de-de/software-download/windows11ISO
 
-- Make backup via ~/bin/backup.py .
-- Connect lan (if connected lateron, run `dhcpcd`).
-- Boot from pendrive.
+For single boot, burn arch.iso to pendrive with rufus dd-mode or `pv arch.iso > /dev/sdx`.
+For dualboot, use ventoy.
 
 ```sh
+sudo pacman -S ventoy
+lsblk
+sudo ventoy -i /dev/sdx
+sudo mount /dev/sdx1 /mnt
+# if windows.iso is too large, you need to reformat the partition created by ventoy from fat32 to exfat
+cp ~/Downloads/<windows.iso> /mnt && sync
+cp ~/Downloads/<arch.iso> /mnt && sync
+sudo umount /mnt
+sudo eject /dev/sdx # may fail, doesn't matter
+```
+
+Boot ventoy on new system.
+
+Install windows on new system. Optionally turn off internet to avoid updates.
+
+Make the efi partition during windows installation: https://wiki.archlinux.org/title/Dual_boot_with_Windows#The_EFI_system_partition_created_by_Windows_Setup_is_too_small .
+
+Disable fastboot via `powercfg.cpl`.
+
+Make a system backup on old system with `backup.py`.
+
+```sh
+# connect to wifi as show in the printed instructions; use tab completion
+iwctl
+
 # following commands come from https://wiki.archlinux.de/title/Arch_Install_Scripts
 loadkeys de-latin1
 lsblk
 cfdisk
   100MB fat32 /boot
   xGB btrfs /
-  2xRAM swap
+  RAM+1GB swap
 mkfs.vfat -F 32 /dev/sda1
 mkfs.btrfs /dev/sda2
 mount /dev/sda2 /mnt
 mount /dev/sda1 /mnt/boot
-mkswap /dev/sda3 swapon /dev/sda3
+mkswap /dev/sda3
+swapon /dev/sda3
 
+# the following command needs internet
 pacstrap /mnt base base-devel linux linux-firmware vim git networkmanager python bash-completion
 genfstab -p /mnt >> /mnt/etc/fstab
 arch-chroot /mnt
-echo adabru-reserve > /etc/hostname
+echo adabru-linux > /etc/hostname
 ln -s /usr/share/zoneinfo/Europe/Berlin /etc/localtime
 # enable network time sync
 timedatectl set-ntp true
@@ -48,46 +66,16 @@ echo LANG=en_US.UTF-8 > /etc/locale.conf
 mkinitcpio -p linux
 passwd # set root passwd
 echo KEYMAP=de > /etc/vconsole.conf
-
-pacman -S grub os-prober
-# for UEFI:
-pacman -S refind-efi
-# see further below how to install
-
-grub-install /dev/sda
-# auto-detects windows via os-prober. if not, mount windows partition before
-grub-mkconfig -o /boot/grub/grub.cfg
-# for UEFI instead:
-grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=Arch-Linux-grub
+pacman -S refind
+refind-install
+vim /boot/refind_linux.conf
+  # "Boot with standard options" "root=/dev/nvme0n1p5 rw add_efi_memmap"
 
 exit
-umount /mnt/boot
-umount /mnt
+poweroff
 ```
 
-- poweroff
-- eject pendrive and boot
-- install windows
-  - download and burn latest iso
-  - install without internet to avoid updates
-  - create a xGB partition during installation
-- disable fastboot via `powercfg.cpl`
-- update drivers with device manager
-- boot via arch pendrive to restore boot loader:
-
-```sh
-lsblk
-mount /dev/sda2 /mnt
-mount /dev/sda1 /mnt/boot
-arch-chroot /mnt
-os-prober
-# if it doesn't see windows:
-mount /dev/sda4 /mnt
-os-prober
-grub-mkconfig -o /boot/grub/grub.cfg
-```
-
-- reboot
+Eject pendrive and boot into arch.
 
 ```sh
 # enable wifi
@@ -95,12 +83,15 @@ systemctl enable NetworkManager.service
 systemctl start NetworkManager
 nmcli
 nmcli device wifi
-nmcli device wifi -a MY_SSID
+nmcli device wifi connect -a MY_SSID
 
-useradd -m adabru
+groupadd sudo
+useradd -m -G sudo adabru
 passwd adabru
+# enable sudo group permissions
 EDITOR=vim visudo
 su adabru
+# faillock --release
 
 git clone https://github.com/adabru/setup
 sudo loadkeys setup/kbd_ab.map
@@ -109,7 +100,7 @@ setup/bin/sync.py
 # store keymap
 sudo cp ~/setup/kbd_ab.map /usr/share/kbd/keymaps/ab.map
 sudo sh -c "echo KEYMAP=ab > /etc/vconsole.conf"
-~/setup/sync.py
+~/setup/bin/sync.py
 
 # restore backup
 pacman -S squashfuse rsync squashfs-tools ntfs-3g

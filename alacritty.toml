@@ -1,0 +1,36 @@
+
+
+[mouse]
+bindings = [{ mouse = "Right", action = "Paste" }]
+
+
+[colors.bright]
+black = "#373b41"
+blue = "#9999ff"
+cyan = "#70c0c0"
+green = "#a5bd68"
+magenta = "#b294bb"
+red = "#cc6666"
+white = "#c5c8c6"
+yellow = "#ffcc88"
+
+[colors.cursor]
+cursor = "CellForeground"
+text = "CellBackground"
+
+[colors.normal]
+black = "#282a2e"
+blue = "#444499"
+cyan = "#5e8d87"
+green = "#6c9440"
+magenta = "#85678f"
+red = "#a54242"
+white = "#708080"
+yellow = "#eeb36f"
+
+[colors.primary]
+background = "#1d1f21"
+foreground = "#c5c8c6"
+
+[font]
+size = 9.0

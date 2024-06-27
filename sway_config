@@ -8,11 +8,17 @@ set $mod Mod4
 # reload lthe configuration file
 bindsym $mod+Ctrl+c reload
 
+
 bindsym $mod+Return exec alacritty -e tmux
-# workaround for now, see https://unix.stackexchange.com/a/598055/218172
-# timeout as albert reports "can't connect to display" otherwise
-exec sleep .5 && systemctl --user start adabru.albert
-bindsym Ctrl+Space exec albert toggle
+
+# bindsym Ctrl+Space exec albert toggle
+bindsym Ctrl+Space exec kupfer
+
+# clipboard manager
+# sets floating only first time, see https://github.com/swaywm/sway/issues/6606
+# window only updates on title change or restart, this doesn't work https://unix.stackexchange.com/a/635514/218172
+for_window [class="^copyq$"] floating enable; sticky enable
+bindsym $mod+V exec copyq toggle
 
 seat seat0 xcursor_theme default 10
 
@@ -26,16 +32,8 @@ bindsym $mod+Shift+d move down
 bindsym $mod+Shift+e move up
 bindsym $mod+Shift+f move right
 
-# clipboard manager
-# sets floating only first time, see https://github.com/swaywm/sway/issues/6606
-# window only updates on title change or restart, this doesn't work https://unix.stackexchange.com/a/635514/218172
-for_window [class="^copyq$"] floating enable; sticky enable
-bindsym $mod+V exec copyq toggle
-# see https://github.com/hluk/CopyQ/issues/1882
-exec copyq config hide_main_window true
-exec sleep .5 && systemctl --user start adabru.copyq
 
-output * bg /home/adabru/setup/wallpapers/LVDS-1/_default.jpg fill
+# output * bg /home/adabru/setup/wallpapers/LVDS-1/C_default.jpg fill
 # swaymsg -t get_outputs
 # swaymsg output "LVDS-1" scale .5
 # swaymsg output "LVDS-1" scale 2
@@ -69,8 +67,10 @@ bindsym ctrl+KP_1 workspace 1 ; exec notify-send -t 100 "1" ; client.focused #FF
 bindsym ctrl+KP_2 workspace 2 ; exec notify-send -t 100 "2" ; client.focused #00FF00 #00FF00 #00FF00
 bindsym ctrl+KP_3 workspace 3 ; exec notify-send -t 100 "3" ; client.focused #0000FF #0000FF #0000FF
 bindsym ctrl+KP_4 workspace 4 ; exec notify-send -t 100 "4" ; client.focused #FFFF00 #FFFF00 #FFFF00
-bindsym ctrl+KP_5 workspace 5 ; exec notify-send -t 100 "5" ; client.focused #FF00FF #FF00FF #FF00FF
-bindsym ctrl+KP_6 workspace 6 ; exec notify-send -t 100 "6" ; client.focused #00FFFF #00FFFF #00FFFF
+bindsym ctrl+KP_5 workspace 5
+# exec notify-send -t 100 "5" ; client.focused #FF00FF #FF00FF #FF00FF
+bindsym ctrl+KP_6 workspace 6
+#; exec notify-send -t 100 "6" ; client.focused #00FFFF #00FFFF #00FFFF
 bindsym ctrl+KP_7 workspace 7 ; exec notify-send -t 100 "7" ; client.focused #FFFFFF #FFFFFF #FFFFFF
 bindsym ctrl+KP_8 workspace 8 ; exec notify-send -t 100 "8" ; client.focused #8800FF #8800FF #8800FF
 bindsym ctrl+KP_9 workspace 9 ; exec notify-send -t 100 "9" ; client.focused #000000 #000000 #000000
@@ -106,10 +106,12 @@ bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
 bindsym $mod+Shift+0 move container to workspace 10
+# default workspace
+workspace 1
 
 # window style and colors
 # client.focused #FF0000 #FF0000 #FF0000 #FF0000 #FF0000
-font pango:monospace 0
+font pango:monospace 10
 titlebar_border_thickness 1
 titlebar_padding 1 1
 default_border pixel 1
@@ -271,5 +273,21 @@ bindsym $mod+j scratchpad show
 # bindsym $mod+r mode "resize"
 
 include /etc/sway/config.d/*
+
+# export relevant environment variables
+exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+# launcher
+exec systemd-cat -t kupfer kupfer --no-splash --debug
+# close launcher on focus lost
+exec systemd-cat -t kupfer python /home/adabru/bin/close_kupfer_on_unfocus.py
+# see https://github.com/hluk/CopyQ/issues/1882
+exec copyq config hide_main_window true
+exec systemd-cat -t copyq copyq
+# redshift / night mode
+exec systemd-cat -t gammastep gammastep
+# wallpaper
+exec systemd-cat -t multibg-sway multibg-sway ~/setup/wallpapers
+
+
 
 exec notify-send -t 5000 "Welcome, Clue!"

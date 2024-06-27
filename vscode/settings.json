@@ -61,7 +61,7 @@
     "editor.suggest.snippetsPreventQuickSuggestions": false,
     "editor.suggestSelection": "first",
     "editor.tabCompletion": "onlySnippets",
-    "editor.wordBasedSuggestions": false,
+    "editor.wordBasedSuggestions": "off",
     "editor.defaultFormatter": "Dart-Code.dart-code"
   },
   "[javascript]": {
@@ -86,7 +86,7 @@
   },
   "python.languageServer": "Pylance",
   "[python]": {
-    "editor.defaultFormatter": "ms-python.python",
+    "editor.defaultFormatter": "ms-python.black-formatter",
     "editor.tabSize": 4
   },
   "astyle.astylerc": "/usr/share/arduino/lib/formatter.conf",
@@ -152,7 +152,25 @@
     "r": "red",
     "g": "green",
     "p": "pink"
-  }
+  },
+  "git.enableSmartCommit": true,
+  "[nginx]": {
+    "editor.defaultFormatter": "ahmadalli.vscode-nginx-conf"
+  },
+  "[csharp]": {
+    "editor.defaultFormatter": "ms-dotnettools.csharp"
+  },
+  "[toml]": {
+    "editor.defaultFormatter": "tamasfe.even-better-toml"
+  },
+  "terminal.integrated.copyOnSelection": true,
+  "terminal.integrated.rightClickBehavior": "paste",
+  "security.workspace.trust.untrustedFiles": "open",
+  "window.restoreWindows": "none",
+  "files.autoSave": "afterDelay",
+  "git.autofetch": true,
+  "github.copilot.editor.enableAutoCompletions": true,
+  "debug.saveBeforeStart": "none"
   // "cursorless.experimental.keyboard.modal.keybindings.shapes": {
   //   "x": "ex",
   //   "f": "fox",

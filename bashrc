@@ -70,7 +70,7 @@ prompt() {
     PS2="${c2}${git_color}⊚ ${normal}"
   fi
   printf "\e]0;${PWD}\007"
-  PS1="${time}${c2} \W ${git_color}${branch}${PS2}"
+  PS1="${time}${c2} \W ${VIRTUAL_ENV_PROMPT}${git_color}${branch}${PS2}"
 }
 git_prompt_vars() {
   if [[ -f .git/HEAD ]] || \
@@ -127,6 +127,10 @@ alias i="pacman -S"
 alias iy="pacman -Sy"
 alias u="pacman -Rs"
 alias S="pacman -Ss"
+alias Q="pacman -Qs"
+alias Qi="pacman -Qi"
+alias remove_orphans='sudo pacman -Rns $(pacman -Qtdq)'
+alias update_keyring='sudo pacman -Sy archlinux-keyring'
 alias update='sudo pacman -Syyu'
 alias t='trizen'
 alias ti='trizen -S'
@@ -134,6 +138,11 @@ alias tS='trizen -Ss'
 alias tupdate='trizen -Syyu'
 # yay as aur helper - updates everything
 alias pksyua="yay -Syu --noconfirm"
+# Remove orphaned packages.
+#    -d restrict output to packages installed as dependencies
+#    -t list packages that are no longer required by any installed package
+#    -q suppress version numbers of packages (this would confuse pacman -R)
+alias cleanup_packages='(set -x; sudo pacman -Rs $(pacman -Qdtq))'
 
 # enforce password to check whether it is disabled
 alias sshpwd="ssh -o PreferredAuthentications=password -o PubkeyAuthentication=no"
@@ -296,16 +305,27 @@ alias Se="systemctl --user status speech.eyeput.service"
 alias Re="systemctl --user restart speech.eyeput.service"
 alias He="systemctl --user stop speech.eyeput.service"
 
-alias E="systemctl --user enable --now"
-alias D="systemctl --user disable --now"
+alias sysue="systemctl --user enable --now"
+alias sysud="systemctl --user disable --now"
+alias sysur="systemctl --user restart"
+alias j="sudo journalctl -e -u"
+alias jf="sudo journalctl -ef -u"
+alias ju="journalctl --user -e -u"
+alias jut="journalctl --user -e -t"
+alias juf="journalctl --user -ef -u"
+alias jutf="journalctl --user -ef -t"
+alias sysr="sudo systemctl restart"
 
 
-alias yd='youtube-dl --playlist-start 1 -f 250/251 -o "%(title)s.opus" '
+alias yd='yt-dlp --playlist-start 1 -f 250/251 -o "%(title)s.opus" '
 ydci() {
-  youtube-dl --playlist-start "$1" -f 250/251 -o "%(title)s.opus" "$(wl-paste)"
+  yt-dlp --playlist-start "$1" -f 250/251 -o "%(title)s.opus" "$(wl-paste)"
 }
-alias ydc='bash -c "youtube-dl --playlist-start 1 -f 250/251 -o \"%(title)s.opus\" \"$(wl-paste)\""'
-alias yd2='youtube-dl --playlist-start 1 -f 140 -o "%(title)s.m4a" '
+alias ydc='bash -c "yt-dlp --playlist-start 1 -f 250/251 -o \"%(title)s.opus\" \"$(wl-paste)\""'
+alias yd2='yt-dlp --playlist-start 1 -f 140 -o "%(title)s.m4a" '
+# yt-dlp -v -f "bv*[height<=1080][ext=mp4]+ba*[ext=m4a]"
+# alias ydfullhd='yt-dlp --playlist-start 1 -f 137+140 -o "%(title)s.%(ext)s" "$(wl-paste)"'
+alias ydfullhd='yt-dlp --playlist-start 1 -v -f "bv*[height<=1080][ext=mp4]+ba*[ext=m4a]" -o "%(title)s.%(ext)s" "$(wl-paste)"'
 
 alias s="sync.py"
 alias sgr="sync.py | grep "

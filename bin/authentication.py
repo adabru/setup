@@ -10,6 +10,7 @@ from re import findall
 import re
 import subprocess
 from sys import argv
+from time import sleep
 
 if len(argv) < 2 or not argv[1] in {"edit", "replace", "type"}:
     print("usage:\n\n  authentication.py edit | replace <input-path> | type <domain>")
@@ -122,9 +123,33 @@ elif command == "type":
     query = argv[2]
     # extract domain name
     query = re.sub(r".+//|www.|/.*", "", query)
-    for match in findall(r"\((.*)\)\n(.*)\n(.*)\n\n", raw):
+    for match in findall(r"\((.*)\)(\n.+)(\n.+)?\n\n", raw):
         if query in match[0].lower().split(" "):
-            user = match[1]
-            password = match[2]
+            if match[2] == "":
+                user = ""
+                password = match[1][1:]
+            else:
+                user = match[1][1:]
+                password = match[2][1:]
             break
-    subprocess.run(("wtype", user, "-P", "tab", "-p", "tab", password))
+    if user == "":
+        subprocess.run(("wtype", password))
+    else:
+        # some keys don't work in xwayland
+        # https://github.com/atx/wtype/issues/31
+        # https://github.com/atx/wtype/issues/46
+        # https://github.com/atx/wtype/issues/39
+        # subprocess.run(("wtype", user, "-k", "tab", password))
+
+        # workaround using clipboard
+        subprocess.run(("wl-copy", user))
+        # wait a second
+        sleep(0.1)
+        subprocess.run(("wtype", "-d", "10", "-M", "ctrl", "-k", "v", "-m", "ctrl"))
+        sleep(0.1)
+        subprocess.run(("wtype", "-k", "tab"))
+        subprocess.run(("wl-copy", password))
+        sleep(0.1)
+        subprocess.run(("wtype", "-M", "ctrl", "-k", "v", "-m", "ctrl"))
+        sleep(0.1)
+        subprocess.run(("wl-copy", argv[2]))

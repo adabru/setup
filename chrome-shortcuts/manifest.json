@@ -1,0 +1,44 @@
+// developing chrome extension: https://developer.chrome.com/extensions/getstarted
+
+// reload by refreshing the chrome://extensions page
+// see https://stackoverflow.com/q/17535154/6040478
+{
+  "manifest_version": 2,
+
+  "name": "adabru shortcuts",
+  "version": "1.0",
+  // see https://developer.chrome.com/extensions/commands
+  "commands": {
+    "next_tab": {
+      "suggested_key": { "default": "Alt+Right" },
+      "description": "next tab"
+    },
+    "previous_tab": {
+      "suggested_key": { "default": "Alt+Left" },
+      "description": "previous tab"
+    },
+    "close_tab": {
+      "description": "close tab"
+    },
+    "create_tab": {
+      "description": "create tab"
+    },
+    "history_backward": {
+      "suggested_key": { "default": "Alt+S" },
+      "description": "history backward"
+    },
+    "history_forward": {
+      "suggested_key": { "default": "Alt+F" },
+      "description": "history forward"
+    }
+  },
+  // see https://developer.chrome.com/extensions/event_pages
+  "background": {
+    "scripts": ["background.js"],
+    "persistent": false
+  },
+  // see https://developer.chrome.com/extensions/content_scripts#pi
+  "permissions": [
+    "activeTab"
+  ]
+}

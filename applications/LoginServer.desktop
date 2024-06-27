@@ -1,0 +1,4 @@
+[Desktop Entry]
+Name=Login adabru
+Exec=bash -c "~/bin/authentication.py type server-apps &> ~/s.log"
+Type=Application
