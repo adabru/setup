@@ -17,8 +17,6 @@ subprocess.call(
         for argument in (
             """mksquashfs
 ~/archive
-~/setup
-~/.cache/authentication_py
 ~/db
 """
             + sys.argv[1]

@@ -1,0 +1,14 @@
+{
+  "data-sink" : {
+    "global" : {
+      "disabled-plugins" : [
+        "SynapsePassPlugin"
+      ]
+    }
+  },
+  "ui" : {
+    "global" : {
+      "ui-type" : "essential"
+    }
+  }
+}

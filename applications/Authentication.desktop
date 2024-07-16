@@ -1,4 +1,0 @@
-[Desktop Entry]
-Name=Authentication
-Exec=sh -c "~/bin/authentication.py edit"
-Type=Application

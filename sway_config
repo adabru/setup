@@ -6,37 +6,24 @@
 set $mod Mod4
 
 # reload lthe configuration file
-bindsym $mod+Ctrl+c reload
+bindsym $mod+Ctrl+r reload
 
+# exit sway (logs you out of your Wayland session)
+bindsym $mod+Ctrl+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
 
 bindsym $mod+Return exec alacritty -e tmux
 
-# bindsym Ctrl+Space exec albert toggle
-bindsym Ctrl+Space exec kupfer
-
-# clipboard manager
-# sets floating only first time, see https://github.com/swaywm/sway/issues/6606
-# window only updates on title change or restart, this doesn't work https://unix.stackexchange.com/a/635514/218172
-for_window [class="^copyq$"] floating enable; sticky enable
-bindsym $mod+V exec copyq toggle
-
 seat seat0 xcursor_theme default 10
 
-bindsym $mod+s focus left
-bindsym $mod+d focus down
-bindsym $mod+e focus up
-bindsym $mod+f focus right
+bindsym $mod+Left focus left
+bindsym $mod+Down focus down
+bindsym $mod+Up focus up
+bindsym $mod+Right focus right
 
-bindsym $mod+Shift+s move left
-bindsym $mod+Shift+d move down
-bindsym $mod+Shift+e move up
-bindsym $mod+Shift+f move right
-
-
-# output * bg /home/adabru/setup/wallpapers/LVDS-1/C_default.jpg fill
-# swaymsg -t get_outputs
-# swaymsg output "LVDS-1" scale .5
-# swaymsg output "LVDS-1" scale 2
+bindsym $mod+Shift+Left move left
+bindsym $mod+Shift+Down move down
+bindsym $mod+Shift+Up move up
+bindsym $mod+Shift+Right move right
 
 # rotate screen
 bindsym $mod+Ctrl+Up output LVDS-1 transform 0
@@ -45,46 +32,38 @@ bindsym $mod+Ctrl+Down output LVDS-1 transform 180
 bindsym $mod+Ctrl+Left output LVDS-1 transform 270
 # swaymsg -t output LVDS-1 transform 0
 
-
 # needed for gparted or kde partitionmanager, see https://wiki.archlinux.org/index.php/Polkit
 # TODO: make systemd service
 exec /usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1
 
-# doc
-# exec "cd home/adabru/repo/adabru-markup/ && ./html/js/server.ls -d ~/portable/documentation --cache ~/.cache/adabru-markup > /home/adabru/debug"
+bindsym $mod+KP_1 workspace 1 ; exec notify-send -t 100 "1"
+bindsym $mod+KP_2 workspace 2 ; exec notify-send -t 100 "2"
+bindsym $mod+KP_3 workspace 3 ; exec notify-send -t 100 "3"
+bindsym $mod+KP_4 workspace 4 ; exec notify-send -t 100 "4"
+bindsym $mod+KP_5 workspace 5 ; exec notify-send -t 100 "5"
+bindsym $mod+KP_6 workspace 6 ; exec notify-send -t 100 "6"
+bindsym $mod+KP_7 workspace 7 ; exec notify-send -t 100 "7"
+bindsym $mod+KP_8 workspace 8 ; exec notify-send -t 100 "8"
+bindsym $mod+KP_9 workspace 9 ; exec notify-send -t 100 "9"
+bindsym ctrl+KP_1 workspace 1 ; exec notify-send -t 100 "1"
+bindsym ctrl+KP_2 workspace 2 ; exec notify-send -t 100 "2"
+bindsym ctrl+KP_3 workspace 3 ; exec notify-send -t 100 "3"
+bindsym ctrl+KP_4 workspace 4 ; exec notify-send -t 100 "4"
+bindsym ctrl+KP_5 workspace 5 ; exec notify-send -t 100 "5"
+bindsym ctrl+KP_6 workspace 6 ; exec notify-send -t 100 "6"
+bindsym ctrl+KP_7 workspace 7 ; exec notify-send -t 100 "7"
+bindsym ctrl+KP_8 workspace 8 ; exec notify-send -t 100 "8"
+bindsym ctrl+KP_9 workspace 9 ; exec notify-send -t 100 "9"
+bindsym $mod+1 workspace 1 ; exec notify-send -t 100 "1"
+bindsym $mod+2 workspace 2 ; exec notify-send -t 100 "2"
+bindsym $mod+3 workspace 3 ; exec notify-send -t 100 "3"
+bindsym $mod+4 workspace 4 ; exec notify-send -t 100 "4"
+bindsym $mod+5 workspace 5 ; exec notify-send -t 100 "5"
+bindsym $mod+6 workspace 6 ; exec notify-send -t 100 "6"
+bindsym $mod+7 workspace 7 ; exec notify-send -t 100 "7"
+bindsym $mod+8 workspace 8 ; exec notify-send -t 100 "8"
+bindsym $mod+9 workspace 9 ; exec notify-send -t 100 "9"
 
-bindsym $mod+KP_1 workspace 1 ; exec notify-send -t 100 "1" ; client.focused #FF0000 #FF0000 #FF0000
-bindsym $mod+KP_2 workspace 2 ; exec notify-send -t 100 "2" ; client.focused #00FF00 #00FF00 #00FF00
-bindsym $mod+KP_3 workspace 3 ; exec notify-send -t 100 "3" ; client.focused #0000FF #0000FF #0000FF
-bindsym $mod+KP_4 workspace 4 ; exec notify-send -t 100 "4" ; client.focused #FFFF00 #FFFF00 #FFFF00
-bindsym $mod+KP_5 workspace 5 ; exec notify-send -t 100 "5" ; client.focused #FF00FF #FF00FF #FF00FF
-bindsym $mod+KP_6 workspace 6 ; exec notify-send -t 100 "6" ; client.focused #00FFFF #00FFFF #00FFFF
-bindsym $mod+KP_7 workspace 7 ; exec notify-send -t 100 "7" ; client.focused #FFFFFF #FFFFFF #FFFFFF
-bindsym $mod+KP_8 workspace 8 ; exec notify-send -t 100 "8" ; client.focused #8800FF #8800FF #8800FF
-bindsym $mod+KP_9 workspace 9 ; exec notify-send -t 100 "9" ; client.focused #000000 #000000 #000000
-bindsym $mod+KP_0 workspace 10 ; exec notify-send -t 100 "10" ; client.focused #000000 #000000 #000000
-bindsym ctrl+KP_1 workspace 1 ; exec notify-send -t 100 "1" ; client.focused #FF0000 #FF0000 #FF0000
-bindsym ctrl+KP_2 workspace 2 ; exec notify-send -t 100 "2" ; client.focused #00FF00 #00FF00 #00FF00
-bindsym ctrl+KP_3 workspace 3 ; exec notify-send -t 100 "3" ; client.focused #0000FF #0000FF #0000FF
-bindsym ctrl+KP_4 workspace 4 ; exec notify-send -t 100 "4" ; client.focused #FFFF00 #FFFF00 #FFFF00
-bindsym ctrl+KP_5 workspace 5
-# exec notify-send -t 100 "5" ; client.focused #FF00FF #FF00FF #FF00FF
-bindsym ctrl+KP_6 workspace 6
-#; exec notify-send -t 100 "6" ; client.focused #00FFFF #00FFFF #00FFFF
-bindsym ctrl+KP_7 workspace 7 ; exec notify-send -t 100 "7" ; client.focused #FFFFFF #FFFFFF #FFFFFF
-bindsym ctrl+KP_8 workspace 8 ; exec notify-send -t 100 "8" ; client.focused #8800FF #8800FF #8800FF
-bindsym ctrl+KP_9 workspace 9 ; exec notify-send -t 100 "9" ; client.focused #000000 #000000 #000000
-bindsym ctrl+KP_0 workspace 10 ; exec notify-send -t 100 "10" ; client.focused #000000 #000000 #000000
-bindsym $mod+1 workspace 1 ; exec notify-send -t 100 "1" ; client.focused #FF0000 #FF0000 #FF0000
-bindsym $mod+2 workspace 2 ; exec notify-send -t 100 "2" ; client.focused #00FF00 #00FF00 #00FF00
-bindsym $mod+3 workspace 3 ; exec notify-send -t 100 "3" ; client.focused #0000FF #0000FF #0000FF
-bindsym $mod+4 workspace 4 ; exec notify-send -t 100 "4" ; client.focused #FFFF00 #FFFF00 #FFFF00
-bindsym $mod+5 workspace 5 ; exec notify-send -t 100 "5" ; client.focused #FF00FF #FF00FF #FF00FF
-bindsym $mod+6 workspace 6 ; exec notify-send -t 100 "6" ; client.focused #00FFFF #00FFFF #00FFFF
-bindsym $mod+7 workspace 7 ; exec notify-send -t 100 "7" ; client.focused #FFFFFF #FFFFFF #FFFFFF
-bindsym $mod+8 workspace 8 ; exec notify-send -t 100 "8" ; client.focused #8800FF #8800FF #8800FF
-bindsym $mod+9 workspace 9 ; exec notify-send -t 100 "9" ; client.focused #000000 #000000 #000000
-bindsym $mod+0 workspace 10 ; exec notify-send -t 100 "10" ; client.focused #000000 #000000 #000000
 # move focused container to workspace
 bindsym $mod+Shift+KP_1 move container to workspace 1
 bindsym $mod+Shift+KP_2 move container to workspace 2
@@ -95,7 +74,6 @@ bindsym $mod+Shift+KP_6 move container to workspace 6
 bindsym $mod+Shift+KP_7 move container to workspace 7
 bindsym $mod+Shift+KP_8 move container to workspace 8
 bindsym $mod+Shift+KP_9 move container to workspace 9
-bindsym $mod+Shift+KP_0 move container to workspace 10
 bindsym $mod+Shift+1 move container to workspace 1
 bindsym $mod+Shift+2 move container to workspace 2
 bindsym $mod+Shift+3 move container to workspace 3
@@ -105,22 +83,15 @@ bindsym $mod+Shift+6 move container to workspace 6
 bindsym $mod+Shift+7 move container to workspace 7
 bindsym $mod+Shift+8 move container to workspace 8
 bindsym $mod+Shift+9 move container to workspace 9
-bindsym $mod+Shift+0 move container to workspace 10
+
 # default workspace
 workspace 1
 
 # window style and colors
-# client.focused #FF0000 #FF0000 #FF0000 #FF0000 #FF0000
 font pango:monospace 10
 titlebar_border_thickness 1
 titlebar_padding 1 1
-default_border pixel 1
-# client.focused #0F000F #0F000F80 #888888 #000000 #000000
-
-# per workspace colors
-# for_window [workspace="1"] client.unfocused #AA0000 #AA0000 #AA0000 #AA0000 #AA0000
-# for_window [workspace="2"] client.focused #00FF00 #00FF00 #00FF00 #00FF00 #00FF00
-
+default_border pixel 0
 
 # keyboard layout
 # alternatively use:
@@ -136,31 +107,23 @@ default_border pixel 1
 # see `man sway-input` → 'keyboard_grouping' and `sudo libinput debug-events`
 #
 input type:keyboard {
-    xkb_layout ab,ab(russian)
-    xkb_options grp:alt_altgr_toggle,compose:menu
-#    xkb_options grp:ctrls_toggle,compose:menu → ctrls_toggle doesnt work and additionally it breaks flutter app ctrl+click
-    repeat_delay 50000
-    repeat_rate 30
-}
-input "76:620:Roberts_Tastatur" {
-    xkb_options altwin:swap_alt_win,lv5:rwin_switch_lock
+  xkb_layout ab,ab(russian)
+  xkb_options grp:alt_altgr_toggle,compose:menu
+  #    xkb_options grp:ctrls_toggle,compose:menu → ctrls_toggle doesnt work and additionally it breaks flutter app ctrl+click
+  repeat_delay 50000
+  repeat_rate 30
 }
 
-# exec swayidle timeout 600 lockscreen.py
-
-# input "2:7:SynPS/2_Synaptics_TouchPad" {
 input type:touchpad {
   tap enabled
   dwt disabled
   natural_scroll enabled
 }
-input "9317:25345:Microsoft_Corporation_Guest_Touchback_Board" {
-  map_to_output "HDMI-A-1"
-}
 # swaymsg -t get_inputs
 # swaymsg -t get_outputs
 # man 5 sway-input
 
+# grep XF86MonBrightness /usr/share/X11/xkb/symbols/*
 bindsym XF86MonBrightnessUp exec brillo -A 10
 bindsym Shift+XF86MonBrightnessUp exec brillo -A 1
 bindsym Ctrl+Shift+XF86MonBrightnessUp exec brillo -A .1
@@ -182,22 +145,8 @@ bindsym Ctrl+XF86Sleep exec systemctl hibernate
 bindsym Print exec slurp | grim -g - ~/s.png
 bindsym Shift+Print exec maim -s ~/s.png
 
-# man 5 sway-bar
-# bar {
-#     status_command statusbar.py
-#     position top
-#     colors {
-#         statusline #ffffff
-#         background #00000000
-#         inactive_workspace #00000000 #00000000 #200020
-#         focused_workspace #00000000 #00000000 #ff0070
-#     }
-#     # disable system tray
-#     tray_output none
-# }
 bindsym KP_enter exec statuswindow.py
 for_window [title="^statuswindow$"] floating enable; sticky enable
-
 
 # kill focused window
 bindsym Mod1+f4 kill
@@ -219,12 +168,6 @@ for_window [title="float"] floating enable
 # mouse button for dragging.
 floating_modifier $mod normal
 
-# exit sway (logs you out of your Wayland session)
-bindsym $mod+Ctrl+q exec swaynag -t warning -m 'You pressed the exit shortcut. Do you really want to exit sway? This will end your Wayland session.' -b 'Yes, exit sway' 'swaymsg exit'
-
-# bindsym $mod+b splith
-# bindsym $mod+v splitv
-
 # Switch the current container between different layout styles
 # bindsym $mod+s layout stacking
 bindsym $mod+Ctrl+w layout tabbed
@@ -237,10 +180,7 @@ bindsym $mod+Ctrl+f fullscreen
 bindsym $mod+Shift+space floating toggle
 
 # # Swap focus between the tiling area and the floating area
-# bindsym $mod+space focus mode_toggle
-
-# # move focus to the parent container
-# bindsym $mod+a focus parent
+bindsym $mod+space focus mode_toggle
 
 #
 # Scratchpad:
@@ -257,37 +197,30 @@ bindsym $mod+Shift+j move scratchpad
 bindsym $mod+minus scratchpad show
 bindsym $mod+j scratchpad show
 
-#
-# Resizing containers:
-#
-# mode "resize" {
-#     bindsym Left resize shrink width 10px
-#     bindsym Down resize grow height 10px
-#     bindsym Up resize shrink height 10px
-#     bindsym Right resize grow width 10px
-
-#     # return to default mode
-#     bindsym Return mode "default"
-#     bindsym Escape mode "default"
-# }
-# bindsym $mod+r mode "resize"
-
 include /etc/sway/config.d/*
 
 # export relevant environment variables
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
+
 # launcher
-exec systemd-cat -t kupfer kupfer --no-splash --debug
-# close launcher on focus lost
-exec systemd-cat -t kupfer python /home/adabru/bin/close_kupfer_on_unfocus.py
+exec systemd-cat -t synapse synapse -s
+bindsym Ctrl+Space exec synapse
+for_window [title="^synapse$"] border none
+
+# clipboard manager
+# sets floating only first time, see https://github.com/swaywm/sway/issues/6606
+# window only updates on title change or restart, this doesn't work https://unix.stackexchange.com/a/635514/218172
+for_window [class="^copyq$"] floating enable; sticky enable
+bindsym $mod+V exec copyq toggle
 # see https://github.com/hluk/CopyQ/issues/1882
 exec copyq config hide_main_window true
 exec systemd-cat -t copyq copyq
+
 # redshift / night mode
 exec systemd-cat -t gammastep gammastep
+
 # wallpaper
 exec systemd-cat -t multibg-sway multibg-sway ~/setup/wallpapers
 
 
-
-exec notify-send -t 5000 "Welcome, Clue!"
+exec notify-send -t 5000 "Digital World."

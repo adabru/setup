@@ -1,6 +1,6 @@
 [user]
 	name = adabru
-	email = b.brunnmeier@gmx.de
+	email = adam.brunnmeier@gmail.com
 [filter "lfs"]
 	clean = git-lfs clean -- %f
 	smudge = git-lfs smudge -- %f

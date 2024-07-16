@@ -1,6 +1,6 @@
-# Setup & Configuration
+# PC Setup (dual boot)
 
-## Arch Setup (dual boot)
+## OS Installation
 
 Arch can be installed on existing Windows installation and Windows can be installed on existing Arch installation.
 
@@ -35,11 +35,13 @@ Disable fastboot via `powercfg.cpl`.
 Make a system backup on old system with `backup.py`.
 
 ```sh
+# following commands come from https://wiki.archlinux.de/title/Arch_Install_Scripts
+
+loadkeys de-latin1
+
 # connect to wifi as show in the printed instructions; use tab completion
 iwctl
 
-# following commands come from https://wiki.archlinux.de/title/Arch_Install_Scripts
-loadkeys de-latin1
 lsblk
 cfdisk
   100MB fat32 /boot
@@ -65,25 +67,23 @@ locale-gen
 echo LANG=en_US.UTF-8 > /etc/locale.conf
 mkinitcpio -p linux
 passwd # set root passwd
-echo KEYMAP=de > /etc/vconsole.conf
 pacman -S refind
 refind-install
 vim /boot/refind_linux.conf
-  # "Boot with standard options" "root=/dev/nvme0n1p5 rw add_efi_memmap"
+# "Boot with standard options" "root=/dev/nvme0n1p5 rw add_efi_memmap"
 
 exit
 poweroff
 ```
 
-Eject pendrive and boot into arch.
+Eject pendrive and boot into arch. Refind will automatically find it.
+
+## Arch Configuration
 
 ```sh
 # enable wifi
-systemctl enable NetworkManager.service
-systemctl start NetworkManager
-nmcli
-nmcli device wifi
-nmcli device wifi connect -a MY_SSID
+systemctl enable --now NetworkManager.service
+nmcli device wifi connect -a <tab completion>
 
 groupadd sudo
 useradd -m -G sudo adabru
@@ -94,171 +94,26 @@ su adabru
 # faillock --release
 
 git clone https://github.com/adabru/setup
-sudo loadkeys setup/kbd_ab.map
-setup/bin/sync.py
+./setup/setup.sh
 
-# store keymap
-sudo cp ~/setup/kbd_ab.map /usr/share/kbd/keymaps/ab.map
-sudo sh -c "echo KEYMAP=ab > /etc/vconsole.conf"
-~/setup/bin/sync.py
-
-# restore backup
-pacman -S squashfuse rsync squashfs-tools ntfs-3g
-# plugin drive
+# restore backup; plugin drive
 lsblk
-sudo mount -o uid=adabru,ro /dev/sdb1 /mnt
-unsquashfs -f -d ~ /mnt/20xx-xx-xx-backup.sqfs
-# sqfs-mount.sh /mnt/20xx-xx-xx-backup.sqfs
-# rsync -r --info=progress2 ~/mnt/20xx-xx-xx-backup.sqfs/xx ~/xx
-# rsync -r --info=progress2 --exclude '*/node_modules/' ~/mnt/20xx-xx-xx-backup.sqfs/xx ~/xx
+backup_mount /dev/sdb1
+# /mnt/20xx-xx-xx-backup.sqfs
+backup_restore "20xx-xx-xx"
 
-# wlan
-# check wlan on/off switch
-rfkill list all
-nmcli device wifi
-nmcli device wifi connect -a your_ap_name_ssid
-nmcli connection
-
-# update system
-pacman -S reflector
-mirror
-
-# number of installed packages
-pacman -Qq | wc -l
-
-# install terminal
-pacman -S alacritty
-
-# setup xkb layout
-sudo cp ~/setup/xkb_ab /usr/share/X11/xkb/symbols/ab
-
-# install sway
-# https://wiki.archlinux.org/index.php/Sway#Installation
-# https://github.com/swaywm/sway/wiki
-pacman -S sway xorg-server-xwayland
-export XKB_DEFAULT_LAYOUT=ab; sway
-# setxkbmap -layout de
-# setxkbmap -layout ab
-
-# install albert
-# add to /etc/pacman.conf :
-# # see https://software.opensuse.org/download.html?project=home:manuelschneid3r&package=albert
-# [home_manuelschneid3r_Arch]
-# Server = https://download.opensuse.org/repositories/home:/manuelschneid3r/Arch/$arch
-key=$(curl -fsSL https://download.opensuse.org/repositories/home:manuelschneid3r/Arch/$(uname -m)/home_manuelschneid3r_Arch.key)
-fingerprint=$(gpg --quiet --with-colons --import-options show-only --import --fingerprint <<< "${key}" | awk -F: '$1 == "fpr" { print $10 }')
-sudo pacman-key --add - <<< "${key}"
-sudo pacman-key --lsign-key "${fingerprint}"
-pacman -Sy home_manuelschneid3r_Arch/albert
-
-# install trizen
-cd ~/repo
-git clone https://aur.archlinux.org/trizen.git
-cd trizen
-makepkg -si
-# in /etc/pacman.conf :
-# uncomment option 'Color'
-# uncomment source [multilib]
-
-pacman -S openssh
-pacman -S muparser
-pacman -S nm-connection-editor
-t -S vivaldi
-# proprietary codecs
-sudo /opt/vivaldi/update-ffmpeg
-sudo /opt/vivaldi/update-widevine
-
-# brightness
-t -S brillo
-usermod -a -G video adabru
-sudo cp setup/udev_backlight.rules /etc/udev/rules.d/backlight.rules
-grep XF86MonBrightness /usr/share/X11/xkb/symbols/*
-
-# autologin
-# https://wiki.archlinux.org/index.php/Getty#Virtual_console
-# https://wiki.archlinux.org/index.php/Systemd#Editing_provided_units
-# sudo systemctl edit getty^TAB
-sudo mkdir /etc/systemd/system/getty@tty1.service.d/
-sudo cp ~/setup/getty.conf /etc/systemd/system/getty@tty1.service.d/override.conf
-sudo mkdir /etc/systemd/system/getty@tty3.service.d/
-sudo cp ~/setup/getty.conf /etc/systemd/system/getty@tty3.service.d/override.conf
-systemctl daemon-reload
-
-# partition managing
-pacman -S partitionmanager polkit-gnome
-# restart sway
-# create 50gb XFS partition with label VM for virtual drives
-sudo sh -c "echo \"/dev/disk/by-label/VM /home/adabru/vm xfs users 0 0\" >> /etc/fstab"
-# for gparted:
-pacman -S gparted xorg-xhost
-# restart sway
-
-mkdir ~/vm
-sudo mount -a
-# navigate to backup
-sudo mount /dev/disk/by-label/500_LapStore /mnt
+# change PARTUUID to your root partition
+blkid
+xdg-open /boot/EFI/refind/refind.conf
+poweroff --reboot
+# if some other installation or package has overwritten the boot order, use:
+# sudo refind-mkdefault
 ```
 
 ## Further Software
 
-- setup other applications
-
 ```sh
-systemctl --user enable --now adabru.albert
 systemctl --user enable --now adabru.headset
-
-# i tried community/code twice, but switched to insiders due to issues (the second time marketplace didn't work)
-t -S visual-studio-code-insiders
-
-git config --global user.email b.brunnmeier@gmx.de
-git config --global user.name adabru
-git config --global pull.ff only
-
-pacman -S mpv
-
-t -S nautilus nautilus-open-terminal gvfs-smb gvfs-mtp
-
-# access documentation on 127.0.7.1:7000 via doc/
-pacman -S nftables
-echo "127.0.7.1       doc" | sudo tee --append /etc/hosts
-sudo cp ~/setup/nftables.conf /etc
-sudo systemctl enable nftables
-sudo systemctl restart nftable
-
-# refind
-pacman -S refind-efi
-t -S memtest86-efi
-refind-install
-# if installing from live-usb system with chroot, /boot/refind_linux.conf must be changed
-# see https://wiki.archlinux.org/index.php/REFInd
-sudo cp ~/setup/os_grub.png /boot/EFI/refind/icons/os_grub.png
-sudo cp /usr/share/memtest86-efi/bootx64.efi /boot/EFI/tools
-sudo cp ~/setup/refind.conf /boot/EFI/refind/refind.conf
-# change PARTUUID to your root partition
-blkid
-sudo vim /boot/EFI/refind/refind.conf
-poweroff --reboot
-# if some other installation or package has overwritten the boot order, use:
-# sudo refind-mkdefault
-
-# messaging
-t -S thunderbird pidgin slack-libpurple-git telegram-purple-git purple-matrix-git purple-discord-git
-# gmx https://support.gmx.com/pop-imap/imap/outlook.html
-# gmail
-# rwth https://www.welcome.itc.rwth-aachen.de/en/email.htm
-# pidgin:
-#   FB https://facebook.com https://en.facebookbrand.com/wp-content/uploads/2016/05/flogo_rgb_hex-brc-site-250.png
-#   MindCloud Slack mind-cloud
-#   Fablab Slack fablab-erkelenz
-#   i9 RocketChat https://rclufgi9.informatik.rwth-aachen.de/home
-#   Telegram
-#   Discord "Hückelhoven Skills"
-
-pacman -S featherpad
-
-# font
-# see font coverage on https://www.fileformat.info/info/unicode/block/miscellaneous_symbols_and_pictographs/fontsupport.htm
-t -S ttf-symbola ttf-dejavu ttf-unifont gucharmap
 
 # check Wayland/XWayland
 # https://fedoraproject.org/wiki/How_to_debug_Wayland_problems
@@ -283,8 +138,6 @@ cat ~/.ssh/id_rsa.pub
 ssh -T git@github.com
 ssh -T git@gitlab.com
 
-# audio
-pacman -S alsa-utils pulseaudio pavucontrol evtest
 # internal microphone boost is not saved per default because pulseaudio resets it
 # see https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Pulse_overwrites_ALSA_settings)
 # and https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Microphone_distorted_due_to_automatic_adjustment
@@ -294,6 +147,7 @@ usermod -a -G input adabru
 alsamixer
 speaker-test
 # reboot for pulseaudio to start
+
 # enable audio loopback device with:
 sudo modprobe snd-aloop
 # route input to output, see https://thelinuxexperiment.com/pulseaudio-monitoring-your-line-in-interface/
@@ -308,20 +162,7 @@ aplay -l
 arecord -l
 alsaloop -C hw:0,0 -P hw:0,0
 
-
-# radio
-t -S goodvibes
-# find radio stations e.g. on https://www.radio.de/genre/film-and-musical
-
-# tmux
-# wl-clipboard as temporary workaround for https://github.com/swaywm/sway/issues/926
-# ctrl+shift+insert as temporary workaround for https://github.com/thestinger/termite/issues/645
-pacman -S tmux wl-clipboard
-
 # bluetooth
-pacman -S bluez bluez-utils pulseaudio-bluetooth blueman
-sudo systemctl enable bluetooth
-sudo systemctl restart bluetooth
 bluetoothctl power on
 bluetoothctl devices
 blueman
@@ -332,25 +173,12 @@ sudo modprobe -r ath9k
 # to make it permanent
 sudo sh -c 'echo "blacklist ath9k" > /etc/modprobe.d/modprobe.conf'
 
-# printer
-pacman -S cups cups-pdf
-t -S brother-mfc-9332cdw
-systemctl enable org.cups.cupsd.service
-systemctl start org.cups.cupsd.service
-# setup printer at http://localhost:631/admin
-
-# pdf reader
-pacman -S evince
-
-# screenshot
-pacman -S slurp grim eog
-
 # screencast
-t -S obs-studio wlrobs-hg
+auri obs-studio wlrobs-hg
 # then select "Wayland output (scpy)" for the whole screen or "Window Capture (Xcomposite)" for X windows
 
 # android emulator
-t -S jdk8-openjdk android-sdk
+auri jdk8-openjdk android-sdk
 export PATH="/opt/android-sdk/tools/bin:$PATH"
 sdkmanager --list
 # https://wiki.archlinux.org/index.php/Android#Android_Studio
@@ -364,7 +192,7 @@ sdkmanager "system-images;android-23;google_apis;x86_64"
 avdmanager create avd --name myandroid -k "system-images;android-23;google_apis;x86_64"
 avdmanager list avd
 sdkmanager emulator
-t -S android-sdk-platform-tools
+auri android-sdk-platform-tools
 # https://developer.android.com/studio/run/emulator-commandline
 # https://developer.android.com/studio/run/emulator-comparison
 emulator @myandroid
@@ -379,25 +207,16 @@ rclone config
 # dropbox, google
 rclone lsd dropbox:
 rclone ls dropbox:
-cd ~/portable/cloud/dropbox
+cd ~/cloud/dropbox
 rclone -P sync dropbox:Gemeindelieder ./Gemeindelieder
 rclone lsd google:
 
 # ftp
-usermod -a -G ftp adabru
-pacman -S bftpd
-sudo chmod 770 /srv/ftp
-sudo bftpd -D # share /
-
-t -S stupid-ftpd
+auri stupid-ftpd
 ftp_here.sh
 
-# anti webspam
-t -S hosts-update
-hosts-update
-
 # opendns + hosts
-t -S ddclient
+auri ddclient
 sudo sh -c 'echo "
 127.0.0.1   localhost
 ::1         localhost
@@ -433,10 +252,10 @@ sudo tunnel_ipv6.sh
 
 
 # node
-pacman -S nodejs yarn
+i nodejs yarn
 
 # arduino
-pacman -S arduino
+i arduino
 # install arduino extension in vscode
 sudo usermod -a -G uucp,lock adabru
 # logout → login
@@ -444,11 +263,11 @@ echo "ciao" > /dev/ttyUSB0
 # see if lights are blinking
 # set "port": "/dev/ttyUSB0" in arduino.json
 # "open serial port" in vscode didn't work, using screen instead (cancel with CTRL+A K)
-pacman -S screen
+i screen
 screen /dev/ttyUSB0 19200
 
 # wine
-pacman -S wine winetricks
+i wine winetricks
 winetricks dotnet452 corefonts
 
 # mingw
@@ -459,9 +278,9 @@ winetricks dotnet452 corefonts
 # Server = https://ftp.f3l.de/~martchus/$repo/os/$arch
 # Server = https://martchus.no-ip.biz/repo/arch/$repo/os/$arch
 t -Sy
-t -S mingw-w64
+auri mingw-w64
 
-pacman -S youtube-dl
+i youtube-dl
 
 # virtualenv + pip if needed, see https://virtualenv.pypa.io/en/latest/installation.html
 wget -O- https://pypi.python.org/packages/source/v/virtualenv/virtualenv-16.0.0.tar.gz | tar xz
@@ -477,38 +296,24 @@ export PYTHONPATH=./lib/python3.7/site-packages
 ## Alternative A
 # https://wiki.archlinux.org/title/Gamepad
 gpg --keyserver keyserver.ubuntu.com --recv-key E23B7E70B467F0BF
-t -S hid-nintendo-dkms xf86-input-joystick ydotool
+auri hid-nintendo-dkms xf86-input-joystick ydotool
 # https://gamepad-tester.com
 systemctl --user enable --now ydotool
 ydotool mousemove --absolute 100 100
 ## Alternative B
-t -S sc-controller
+auri sc-controller
 ## Alternative C
 # https://wiki.archlinux.org/title/Gamepad#iPEGA-9017s_and_other_Bluetooth_gamepads
 # https://www.reddit.com/r/RetroPie/comments/67lhv3/nintendo_switch_pro_controller_is_fully_working/
-t -S xboxdrv
+auri xboxdrv
 sudo cp ~/setup/gamepad/udev_bt_switch_pro.rules /etc/udev/rules.d/99-bt_switch_pro.rules
 sudo udevadm control --reload-rules
 xboxdrv_switch_pro.conf
 xboxdrv --evdev /dev/btjoy --config .config/xboxdrv/ipega.conf
 
-# auto mount
-i udiskie
-systemctl --user enable --now adabru.albert
-
-# wallpapers
-ti multibg-sway
 ```
 
 - see <https://wiki.archlinux.org/index.php/System_maintenance>:
   - `systemctl --failed`
   - `journalctl -p 3 -xb`
   - update system with: `update` (pacman) or `tupdate` (trizen)
-
-## Postinstall Windows
-
-Prepare an unallocated space on your hard drive for Windows.
-
-Didn't try yet it could be possible to install via kvm: <https://askubuntu.com/a/249169/452398>. Possibly with help of sysprep.
-
-Else create a dual boot usb stick (s. above) and do the default Windows installation where you can select the prepared unallocated space for installation. Because of efi I was even able to boot linux from the hard disk afterwards with the bios boot device selection.
