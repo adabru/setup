@@ -19,18 +19,23 @@ command = "setup"
 if len(sys.argv) == 2:
     command = sys.argv[1]
 
+error = 0
+
 
 def is_git(path):
     return subprocess.run(["git", "rev-parse"], cwd=path.parent).returncode == 0
 
 
 def sync(source, target):
+    return
+    global error
     # symbolic links are not supported on FAT32, check with target.parent.owner() != "root"
-    print("\033[96m{:} \033[39m \033[94m{:}\033[39m : ".format(source, target), end="")
+    # print("\033[96m{:} \033[39m \033[94m{:}\033[39m : ".format(source, target), end="")
     source = Path(source).expanduser()
     target = Path(target).expanduser()
     if not source.exists():
         print("\033[33msource doesn't exist")
+        error = 1
     elif target.resolve() == source:
         print("\033[92m✔")
     elif not target.parent.exists():
@@ -39,12 +44,16 @@ def sync(source, target):
             return sync(source, target)
         except IOError:
             print("\033[93mdirectory creation failed!")
+            error = 2
     elif target.is_symlink():
         print("\033[33mtarget already links to {:}".format(target.resolve()))
+        error = 3
     elif source.is_dir() and target.is_file():
         print("\033[33msource is a dir but target is a file")
+        error = 4
     elif source.is_file() and target.is_dir():
         print("\033[33msource is a file but target is a dir")
+        error = 5
     elif (
         target.exists()
         and (not os.access(target, os.W_OK) or target.parent.owner() == "root")
@@ -53,12 +62,15 @@ def sync(source, target):
         print("\033[92m(✔)")
     elif target.exists() and not filecmp.cmp(source, target, shallow=False):
         print("\033[93msource and target differ")
+        error = 6
     elif target.exists() and is_git(target):
         print("duplicate target")
     elif target.exists():
         print("remove duplicate target and sync again to create a link")
+        error = 7
     elif not os.access(target.parent, os.W_OK):
         print("\033[93msudo copy source to target")
+        error = 8
     elif target.parent.owner() == "root":
         shutil.copyfile(source, target)
         print("\033[92m(✔)")
@@ -85,7 +97,7 @@ def bin_sync(source, target_name=""):
     """
     if target_name == "":
         target_name = Path(source).name
-    sync(source, f"~/bin/{target_name}")
+    user_sync(source, f"~/bin/{target_name}")
 
 
 def db_sync(target):
@@ -95,72 +107,97 @@ def db_sync(target):
     sync(f"~/db/{target}", f"~/{target}")
 
 
+def user_sync(source, target):
+    """
+    Sync from ~/setup/user/<target> to ~/<target>.
+    """
+    # sync(f"~/setup/user/{target}", f"~/{target}")
+    source = Path(source).expanduser()
+    target = Path(target).expanduser()
+    # create target folder in ~/setup/user or ~/setup/root
+    if target.parts[1] == "home" and target.parts[2] == "adabru":
+        relTarget = Path.home() / "setup/user" / target.relative_to(Path.home())
+        # print(relTarget.parent)
+        # create ~/setup/user/<relParent>
+        # os.makedirs(relTarget.parent, exist_ok=True)
+        # move source to relTarget
+        # shutil.move(source, relTarget)
+        # print(source)
+    elif target.parts[1] != "home":
+        relTarget = Path.home() / "setup/root" / target.relative_to(Path("/"))
+        os.makedirs(relTarget.parent, exist_ok=True)
+        if source.exists():
+            shutil.move(source, relTarget)
+    return
+
+
+def root_sync(target):
+    """
+    Sync from ~/setup/root/<target> to /<target>.
+    """
+    sync(f"~/setup/root/{target}", f"/{target}")
+
+
 if command == "setup":
-    # bootloader
-    sync("~/setup/refind.conf", "/boot/EFI/refind/refind.conf")
-    sync("~/setup/rorschach.png", "/boot/EFI/refind/rorschach.png")
-    # autologin
-    sync("~/setup/getty.conf", "/etc/systemd/system/getty@tty1.service.d/override.conf")
-    sync("~/setup/getty.conf", "/etc/systemd/system/getty@tty3.service.d/override.conf")
 
     # keyboard
-    sync("~/setup/kbd_ab.map", "/usr/share/kbd/keymaps/ab.map")
-    sync("~/setup/vconsole.conf", "/etc/vconsole.conf")
-    sync("~/setup/xkb_ab", "/usr/share/X11/xkb/symbols/ab")
+    user_sync("~/setup/kbd_ab.map", "/usr/share/kbd/keymaps/ab.map")
+    user_sync("~/setup/vconsole.conf", "/etc/vconsole.conf")
+    user_sync("~/setup/xkb_ab", "/usr/share/X11/xkb/symbols/ab")
 
     # window manager
-    sync("~/setup/sway_config", "~/.config/sway/config")
+    user_sync("~/setup/sway_config", "~/.config/sway/config")
     bin_sync("~/setup/bin/statusbar.py")
     bin_sync("~/setup/bin/statuswindow.py")
     bin_sync("~/setup/bin/toggle_mic.py")
 
     # terminal
-    sync("~/setup/alacritty.toml", "~/.config/alacritty/alacritty.toml")
-    sync("~/setup/bashrc", "~/.bashrc")
+    user_sync("~/setup/alacritty.toml", "~/.config/alacritty/alacritty.toml")
+    user_sync("~/setup/bashrc", "~/.bashrc")
     db_sync(".bash_history")
-    sync("~/setup/vimrc", "~/.vimrc")
-    sync("~/setup/clingrc", "~/.clingrc")
-    sync("~/setup/pythonrc", "~/.pythonrc")
-    sync("~/setup/tmux.conf", "~/.tmux.conf")
-    sync("~/setup/screenrc", "~/.screenrc")
-    sync("~/setup/XCompose", "~/.XCompose")
+    user_sync("~/setup/vimrc", "~/.vimrc")
+    user_sync("~/setup/clingrc", "~/.clingrc")
+    user_sync("~/setup/pythonrc", "~/.pythonrc")
+    user_sync("~/setup/tmux.conf", "~/.tmux.conf")
+    user_sync("~/setup/screenrc", "~/.screenrc")
+    user_sync("~/setup/XCompose", "~/.XCompose")
     bin_sync("~/setup/bin/rename.py")
     bin_sync("~/setup/bin/dates.py")
-    bin_sync("~/repo/hh-adabru/ads/fill_form.py", "ff")
-    sync("~/setup/pacman.conf", "/etc/pacman.conf")
+    # bin_sync("~/repo/hh-adabru/ads/fill_form.py", "ff")
+    user_sync("~/setup/pacman.conf", "/etc/pacman.conf")
 
     # automount usb
-    sync(
+    user_sync(
         "~/setup/services/adabru.udiskie.service",
         "/etc/systemd/user/adabru.udiskie.service",
     )
 
     # headset mic boost
     bin_sync("~/setup/bin/headset_daemon.py")
-    sync(
+    user_sync(
         "~/setup/services/adabru.headset.service",
         "/etc/systemd/user/adabru.headset.service",
     )
 
     # brightness
-    sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
+    user_sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
 
     # hdmi sound
-    sync("~/setup/udev_hdmi_sound.rules", "/etc/udev/rules.d/hdmi_sound.rules")
+    user_sync("~/setup/udev_hdmi_sound.rules", "/etc/udev/rules.d/hdmi_sound.rules")
 
     # no beep
-    sync("~/setup/udev_no_beep.conf", "/etc/modprobe.d/udev_no_beep.conf")
+    user_sync("~/setup/udev_no_beep.conf", "/etc/modprobe.d/udev_no_beep.conf")
 
     # gammastep / redshift
-    sync("~/setup/gammastep_config.ini", "~/.config/gammastep/config.ini")
+    user_sync("~/setup/gammastep_config.ini", "~/.config/gammastep/config.ini")
 
     # launcher
-    sync("~/setup/user-dirs.dirs", "~/.config/user-dirs.dirs")
-    sync("~/setup/applications", "~/.local/share/applications/adabru")
-    sync("~/setup/synapse_config.json", "~/.config/synapse/config.json")
+    user_sync("~/setup/user-dirs.dirs", "~/.config/user-dirs.dirs")
+    user_sync("~/setup/applications", "~/.local/share/applications/adabru")
+    user_sync("~/setup/synapse_config.json", "~/.config/synapse/config.json")
 
     # inkscape
-    sync("~/setup/inkscape.xml", "~/.config/inkscape/keys/default.xml")
+    user_sync("~/setup/inkscape.xml", "~/.config/inkscape/keys/default.xml")
 
     # sync
     bin_sync("~/setup/bin/sync.py")
@@ -172,7 +209,7 @@ if command == "setup":
     bin_sync("~/setup/bin/bt.py")
 
     # packaging
-    sync("~/setup/makepkg.conf", "~/.makepkg.conf")
+    user_sync("~/setup/makepkg.conf", "~/.makepkg.conf")
 
     # documentation
     sync("~/repo/adabru-server/Readme", "~/documentation/Homepage/Server")
@@ -181,8 +218,8 @@ if command == "setup":
     bin_sync("~/setup/bin/ftp_here.sh")
 
     # network
-    sync("~/setup/NetworkManager.conf", "/etc/NetworkManager/NetworkManager.conf")
-    sync("~/setup/resolv.conf", "/etc/resolv.conf")
+    user_sync("~/setup/NetworkManager.conf", "/etc/NetworkManager/NetworkManager.conf")
+    user_sync("~/setup/resolv.conf", "/etc/resolv.conf")
 
     # backup
     bin_sync("~/setup/bin/backup.py")
@@ -217,7 +254,7 @@ if command == "setup":
     bin_sync("~/setup/bin/type_pass.py")
 
     # gitconfig
-    sync("~/setup/gitconfig", "~/.gitconfig")
+    user_sync("~/setup/gitconfig", "~/.gitconfig")
 
     # keys and logins
     db_sync(".ssh")
@@ -242,7 +279,6 @@ if command == "setup":
 elif command == "audio":
     ip = "192.168.178.89"
     user = "user"
-    home = Path.home()
     # exec(
     #     f'rsync -vh --size-only --progress --update --inplace --recursive --delete --exclude=".*" --no-perms -e "ssh -i ~/.ssh/id_phone -p 8022" {home}/audio/ {user}@{ip}:/sdcard/Music/'
     # )
@@ -252,7 +288,6 @@ elif command == "audio":
         exec(
             f'rsync -vh --size-only --progress --update --inplace --recursive --delete --exclude=".*" --no-perms -e "ssh -i ~/.ssh/id_phone -p 8022" {home}/audio/ {home}/mnt/Music'
         )
-    # home = Path.home()
     # # see https://rafaelc.org/posts/mounting-kde-connect-filesystem-via-cli/
     # exec(
     #     f"sshfs -o rw,nosuid,nodev,identityfile={home}/.config/kdeconnect/privateKey.pem,port=1740,HostKeyAlgorithms=+ssh-rsa,PubkeyAcceptedKeyTypes=+ssh-rsa kdeconnect@{ip}:/ {home}/mnt"
