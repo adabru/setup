@@ -27,10 +27,9 @@ def is_git(path):
 
 
 def sync(source, target):
-    return
     global error
     # symbolic links are not supported on FAT32, check with target.parent.owner() != "root"
-    # print("\033[96m{:} \033[39m \033[94m{:}\033[39m : ".format(source, target), end="")
+    print("\033[96m{:} \033[39m \033[94m{:}\033[39m : ".format(source, target), end="")
     source = Path(source).expanduser()
     target = Path(target).expanduser()
     if not source.exists():
@@ -97,7 +96,7 @@ def bin_sync(source, target_name=""):
     """
     if target_name == "":
         target_name = Path(source).name
-    user_sync(source, f"~/bin/{target_name}")
+    sync(source, f"~/bin/{target_name}")
 
 
 def db_sync(target):
@@ -107,122 +106,54 @@ def db_sync(target):
     sync(f"~/db/{target}", f"~/{target}")
 
 
-def user_sync(source, target):
-    """
-    Sync from ~/setup/user/<target> to ~/<target>.
-    """
-    # sync(f"~/setup/user/{target}", f"~/{target}")
-    source = Path(source).expanduser()
-    target = Path(target).expanduser()
-    # create target folder in ~/setup/user or ~/setup/root
-    if target.parts[1] == "home" and target.parts[2] == "adabru":
-        relTarget = Path.home() / "setup/user" / target.relative_to(Path.home())
-        # print(relTarget.parent)
-        # create ~/setup/user/<relParent>
-        # os.makedirs(relTarget.parent, exist_ok=True)
-        # move source to relTarget
-        # shutil.move(source, relTarget)
-        # print(source)
-    elif target.parts[1] != "home":
-        relTarget = Path.home() / "setup/root" / target.relative_to(Path("/"))
-        os.makedirs(relTarget.parent, exist_ok=True)
-        if source.exists():
-            shutil.move(source, relTarget)
-    return
-
-
-def root_sync(target):
-    """
-    Sync from ~/setup/root/<target> to /<target>.
-    """
-    sync(f"~/setup/root/{target}", f"/{target}")
+def sync_recursive(source_base, target_base, dir_links=[]):
+    for root, dirs, files in os.walk(source_base):
+        for name in list(dirs):  # Create a copy of the dirs list
+            rel_path: Path = Path(root).relative_to(source_base) / name
+            if rel_path.as_posix() in dir_links:
+                source = Path(root) / name
+                target = target_base / source.relative_to(source_base)
+                sync(source, target)
+                dirs.remove(name)  # Skip syncing the directory contents
+        for name in files:
+            source = Path(root) / name
+            target = target_base / source.relative_to(source_base)
+            sync(source, target)
 
 
 if command == "setup":
 
-    # keyboard
-    user_sync("~/setup/kbd_ab.map", "/usr/share/kbd/keymaps/ab.map")
-    user_sync("~/setup/vconsole.conf", "/etc/vconsole.conf")
-    user_sync("~/setup/xkb_ab", "/usr/share/X11/xkb/symbols/ab")
-
-    # window manager
-    user_sync("~/setup/sway_config", "~/.config/sway/config")
-    bin_sync("~/setup/bin/statusbar.py")
-    bin_sync("~/setup/bin/statuswindow.py")
-    bin_sync("~/setup/bin/toggle_mic.py")
-
-    # terminal
-    user_sync("~/setup/alacritty.toml", "~/.config/alacritty/alacritty.toml")
-    user_sync("~/setup/bashrc", "~/.bashrc")
-    db_sync(".bash_history")
-    user_sync("~/setup/vimrc", "~/.vimrc")
-    user_sync("~/setup/clingrc", "~/.clingrc")
-    user_sync("~/setup/pythonrc", "~/.pythonrc")
-    user_sync("~/setup/tmux.conf", "~/.tmux.conf")
-    user_sync("~/setup/screenrc", "~/.screenrc")
-    user_sync("~/setup/XCompose", "~/.XCompose")
-    bin_sync("~/setup/bin/rename.py")
-    bin_sync("~/setup/bin/dates.py")
-    # bin_sync("~/repo/hh-adabru/ads/fill_form.py", "ff")
-    user_sync("~/setup/pacman.conf", "/etc/pacman.conf")
-
-    # automount usb
-    user_sync(
-        "~/setup/services/adabru.udiskie.service",
-        "/etc/systemd/user/adabru.udiskie.service",
+    # sync ~/setup/user/
+    sync_recursive(
+        Path.home() / "setup" / "user",
+        Path.home(),
+        dir_links=[".local/share/applications/adabru"],
     )
 
-    # headset mic boost
-    bin_sync("~/setup/bin/headset_daemon.py")
-    user_sync(
-        "~/setup/services/adabru.headset.service",
-        "/etc/systemd/user/adabru.headset.service",
+    # sync ~/setup/root/
+    sync_recursive(Path.home() / "setup" / "root", Path("/"))
+
+    # sync ~/db/user/
+    sync_recursive(
+        Path.home() / "db" / "user",
+        Path.home(),
+        dir_links=[
+            ".ssh",
+            ".gnupg",
+            ".password-store",
+            ".thunderbird",
+            "repo/accounting/data",
+            "repo/speech/adabru_talon/dictionary",
+            "repo/hh-adabru/ads/db",
+            "repo/hh-adabru/ads/scrapes",
+        ],
     )
 
-    # brightness
-    user_sync("~/setup/udev_backlight.rules", "/etc/udev/rules.d/backlight.rules")
-
-    # hdmi sound
-    user_sync("~/setup/udev_hdmi_sound.rules", "/etc/udev/rules.d/hdmi_sound.rules")
-
-    # no beep
-    user_sync("~/setup/udev_no_beep.conf", "/etc/modprobe.d/udev_no_beep.conf")
-
-    # gammastep / redshift
-    user_sync("~/setup/gammastep_config.ini", "~/.config/gammastep/config.ini")
-
-    # launcher
-    user_sync("~/setup/user-dirs.dirs", "~/.config/user-dirs.dirs")
-    user_sync("~/setup/applications", "~/.local/share/applications/adabru")
-    user_sync("~/setup/synapse_config.json", "~/.config/synapse/config.json")
-
-    # inkscape
-    user_sync("~/setup/inkscape.xml", "~/.config/inkscape/keys/default.xml")
-
-    # sync
-    bin_sync("~/setup/bin/sync.py")
-
-    # youtube
-    bin_sync("~/setup/bin/yt.py")
-
-    # bluetooth
-    bin_sync("~/setup/bin/bt.py")
-
-    # packaging
-    user_sync("~/setup/makepkg.conf", "~/.makepkg.conf")
+    bin_sync("~/repo/hh-adabru/ads/fill_form.py", "ff")
+    bin_sync("~/repo/gists/job_search.py")
 
     # documentation
     sync("~/repo/adabru-server/Readme", "~/documentation/Homepage/Server")
-
-    # ftp
-    bin_sync("~/setup/bin/ftp_here.sh")
-
-    # network
-    user_sync("~/setup/NetworkManager.conf", "/etc/NetworkManager/NetworkManager.conf")
-    user_sync("~/setup/resolv.conf", "/etc/resolv.conf")
-
-    # backup
-    bin_sync("~/setup/bin/backup.py")
 
     # eye tracking + speech
     sync(
@@ -250,31 +181,6 @@ if command == "setup":
         "~/repo/speech/adabru_talon/apps/eyeput/shared_tags.py",
     )
 
-    # authentication
-    bin_sync("~/setup/bin/type_pass.py")
-
-    # gitconfig
-    user_sync("~/setup/gitconfig", "~/.gitconfig")
-
-    # keys and logins
-    db_sync(".ssh")
-    db_sync(".gnupg")
-    db_sync(".password-store")
-
-    # mail
-    db_sync(".thunderbird")
-
-    # ip6 tunnel
-    db_sync("bin/tunnel_ipv6.sh")
-
-    # project keys + data + config
-    db_sync("repo/accounting/data")
-    db_sync("repo/language-trainer/data/profile.json")
-    db_sync("repo/server-apps/.env")
-    db_sync("repo/server-apps/telegram/private-key.json")
-    db_sync("repo/speech/adabru_talon/dictionary")
-    db_sync("repo/hh-adabru/ads/db")
-    db_sync("repo/hh-adabru/ads/scrapes")
 
 elif command == "audio":
     ip = "192.168.178.89"
