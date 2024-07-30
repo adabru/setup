@@ -326,6 +326,7 @@ alias yd2='yt-dlp --playlist-start 1 -f 140 -o "%(title)s.m4a" '
 # yt-dlp -v -f "bv*[height<=1080][ext=mp4]+ba*[ext=m4a]"
 # alias ydfullhd='yt-dlp --playlist-start 1 -f 137+140 -o "%(title)s.%(ext)s" "$(wl-paste)"'
 alias ydfullhd='yt-dlp --playlist-start 1 -v -f "bv*[height<=1080][ext=mp4]+ba*[ext=m4a]" -o "%(title)s.%(ext)s" "$(wl-paste)"'
+alias zspotify="~/.venv/bin/python ~/downloads/zspotify/zspotify"
 
 alias s="sync.py"
 alias sgr="sync.py | grep "

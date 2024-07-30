@@ -13,11 +13,11 @@ aur_confirm() {
 }
 
 # sync
-./setup/bin/sync.py
+./setup/user/bin/sync.py
 if [ $? -ne 0 ]; then
     read -p "Not everything is synced. Do you want to run the sync.py script interactively? (y/N): " choice
     if [ "$choice" = "y" ]; then
-        ./setup/bin/sync.py interactive
+        ./setup/user/bin/sync.py interactive
     fi
 fi
 
