@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code Server Apps
-Exec=code-insiders /home/adabru/repo/server-apps
+Exec=code /home/adabru/repo/server-apps
 Type=Application

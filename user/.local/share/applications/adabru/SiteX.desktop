@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code SiteX
-Exec=code-insiders /home/adabru/repo/sitexfrontend /home/adabru/repo/Sitex-Backend
+Exec=code /home/adabru/repo/sitexfrontend /home/adabru/repo/Sitex-Backend
 Type=Application

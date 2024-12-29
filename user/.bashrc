@@ -329,6 +329,7 @@ alias ydfullhd='yt-dlp --playlist-start 1 -v -f "bv*[height<=1080][ext=mp4]+ba*[
 alias zspotify="~/.venv/bin/python ~/downloads/zspotify/zspotify"
 
 alias s="sync.py"
+alias si="sync.py interactive"
 alias sgr="sync.py | grep "
 
 alias cde="cd ~/repo/eyeput"

@@ -52,10 +52,19 @@ confirm squashfuse squashfs-tools ntfs-3g
 
 # i tried community/code twice, but switched to insiders due to issues (the second time marketplace didn't work)
 confirm shfmt
-aur_confirm visual-studio-code-insiders-bin
+aur_confirm visual-studio-code-bin
 
 # sway
 confirm alacritty sway xorg-xwayland
+
+# unlock keyring on login, needed for nextcloud
+# https://github.com/nextcloud/desktop/issues/2573#issuecomment-1528879901
+# https://wiki.archlinux.org/title/GNOME/Keyring#Using_the_keyring
+# https://wiki.archlinux.org/title/Pam_autologin
+# https://wiki.archlinux.org/title/KDE_Wallet#Unlock_KDE_Wallet_automatically_on_login
+confirm gnome-keyring
+aur_confirm pam_autologin
+sudo touch /etc/security/autologin.conf
 
 confirm nm-connection-editor
 

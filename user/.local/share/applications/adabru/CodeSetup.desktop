@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code Setup
-Exec=code-insiders /home/adabru/setup
+Exec=code /home/adabru/setup
 Type=Application

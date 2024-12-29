@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code HH Hückelhoven
-Exec=code-insiders /home/adabru/repo/hh-adabru
+Exec=code /home/adabru/repo/hh-adabru
 Type=Application

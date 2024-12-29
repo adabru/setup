@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code KarSoft
-Exec=code-insiders /home/adabru/work/armin
+Exec=code /home/adabru/work/armin
 Type=Application

@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code InfoAG
-Exec=code-insiders /home/adabru/repo/infoaghh
+Exec=code /home/adabru/repo/infoaghh
 Type=Application

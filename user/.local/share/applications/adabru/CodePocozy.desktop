@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code Pocozy
-Exec=code-insiders /home/adabru/repo/app
+Exec=code /home/adabru/repo/app
 Type=Application

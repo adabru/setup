@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=Code Glove
-Exec=code-insiders /home/adabru/repo/glove-firmware
+Exec=code /home/adabru/repo/glove-firmware
 Type=Application
