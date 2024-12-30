@@ -8,7 +8,17 @@ import sys
 from pathlib import Path
 from typing import Type
 
-if os.geteuid() == 0:
+
+def is_privileged():
+    if sys.platform == "linux":
+        return os.geteuid() == 0
+    elif sys.platform == "win32":
+        import ctypes
+
+        return ctypes.windll.shell32.IsUserAnAdmin() != 0
+
+
+if is_privileged():
     print("Don't run as root. Exiting.")
     exit()
 
@@ -323,27 +333,12 @@ def sync(source, target):
         # CreateFAT32Copy.process(context)
         CreateTargetDir.process(context)
         CreateGitCopy.process(context)
-        CreateSudoCopy.process(context)
+        if sys.platform == "linux":
+            CreateSudoCopy.process(context)
         CreateSymlink.process(context)
 
         CheckSymlink.process(context)
         CheckCopy.process(context)
-
-
-def bin_sync(source, target_name=""):
-    """
-    Sync from <source> to ~/bin/<source|target_name>
-    """
-    if target_name == "":
-        target_name = Path(source).name
-    sync(source, f"~/bin/{target_name}")
-
-
-def db_sync(target):
-    """
-    Sync from ~/db/<target> to ~/<target>.
-    """
-    sync(f"~/db/{target}", f"~/{target}")
 
 
 def sync_recursive(source_base, target_base, dir_links=[]):
@@ -367,64 +362,52 @@ if command == "interactive":
 
 if command == "run":
     try:
-        bin_sync("~/repo/hh-adabru/ads/fill_form.py", "ff")
-        bin_sync("~/repo/gists/job_search.py")
+        if sys.platform == "linux":
+            setup_dir = Path.home() / "setup"
 
-        # sync ~/setup/user/
-        sync_recursive(
-            Path.home() / "setup" / "user",
-            Path.home(),
-            dir_links=[".local/share/applications/adabru"],
-        )
+            # sync user and root files
+            sync_recursive(
+                setup_dir / "linux/user",
+                Path.home(),
+                dir_links=[".local/share/applications/adabru"],
+            )
+            sync_recursive(setup_dir / "linux/root", Path("/"))
 
-        # sync ~/setup/root/
-        sync_recursive(Path.home() / "setup" / "root", Path("/"))
+            # documentation
+            sync("~/repo/adabru-server/Readme", "~/documentation/Homepage/Server")
 
-        # sync ~/db/user/
-        sync_recursive(
-            Path.home() / "db" / "user",
-            Path.home(),
-            dir_links=[
-                ".ssh",
-                ".gnupg",
-                ".password-store",
-                ".thunderbird",
-                "repo/accounting/data",
-                "repo/speech/adabru_talon/dictionary",
-                "repo/hh-adabru/ads/db",
-                "repo/hh-adabru/ads/scrapes",
-            ],
-        )
+            # eye tracking + speech
+            sync(
+                "~/repo/speech/service/speech.eyeput.service",
+                "/etc/systemd/user/speech.eyeput.service",
+            )
+            sync("~/repo/speech/cursor/AdabruCursors", "~/.icons/AdabruCursors")
+            sync("~/repo/speech/parrot_patterns.json", "~/.talon/parrot/patterns.json")
+            sync("~/repo/speech/adabru_talon", "~/.talon/user/adabru")
+            sync(
+                "~/repo/speech/adabru_talon/cursorless-settings",
+                "~/.talon/user/cursorless-settings",
+            )
+            sync("~/repo/gists/unix_socket.py", "~/repo/eyeput/unix_socket.py")
+            sync(
+                "~/repo/gists/unix_socket.py",
+                "~/repo/speech/adabru_talon/code/unix_socket.py",
+            )
+            sync("~/repo/gists/unix_socket.py", "~/repo/speech/run/unix_socket.py")
+            sync(
+                "~/repo/eyeput/session_bus.py",
+                "~/repo/speech/adabru_talon/apps/eyeput/session_bus.py",
+            )
+            sync(
+                "~/repo/eyeput/shared_tags.py",
+                "~/repo/speech/adabru_talon/apps/eyeput/shared_tags.py",
+            )
+        elif sys.platform == "win32":
+            setup_dir = Path.home() / "Documents/git/setup"
 
-        # documentation
-        sync("~/repo/adabru-server/Readme", "~/documentation/Homepage/Server")
+            # sync user files
+            sync_recursive(setup_dir / "windows/user", Path.home())
 
-        # eye tracking + speech
-        sync(
-            "~/repo/speech/service/speech.eyeput.service",
-            "/etc/systemd/user/speech.eyeput.service",
-        )
-        sync("~/repo/speech/cursor/AdabruCursors", "~/.icons/AdabruCursors")
-        sync("~/repo/speech/parrot_patterns.json", "~/.talon/parrot/patterns.json")
-        sync("~/repo/speech/adabru_talon", "~/.talon/user/adabru")
-        sync(
-            "~/repo/speech/adabru_talon/cursorless-settings",
-            "~/.talon/user/cursorless-settings",
-        )
-        sync("~/repo/gists/unix_socket.py", "~/repo/eyeput/unix_socket.py")
-        sync(
-            "~/repo/gists/unix_socket.py",
-            "~/repo/speech/adabru_talon/code/unix_socket.py",
-        )
-        sync("~/repo/gists/unix_socket.py", "~/repo/speech/run/unix_socket.py")
-        sync(
-            "~/repo/eyeput/session_bus.py",
-            "~/repo/speech/adabru_talon/apps/eyeput/session_bus.py",
-        )
-        sync(
-            "~/repo/eyeput/shared_tags.py",
-            "~/repo/speech/adabru_talon/apps/eyeput/shared_tags.py",
-        )
         exit(error)
 
     except KeyboardInterrupt:
@@ -433,27 +416,29 @@ if command == "run":
 
 
 elif command == "audio":
+    audio_dir = Path.home() / "Nextcloud/audio"
 
     def exec(cmd):
         # echo command for debugging
         print("\033[90m%s\033[0m" % cmd)
-        return 0 == subprocess.call(["sh", "-c", cmd])
+        result = subprocess.run(cmd, shell=True)
+        return result.returncode == 0
 
-    ip = "192.168.178.89"
-    user = "user"
-    # exec(
-    #     f'rsync -vh --size-only --progress --update --inplace --recursive --delete --exclude=".*" --no-perms -e "ssh -i ~/.ssh/id_phone -p 8022" {home}/audio/ {user}@{ip}:/sdcard/Music/'
-    # )
-    if exec(
-        f"sshfs -o rw,nosuid,nodev,identityfile={home}/.ssh/id_phone,port=8022,HostKeyAlgorithms=+ssh-rsa,PubkeyAcceptedKeyTypes=+ssh-rsa {user}@{ip}:/ {home}/mnt"
-    ):
-        exec(
-            f'rsync -vh --size-only --progress --update --inplace --recursive --delete --exclude=".*" --no-perms -e "ssh -i ~/.ssh/id_phone -p 8022" {home}/audio/ {home}/mnt/Music'
-        )
-    # # see https://rafaelc.org/posts/mounting-kde-connect-filesystem-via-cli/
-    # exec(
-    #     f"sshfs -o rw,nosuid,nodev,identityfile={home}/.config/kdeconnect/privateKey.pem,port=1740,HostKeyAlgorithms=+ssh-rsa,PubkeyAcceptedKeyTypes=+ssh-rsa kdeconnect@{ip}:/ {home}/mnt"
-    # )
-    # exec(
-    #     f'rsync -avh --progress --update --delete --exclude=".*" {home}/audio/ {home}/mnt/Music/'
-    # )
+    adb_config_file = Path.home() / ".adb_config"
+
+    ip = ""
+    port = "5555"
+
+    if adb_config_file.exists():
+        config = adb_config_file.read_text().strip().split(":")
+        if len(config) == 2:
+            ip, port = config
+
+    ip = input(f"Enter ip [{ip}]: ") or ip
+    port = input(f"Enter port [{port}]: ") or port
+
+    adb_config_file.write_text(f"{ip}:{port}")
+    # there is no return code if connect fails
+    exec(f"adb connect {ip}:{port}")
+    # adb push to android music folder
+    exec(f"adb push {audio_dir} /storage/emulated/0/Music")

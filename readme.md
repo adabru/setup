@@ -4,10 +4,10 @@
 
 Arch can be installed on existing Windows installation and Windows can be installed on existing Arch installation.
 
-Preferred way is to install Windows first (https://wiki.archlinux.org/title/Dual_boot_with_Windows#Installation)
+Preferred way is to install Windows first (<https://wiki.archlinux.org/title/Dual_boot_with_Windows#Installation>)
 
-Download arch.iso from https://www.archlinux.de/download .
-Download windows.iso from https://www.microsoft.com/de-de/software-download/windows11ISO
+Download arch.iso from <https://www.archlinux.de/download> .
+Download windows.iso from <https://www.microsoft.com/de-de/software-download/windows11ISO>
 
 For single boot, burn arch.iso to pendrive with rufus dd-mode or `pv arch.iso > /dev/sdx`.
 For dualboot, use ventoy.
@@ -28,7 +28,7 @@ Boot ventoy on new system.
 
 Install windows on new system. Optionally turn off internet to avoid updates.
 
-Make the efi partition during windows installation: https://wiki.archlinux.org/title/Dual_boot_with_Windows#The_EFI_system_partition_created_by_Windows_Setup_is_too_small .
+Make the efi partition during windows installation: <https://wiki.archlinux.org/title/Dual_boot_with_Windows#The_EFI_system_partition_created_by_Windows_Setup_is_too_small> .
 
 Disable fastboot via `powercfg.cpl`.
 
@@ -94,7 +94,7 @@ su adabru
 # faillock --release
 
 git clone https://github.com/adabru/setup
-./setup/setup.sh
+./setup/linux/setup.sh
 
 # restore backup; plugin drive
 lsblk
@@ -110,6 +110,14 @@ poweroff --reboot
 # sudo refind-mkdefault
 ```
 
+## Windows Configuration
+
+Run following command. It will open an elevation prompt. That is necessary to edit registry keys.
+
+```powershell
+python .\windows\setup.py
+```
+
 ## Further Software
 
 ```sh
@@ -123,20 +131,9 @@ systemctl --user enable --now adabru.headset
 xlsclients
 xwininfo
 
-# eduroam
-# connect to mops
+# setup new wifi connection
 nm-connection-editor
-# SSID:eduroam, WPA2, PWD, username, password
-nmcli connection up id eduroam
-
-# create ssh-key for github and gitlab
-# eval "$(ssh-agent -s)"
-# ssh-add -l
-ssh-keygen -t rsa -C "adam.brunnmeier@rwth-aachen.de" -b 4096
-cat ~/.ssh/id_rsa.pub
-# add to https://gitlab.com and https://github.com
-ssh -T git@github.com
-ssh -T git@gitlab.com
+nmcli connection up id <connection_id>
 
 # internal microphone boost is not saved per default because pulseaudio resets it
 # see https://wiki.archlinux.org/index.php/PulseAudio/Troubleshooting#Pulse_overwrites_ALSA_settings)
@@ -177,40 +174,6 @@ sudo sh -c 'echo "blacklist ath9k" > /etc/modprobe.d/modprobe.conf'
 auri obs-studio wlrobs-hg
 # then select "Wayland output (scpy)" for the whole screen or "Window Capture (Xcomposite)" for X windows
 
-# android emulator
-auri jdk8-openjdk android-sdk
-export PATH="/opt/android-sdk/tools/bin:$PATH"
-sdkmanager --list
-# https://wiki.archlinux.org/index.php/Android#Android_Studio
-sudo chown -R adabru:adabru /opt/android-sdk/
-# see https://developer.android.com/about/dashboards/
-# increase /tmp size as sdkmanager takes a lot of it
-# 5G of free ram is needed, as sdkmanager downloads and unzips to /tmp
-sudo mount -o remount,size=5G /tmp/
-touch ~/.android/repositories.cfg
-sdkmanager "system-images;android-23;google_apis;x86_64"
-avdmanager create avd --name myandroid -k "system-images;android-23;google_apis;x86_64"
-avdmanager list avd
-sdkmanager emulator
-auri android-sdk-platform-tools
-# https://developer.android.com/studio/run/emulator-commandline
-# https://developer.android.com/studio/run/emulator-comparison
-emulator @myandroid
-adb install ~/portable/Aktuell/Android/apps/WhatsApp.apk
-# for WhatsApp-Web, connect (compatible) webcam and run
-emulator @myandroid -webcam-list
-emulator @myandroid -camera-back webcam1
-
-# cloud storage
-pacman -S rclone
-rclone config
-# dropbox, google
-rclone lsd dropbox:
-rclone ls dropbox:
-cd ~/cloud/dropbox
-rclone -P sync dropbox:Gemeindelieder ./Gemeindelieder
-rclone lsd google:
-
 # ftp
 auri stupid-ftpd
 ftp_here.sh
@@ -250,12 +213,6 @@ echo 'echo "using wlan"' >> ~/bin/tunnel_ipv6.sh
 sudo tunnel_ipv6.sh
 # remove with `sudo ip tunnel del he-ipv6`
 
-
-# node
-i nodejs yarn
-
-# arduino
-i arduino
 # install arduino extension in vscode
 sudo usermod -a -G uucp,lock adabru
 # logout → login
@@ -269,28 +226,6 @@ screen /dev/ttyUSB0 19200
 # wine
 i wine winetricks
 winetricks dotnet452 corefonts
-
-# mingw
-# add to /etc/pacman.conf :
-# [ownstuff]
-# # see https://github.com/Martchus/PKGBUILDs/issues/76
-# SigLevel = Never
-# Server = https://ftp.f3l.de/~martchus/$repo/os/$arch
-# Server = https://martchus.no-ip.biz/repo/arch/$repo/os/$arch
-t -Sy
-auri mingw-w64
-
-i youtube-dl
-
-# virtualenv + pip if needed, see https://virtualenv.pypa.io/en/latest/installation.html
-wget -O- https://pypi.python.org/packages/source/v/virtualenv/virtualenv-16.0.0.tar.gz | tar xz
-cd virtualenv-*
-python setup.py install --prefix ~/.virtualenv
-cd ~/.virtualenv
-export PYTHONPATH=./lib/python3.7/site-packages
-./bin/virtualenv -p python3 .
-. ./bin/activate
-
 
 # gamepad: nintendo switch pro controller
 ## Alternative A

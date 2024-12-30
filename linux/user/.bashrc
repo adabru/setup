@@ -328,11 +328,11 @@ alias yd2='yt-dlp --playlist-start 1 -f 140 -o "%(title)s.m4a" '
 alias ydfullhd='yt-dlp --playlist-start 1 -v -f "bv*[height<=1080][ext=mp4]+ba*[ext=m4a]" -o "%(title)s.%(ext)s" "$(wl-paste)"'
 alias zspotify="~/.venv/bin/python ~/downloads/zspotify/zspotify"
 
-alias s="sync.py"
-alias si="sync.py interactive"
-alias sgr="sync.py | grep "
+alias s="~/setup/shared/sync.py"
+alias si="~/setup/shared/sync.py interactive"
+alias sgr="~/setup/shared/sync.py | grep "
 
-alias cde="cd ~/repo/eyeput"
-alias cds="cd ~/repo/speech"
+alias ff='~/repo/hh-adabru/ads/fill_form.py'
+alias job_search='~/repo/gists/job_search.py'
 
 export PATH="$PATH:/opt/android-sdk/platform-tools"
