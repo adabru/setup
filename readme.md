@@ -116,6 +116,7 @@ Run following command. It will open an elevation prompt. That is necessary to ed
 
 ```powershell
 python .\windows\setup.py
+winget install Governikus.AusweisApp Microsoft.VisualStudioCode Git.Git Gyan.FFmpeg Python.Python.3.12 Unity.UnityHub GitHub.cli Bitwarden.Bitwarden KDE.Okular Google.Chrome Beeper.Beeper Mozilla.Thunderbird Discord.Discord Microsoft.PowerToys
 ```
 
 ## Further Software
