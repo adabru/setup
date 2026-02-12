@@ -117,13 +117,13 @@ Run following command. It will open an elevation prompt. That is necessary to ed
 ```powershell
 python .\windows\setup.py
 # personal
-winget install Governikus.AusweisApp Microsoft.VisualStudioCode Git.Git Python.Python.3.12 Bitwarden.Bitwarden KDE.Okular Google.Chrome Beeper.Beeper Mozilla.Thunderbird Discord.Discord Microsoft.PowerToys RustDesk.RustDesk Amazon.Corretto.23.JDK Nextcloud.NextcloudDesktop Zoom.Zoom
+winget install -e Governikus.AusweisApp Microsoft.VisualStudioCode Git.Git Python.Python.3.12 Bitwarden.Bitwarden KDE.Okular Google.Chrome Beeper.Beeper Mozilla.Thunderbird Discord.Discord Microsoft.PowerToys RustDesk.RustDesk Amazon.Corretto.23.JDK Nextcloud.NextcloudDesktop Zoom.Zoom
 # cynteract
-winget install Unity.UnityHub GitHub.cli Google.AndroidStudio Microsoft.DotNet.SDK.8 BrechtSanders.WinLibs.POSIX.UCRT
+winget install -e Unity.UnityHub GitHub.cli Google.AndroidStudio Microsoft.DotNet.SDK.8 BrechtSanders.WinLibs.POSIX.UCRT
 # sitex
-winget install CaddyServer.Caddy OpenJS.NodeJS.LTS
+winget install -e CaddyServer.Caddy OpenJS.NodeJS.LTS
 # baal
-winget install Audacity.Audacity Gyan.FFmpeg
+winget install -e Audacity.Audacity Gyan.FFmpeg
 ```
 
 ## Further Software
